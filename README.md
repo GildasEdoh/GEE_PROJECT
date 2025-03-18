@@ -30,7 +30,7 @@ Frontend : Next.js, React, Tailwind CSS
 
 Backend : Laravel, MySQL
 
-Authentification : (À préciser si nécessaire)
+Authentification 
 
 Installation et configuration
 
@@ -38,7 +38,7 @@ Installation du Frontend
 
 Cloner le projet :
 
-git clone https://github.com/votre-repo/GEE_PROJECT.git
+git clone https://github.com/GildasEdoh/GEE_PROJECT.git
 cd GEE_PROJECT/frontend
 
 Installer les dépendances :
@@ -93,6 +93,3 @@ Ce projet est sous licence MIT.
 Licence
 
 Ce projet est sous licence MIT.
-
-Auteur : Gildas
-
