@@ -2,18 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class Note
+class Note extends Model
 {
-    private $id;
-    private $valeur;
-    private $gele;
+    use HasFactory;
 
-    public function __construct() {
-        
+    protected $table = 'Note';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'valeur',
+        'gele',
+        'evaluation_id',
+        'etudiant_id',
+    ];
+
+    public function evaluation()
+    {
+        return $this->belongsTo(Evaluation::class, 'evaluation_id');
+    }
+
+    public function etudiant()
+    {
+        return $this->belongsTo(Etudiant::class, 'etudiant_id');
     }
 }

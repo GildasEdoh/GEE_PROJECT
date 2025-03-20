@@ -3,69 +3,35 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class Etudiant
+class Etudiant extends Model
 {
-    // Definition des attributs
-    private $id;
-    private $numero_carte;
-    private $nom;
-    private $prenoms;
-    private $sexe;
-    private $dateNaissance;
-    private $lieuNaissance;
-    private $sexe;
-    private $moyenne;
-    private $rang;
-    private $notes;
+    use HasFactory;
 
-    // Constructeur sans argument
-    public function __construct() {
+    protected $table = 'Etudiant';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
 
+    protected $fillable = [
+        'nom',
+        'prenom',
+        'dateNaissance',
+        'lieuNaissance',
+        'numero_carte',
+        'sexe',
+        'notes',
+        'moyenne',
+        'rang',
+    ];
+
+    public function inscriptions()
+    {
+        return $this->hasMany(Inscription::class, 'etudiant_id');
     }
 
-    // Getteurs
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getNumCarte() {
-        return $this->numero_carte;
-    }
-
-    public function getNom() {
-        return $this->nom;
-    }
-
-    public function getDateNais() {
-        return $this->dateNaissance;
-    }
-
-    public function getLieuNais() {
-        return $this->lieuNaissance;
-    }
-
-    public function getSexe() {
-        return $this->sexe;
-    }
-
-    public function getRang() {
-        return $this->rang;
-    }
-
-    // Setteurs
-
-    public function setNom($nom_) {
-        $this->nom = $nom_;
-    }
-    public function setPrenom($prenoms_) {
-        $this->prenoms = $prenoms_;
-    }
-    public function setSexe($sexe_) {
-        return $this->sexe = $sexe_;
-    }
-    public function setLieuNais() {
-        return $this->id;
+    public function notes()
+    {
+        return $this->hasMany(Note::class, 'etudiant_id');
     }
 }
