@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <nav className="bg-blue-500 p-4 flex items-center justify-between">
       {/* Barre de recherche */}
-      <div className="relative w-1/3">
+      <div className="bg-white relative w-1/3">
         <input
           type="text"
           placeholder="Rechercher..."

@@ -7,7 +7,7 @@ import InfoCard from "./components/InfoCard"
 
 export default function Home() {
   return (
-    <div className="flex h-screen">
+    <div className="bg-white flex h-screen">
       <SideBar />
       <div className="flex-1">
         <Navbar />
