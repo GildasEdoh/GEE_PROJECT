@@ -11,7 +11,7 @@ class Inscription
     private $annee;
 
     public function __construct() {
-
+        
     }
 
 }
