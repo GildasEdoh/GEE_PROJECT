@@ -3,23 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class Matiere
+class Matiere extends Model
 {
-    // Definition des attributs
-    private $id;
-    private $libelle;
-    private $abreviation;
-    private $optionnelle;
+    use HasFactory;
 
-    public function __construct($libelle, $abreviation, $optionnelle) {
-        $this->libelle = $libelle;
-        $this->abreviation = $abreviation;
-        $this->optionnelle = $optionnelle
+    protected $table = 'Matiere';
+    protected $primaryKey = 'id_matiere';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'libelle',
+        'abreviation',
+        'optionnelle',
+    ];
+
+    public function coefficients()
+    {
+        return $this->hasMany(Coefficient::class, 'matiere_id');
     }
-    
-    public function _toString() {
 
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'matiere_id');
     }
 }

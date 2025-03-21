@@ -3,18 +3,37 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class Evaluation
+class Evaluation extends Model
 {
-    // Definition des attributs
-    private $id;
-    private $libelle;
-    private $description;
-    private $moyenneAdmissible;
-    private $coture;
+    use HasFactory;
 
-    public function __construct() {
+    protected $table = 'Evaluation';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
 
+    protected $fillable = [
+        'libelle',
+        'abreviation',
+        'moyenneAdmissible',
+        'cloture',
+        'session_id',
+        'matiere_id',
+    ];
+
+    public function session()
+    {
+        return $this->belongsTo(Session::class, 'session_id');
+    }
+
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class, 'matiere_id');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class, 'evaluation_id');
     }
 }

@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bareme extends Model
+class TypeDetails extends Model
 {
     use HasFactory;
 
-    protected $table = 'Bareme';
+    protected $table = 'TypeDetails';
     protected $primaryKey = 'id';
-    public $timestamps = false; // Si vous n'avez pas de colonnes created_at et updated_at
+    public $timestamps = false;
 
     protected $fillable = [
-        'mention',
+        'libelle',
         'abreviation',
-        'moyenne',
+        'poids',
     ];
 }
