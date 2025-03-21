@@ -1,4 +1,4 @@
-import Login from '../app/login';
+import Login from '../app/SignUp/Page'
 
 export default function Home() {
   return (
