@@ -160,6 +160,7 @@ const styles = {
         backgroundColor: '#B91919',
         border: 'none',
         borderRadius: '15px',
+        color: '#fff',
         cursor: 'pointer',
     },
     submitButton: {

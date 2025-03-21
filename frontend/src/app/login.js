@@ -18,7 +18,7 @@ const Login = () => {
     return (
         <div style={styles.container}>
             <div style={styles.imageContainer}>
-                <Image src="/ul.png" alt="Illustration" width={400} height={100} />
+                <Image src="/ul.png" alt="Illustration" width={350} height={100} />
             </div>
             <div>
                 <h1 style={styles.title}>Gestion des Examens Etudiants</h1>
@@ -81,11 +81,9 @@ const styles = {
         backgroundColor: 'white',
         marginRight: '260px',
     },
-    image: {
-        width: "100px",
-        height: "100px",
-    },
     title: {
+        position: 'relative',
+        right: '35px',
         fontSize: '2.6rem',
         marginBottom: '0.1rem',
         marginTop: '20px',
@@ -132,8 +130,7 @@ const styles = {
         position: 'relative',
         display: 'flex',
         justifyContent: 'space-between',
-        marginTop: '10px',
-        marginBottom: '20px',
+        marginBottom: '60px',
     },
     cancelButton: {
         width: '150px',
@@ -142,6 +139,7 @@ const styles = {
         backgroundColor: '#B91919',
         border: 'none',
         borderRadius: '15px',
+        color: '#fff',
         cursor: 'pointer',
     },
     submitButton: {
