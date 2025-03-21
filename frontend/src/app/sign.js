@@ -20,7 +20,7 @@ const Sign = () => {
     return (
         <div style={styles.container}>
             <div style={styles.imageContainer}>
-                <img src="ul.png" alt="Illustration" style={styles.image} />
+                <Image src="/ul.png" alt="Illustration" width={400} height={100} />
             </div>
             <div>
                 <h1 style={styles.title}>Gestion des Examens Etudiants</h1>

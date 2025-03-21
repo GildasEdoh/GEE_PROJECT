@@ -1,6 +1,7 @@
 // components/Login.js
 "use client"; // Ajoutez cette ligne
 import { useState } from 'react';
+import Image from 'next/image';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ const Login = () => {
     return (
         <div style={styles.container}>
             <div style={styles.imageContainer}>
-                <image src="ul.png" width={'20'} alt="Illustration" style={{width:"100px",height:"100px"}} />
+                <Image src="/ul.png" alt="Illustration" width={400} height={100} />
             </div>
             <div>
                 <h1 style={styles.title}>Gestion des Examens Etudiants</h1>
@@ -78,7 +79,7 @@ const styles = {
         position: 'relative',
         width: '350px',
         backgroundColor: 'white',
-        marginRight: '215px',
+        marginRight: '260px',
     },
     image: {
         width: "100px",
@@ -86,7 +87,7 @@ const styles = {
     },
     title: {
         fontSize: '2.6rem',
-        marginBottom: '0.5rem',
+        marginBottom: '0.1rem',
         marginTop: '20px',
         fontFamily: 'limelight',
         fontWeight: 'Bold',
@@ -105,11 +106,11 @@ const styles = {
     },
     subtitle: {
         position: 'relative',
-        fontSize: '1.5rem',
+        fontSize: '2.5rem',
         marginBottom: '2rem',
         fontFamily: 'limelight',
         fontWeight: 'Bold',
-        left: '32%',
+        left: '29%',
         color: '#6988ED',
     },
     form: {
@@ -132,6 +133,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         marginTop: '10px',
+        marginBottom: '20px',
     },
     cancelButton: {
         width: '150px',
