@@ -9,9 +9,9 @@ export default function Home() {
   return (
     <div className="flex h-screen">
       <SideBar />
-      <div className="flex-1">
+      <div className="bg-white flex-1">
         <Navbar />
-        <main className="p-4">
+        <main className=" p-4">
           
           <div className="grid grid-cols-4 gap-4">
             <InfoCard title="Nombre Total d’étudiants inscrits" value="-----" />
