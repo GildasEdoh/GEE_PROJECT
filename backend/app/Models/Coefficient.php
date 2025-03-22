@@ -2,18 +2,30 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class Coefficient
+class Coefficient extends Model
 {
-    private $id
-    private $session
-    private $coef
+    use HasFactory;
 
-    public function __construct() {
-        
+    protected $table = 'Coefficient';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'session_id',
+        'matiere_id',
+        'coef',
+    ];
+
+    public function session()
+    {
+        return $this->belongsTo(Session::class, 'session_id');
+    }
+
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class, 'matiere_id');
     }
 }
