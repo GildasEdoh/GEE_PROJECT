@@ -7,7 +7,7 @@
 //     </div>
 //   );
 // }
-import Sign from '../app/SignUp/Page';
+import Sign from '../app/SignIn/Page';
 
 export default function Home() {
   return (
