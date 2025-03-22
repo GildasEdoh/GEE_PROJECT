@@ -2,6 +2,7 @@
 "use client"; // Ajoutez cette ligne
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 const Sign = () => {
@@ -9,12 +10,23 @@ const Sign = () => {
     const [surname, setSurname] = useState('');
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
+    const [showPassword0, setShowPassword0] = useState(false);
+    const [showPassword1, setShowPassword1] = useState(false); // État pour masquer/afficher le mot de passe
+    const togglePasswordVisibility0 = () => {
+        setShowPassword0(!showPassword0); // Bascule entre true et false
+    };
+    const togglePasswordVisibility1 = () => {
+        setShowPassword1(!showPassword1); // Bascule entre true et false
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Username:', username);
+        console.log('Username:', name);
+        console.log('Surname:', surName);
+        console.log('Email:', mail);
         console.log('Password:', password);
-        console.log('Remember Me:', rememberMe);
+        console.log('Confirm:', confirm);
     };
 
     return (
@@ -59,27 +71,43 @@ const Sign = () => {
                         </div>
                         <div style={styles.formGroup}>
                             <input
-                                type="password"
+                                type={showPassword0 ? 'text' : 'password'}
                                 id="password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => setPassword (e.target.value)}
                                 style={styles.input}
                                 placeholder="Mot de passe"
                             />
+                            <button
+                                type="button"
+                                onClick={togglePasswordVisibility0}
+                                style={styles.eyeButton}
+                            >
+                                {showPassword0 ? '👁️' : '👁‍🗨'} {/* Change l'icône en fonction de l'état */}
+                            </button>
                         </div>
                         <div style={styles.formGroup}>
                             <input
-                                type="password"
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                type={showPassword1 ? 'text' : 'password'}
+                                id="confirm"
+                                value={confirm}
+                                onChange={(e) => setConfirm(e.target.value)}
                                 style={styles.input}
                                 placeholder="Confirmer le mot de passe"
                             />
+                            <button
+                                type="button"
+                                onClick={togglePasswordVisibility1}
+                                style={styles.eyeButton1}
+                            >
+                                {showPassword1 ? '👁️' : '👁‍🗨'} {/* Change l'icône en fonction de l'état */}
+                            </button>
                         </div>
                         <div style={styles.buttonGroup}>
                             <button type="button" style={styles.cancelButton}>Annuler</button>
-                            <button type="submit" style={styles.submitButton}>S&apos;inscrire</button>
+                            <Link href={"/SignIn/Page.js"}>
+                                <button type="submit" style={styles.submitButton}>S&apos;inscrire</button>
+                            </Link>
                         </div>
                     </form>
                 </div>
@@ -148,6 +176,26 @@ const styles = {
         fontSize: '1rem',
         backgroundColor: '#D9D9D9',
         borderRadius: '10px',
+    },
+    eyeButton: {
+        position: 'absolute',
+        right: '80px',
+        top: '62%',
+        transform: 'translateY(-50%)',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: '1rem',
+    },
+    eyeButton1: {
+        position: 'absolute',
+        right: '80px',
+        top: '75%',
+        transform: 'translateY(-50%)',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: '1rem',
     },
     buttonGroup: {
         display: 'flex',

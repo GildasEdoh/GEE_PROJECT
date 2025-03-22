@@ -2,6 +2,7 @@
 "use client"; // Ajoutez cette ligne
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -57,7 +58,9 @@ const Login = () => {
                         </div>
                         <div style={styles.buttonGroup}>
                             <button type="button" style={styles.cancelButton}>Annuler</button>
-                            <button type="submit" style={styles.submitButton}>Se connecter</button>
+                            <Link href={"/SignUp/Page.js"}>
+                                <button type="submit" style={styles.submitButton}>Se connecter</button>
+                            </Link>
                         </div>
                     </form>
                 </div>
