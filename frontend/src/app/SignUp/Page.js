@@ -231,6 +231,8 @@ const styles = {
         color: 'skyblue',
         cursor: 'pointer',
         left: '27%',
+        fontFamily: 'limelight',
+        fontWeight: 'Bold',
     }
 };
 
