@@ -1,17 +1,19 @@
 "use client";
 
 import Navbar from "./components/NavBar";
-import ActionButton from "./components/ActionButton";
-import SideBar from "./components/SideBar"
-import InfoCard from "./components/InfoCard"
+import SideBar from "./components/SideBar";
+import Dashboard from "./Dashboard"
+import { useState } from "react";
 
 export default function Home() {
+  const [selectedMenu, setSelectedMenu] = useState("accueil");
+
   return (
     <div className="flex h-screen">
       <SideBar />
-      <div className="bg-white flex-1">
+      <div className="flex-1">
         <Navbar />
-        <main className=" p-4">
+        <main className="p-4">
           
           <div className="grid grid-cols-4 gap-4">
             <InfoCard title="Nombre Total d’étudiants inscrits" value="-----" />
