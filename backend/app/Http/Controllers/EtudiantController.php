@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class EtudiantController extends Controller
 {
+
+    
     // Créer un étudiant
     public function store(Request $request)
     {
