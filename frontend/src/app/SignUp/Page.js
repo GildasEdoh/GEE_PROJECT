@@ -109,6 +109,11 @@ const Sign = () => {
                                 <button type="submit" style={styles.submitButton}>S&apos;inscrire</button>
                             </Link>
                         </div>
+                        <div style={styles.textLink}>
+                            <Link href={"/SignIn/Page.js"}>
+                                <h4>Déjà inscrit ? Si oui...Cliquez</h4>
+                            </Link>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -221,6 +226,12 @@ const styles = {
         borderRadius: '15px',
         cursor: 'pointer',
     },
+    textLink: {
+        position: 'relative',
+        color: 'skyblue',
+        cursor: 'pointer',
+        left: '27%',
+    }
 };
 
 export default Sign;

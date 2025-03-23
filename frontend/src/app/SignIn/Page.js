@@ -58,9 +58,7 @@ const Login = () => {
                         </div>
                         <div style={styles.buttonGroup}>
                             <button type="button" style={styles.cancelButton}>Annuler</button>
-                            <Link href={"/SignUp/Page.js"}>
-                                <button type="submit" style={styles.submitButton}>Se connecter</button>
-                            </Link>
+                            <button type="submit" style={styles.submitButton}>Se connecter</button>
                         </div>
                     </form>
                 </div>
