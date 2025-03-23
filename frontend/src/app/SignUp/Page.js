@@ -179,7 +179,7 @@ const styles = {
         width: '100%',
         padding: '0.5rem',
         fontSize: '1rem',
-        backgroundColor: '#D9D9D9',
+        backgroundColor: '#ECECEC',
         borderRadius: '10px',
     },
     eyeButton: {
