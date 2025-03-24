@@ -7,7 +7,7 @@ export default function Home() {
     </div>
   );
 }
-// import Sign from '../app/SignIn/Page';
+// import Sign from '../app/SignIn/page';
 
 // export default function Home() {
 //   return (
