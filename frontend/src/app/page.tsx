@@ -1,8 +1,8 @@
-import Login from '../app/SignUp/Page'
+import Login from "../app/login/Page";
 
 export default function Home() {
   return (
-    <div style={{ backgroundColor: '#6988ED', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: "#6988ED", minHeight: "100vh" }}>
       <Login />
     </div>
   );

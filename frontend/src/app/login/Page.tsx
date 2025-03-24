@@ -1,89 +1,88 @@
-// components/Login.js
-
-"use client"; // Ajoutez cette ligne
-
-import Image from "next/image";
+"use client";
 import { useState } from "react";
+import Image from "next/image";
+import axios from "axios";
+import { useRouter } from "next/navigation"; // Importer useRouter
 
-const Sign = () => {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
+const Login = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const router = useRouter(); // Initialisation de useRouter
 
-  const handleSubmit = (e) => {
+  // Fonction pour gérer la soumission du formulaire
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
+
+    try {
+      // Appel de l'API Laravel pour se connecter
+      const res = await axios.post("https://localhost:8000/login", {
+        email,
+        password,
+      });
+
+      const data = res.data;
+
+      // Vérifier si la réponse contient un token
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token); // Enregistrer le token dans le localStorage
+        console.log("Connexion réussie !");
+        // Rediriger l'utilisateur vers le dashboard
+        router.push("/dashboard"); // Redirection vers le dashboard
+      } else {
+        console.error("Erreur de connexion : token manquant");
+      }
+    } catch (error) {
+      console.error("Erreur de connexion :", error);
+    }
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.imageContainer}>
-        <Image src="/ul.png" alt="Illustration" width={400} height={100} />
+        <Image src="/ul.png" alt="Illustration" width={350} height={100} />
       </div>
       <div>
         <h1 style={styles.title}>Gestion des Examens Etudiants</h1>
-        <div style={styles.inscription}>
-          <h2 style={styles.subtitle}>INSCRIPTION</h2>
+        <div style={styles.connexion}>
+          <h2 style={styles.subtitle}>Connexion</h2>
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.formGroup}>
               <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                style={styles.input}
-                placeholder="Nom"
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <input
-                type="text"
-                id="surname"
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-                style={styles.input}
-                placeholder="Prénoms"
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <input
                 type="email"
-                id="mail"
-                value={mail}
-                onChange={(e) => setMail(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 style={styles.input}
-                placeholder="Entrez votre adresse email"
+                placeholder="Adresse email"
+                required
               />
             </div>
             <div style={styles.formGroup}>
               <input
                 type="password"
-                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={styles.input}
                 placeholder="Mot de passe"
+                required
               />
             </div>
             <div style={styles.formGroup}>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={styles.input}
-                placeholder="Confirmer le mot de passe"
-              />
+              <label style={styles.label}>
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                Se souvenir de moi
+              </label>
             </div>
             <div style={styles.buttonGroup}>
               <button type="button" style={styles.cancelButton}>
                 Annuler
               </button>
               <button type="submit" style={styles.submitButton}>
-                S&apos;inscrire
+                Se connecter
               </button>
             </div>
           </form>
@@ -93,7 +92,7 @@ const Sign = () => {
   );
 };
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: "flex",
     flexDirection: "row",
@@ -105,37 +104,36 @@ const styles = {
     position: "relative",
     width: "350px",
     backgroundColor: "white",
-    marginRight: "215px",
-  },
-  image: {
-    width: "100px",
-    height: "100px",
+    marginRight: "260px",
   },
   title: {
+    position: "relative",
+    right: "35px",
     fontSize: "2.6rem",
-    marginBottom: "0.5rem",
+    marginBottom: "0.1rem",
     marginTop: "20px",
     fontFamily: "limelight",
     fontWeight: "Bold",
     color: "white",
   },
-  inscription: {
+  connexion: {
     position: "relative",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    height: "450px",
+    height: "350px",
+    width: "450px",
     marginTop: "50px",
-    padding: "20px 50px 20px 60px",
+    padding: "20px 30px 0px 30px",
     borderRadius: "15px",
   },
   subtitle: {
     position: "relative",
-    fontSize: "1.5rem",
+    fontSize: "2.5rem",
     marginBottom: "2rem",
     fontFamily: "limelight",
     fontWeight: "Bold",
-    left: "32%",
+    left: "29%",
     color: "#6988ED",
   },
   form: {
@@ -144,21 +142,23 @@ const styles = {
     width: "400px",
   },
   formGroup: {
-    marginBottom: "1.4rem",
+    marginBottom: "2rem",
   },
   input: {
-    width: "100%",
+    width: "90%",
     padding: "0.5rem",
     fontSize: "1rem",
     backgroundColor: "#D9D9D9",
     borderRadius: "10px",
   },
   buttonGroup: {
+    position: "relative",
     display: "flex",
     justifyContent: "space-between",
+    marginBottom: "60px",
   },
   cancelButton: {
-    width: "120px",
+    width: "150px",
     padding: "5px 20px 5px 20px",
     fontSize: "1rem",
     backgroundColor: "#B91919",
@@ -168,7 +168,7 @@ const styles = {
     cursor: "pointer",
   },
   submitButton: {
-    width: "120px",
+    width: "150px",
     padding: "5px 20px 5px 20px",
     fontSize: "1rem",
     backgroundColor: "#1B5A25",
@@ -179,4 +179,4 @@ const styles = {
   },
 };
 
-export default Sign;
+export default Login;
