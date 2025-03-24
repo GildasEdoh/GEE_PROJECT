@@ -1,6 +1,6 @@
 const Matieres = () => {
     return (
-      <div className="p-6 bg-black/50 shadow-md rounded-lg w-full">
+      <div className="p-6 bg-transparent shadow-md rounded-lg w-full">
         <h2 className="text-2xl font-bold text-center">Liste des matières</h2>
         
         {/* Tableau des matières */}
@@ -16,43 +16,43 @@ const Matieres = () => {
             </thead>
             <tbody>
               {/* Exemple de données */}
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
                 <td className="p-3 border">Non</td>
               </tr>
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
                 <td className="p-3 border">Non</td>
               </tr>
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
                 <td className="p-3 border">Non</td>
               </tr>
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
                 <td className="p-3 border">Non</td>
               </tr>
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
                 <td className="p-3 border">Non</td>
               </tr>
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
                 <td className="p-3 border">Non</td>
               </tr>
-              <tr className="bg-black">
+              <tr className="bg-white">
                 <td className="p-3 border">MAT101</td>
                 <td className="p-3 border">Mathématiques</td>
                 <td className="p-3 border">MATH</td>
