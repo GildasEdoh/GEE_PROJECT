@@ -60,6 +60,11 @@ const Login = () => {
                             <button type="button" style={styles.cancelButton}>Annuler</button>
                             <button type="submit" style={styles.submitButton}>Se connecter</button>
                         </div>
+                        <div style={styles.textLink}>
+                            <Link href="/SignUp">
+                                <h4>Pas de compte ? Si non...Cliquez</h4>
+                            </Link>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -97,7 +102,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        height: '350px',
+        height: '400px',
         width: '450px',
         marginTop: '50px',
         padding: '20px 30px 0px 30px',
@@ -153,6 +158,15 @@ const styles = {
         borderRadius: '15px',
         cursor: 'pointer',
     },
+    textLink: {
+        position: 'relative',
+        color: 'skyblue',
+        cursor: 'pointer',
+        bottom: '32px',
+        left: '24%',
+        fontFamily: 'limelight',
+        fontWeight: 'Bold',
+    }
 };
 
 export default Login;
