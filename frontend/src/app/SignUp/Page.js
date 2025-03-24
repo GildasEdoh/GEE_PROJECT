@@ -110,7 +110,7 @@ const Sign = () => {
                             </Link>
                         </div>
                         <div style={styles.textLink}>
-                            <Link href={"/SignIn/Page.js"}>
+                            <Link href="/SignIn">
                                 <h4>Déjà inscrit ? Si oui...Cliquez</h4>
                             </Link>
                         </div>
