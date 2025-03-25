@@ -1,13 +1,13 @@
 
-// import Login from '../app/SignIn/page'
+import Login from '../app/SignUp/page'
 
-// export default function Home() {
-//   return (
-//     <div style={{ backgroundColor: '#6988ED', minHeight: '100vh' }}>
-//       <Login />
-//     </div>
-//   );
-// }
+export default function Home() {
+  return (
+    <div style={{ backgroundColor: '#6988ED', minHeight: '100vh' }}>
+      <Login />
+    </div>
+  );
+}
 // import Sign from '../app/sign';
 
 // export default function Home() {
@@ -52,23 +52,23 @@
 //     </div>
 //   );
 // }
-"use client";
+// "use client";
 
-import Navbar from "./components/NavBar";
-import SideBar from "./components/SideBar";
-import Dashboard from "./components/Dashboard"
-import { useState } from "react";
+// import Navbar from "./components/NavBar";
+// import SideBar from "./components/SideBar";
+// import Dashboard from "./components/Dashboard"
+// import { useState } from "react";
 
-export default function Home() {
-  const [selectedMenu, setSelectedMenu] = useState("accueil");
+// export default function Home() {
+//   const [selectedMenu, setSelectedMenu] = useState("accueil");
 
-  return (
-    <div className="flex h-screen">
-      <SideBar setSelectedMenu={setSelectedMenu} />
-      <div className="flex-1">
-        <Navbar />
-        <Dashboard selectedMenu={selectedMenu} />
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="flex h-screen">
+//       <SideBar setSelectedMenu={setSelectedMenu} />
+//       <div className="flex-1">
+//         <Navbar />
+//         <Dashboard selectedMenu={selectedMenu} />
+//       </div>
+//     </div>
+//   );
+// }
