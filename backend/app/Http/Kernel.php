@@ -48,6 +48,8 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
+        \App\Http\Middleware\HandleCors::class,
+
     ];
 
     /**

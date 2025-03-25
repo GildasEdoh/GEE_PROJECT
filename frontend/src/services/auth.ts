@@ -1,10 +1,27 @@
 import axios, { AxiosError } from "axios";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "http://localhost:8000"; // Base URL du backend Laravel
+
+const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true, // Important pour Sanctum (gère les cookies de session)
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
 
 export const loginUser = async (email: string, password: string) => {
+  console.log("Tentative de connexion...");
   try {
-    const res = await axios.post(`${API_URL}/login`, { email, password });
+    // 1️⃣ Récupérer le CSRF Token d'abord
+    await api.get("/sanctum/csrf-cookie");
+
+    // 2️⃣ Ensuite, envoyer la requête de connexion
+    const res = await api.post("/login", {
+      email,
+      password,
+    });
 
     if (res.data?.token) {
       localStorage.setItem("auth_token", res.data.token);

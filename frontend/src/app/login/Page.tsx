@@ -1,40 +1,33 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import axios from "axios";
-import { useRouter } from "next/navigation"; // Importer useRouter
+import { useRouter } from "next/navigation";
+import { loginUser } from "../../services/auth";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
-  const router = useRouter(); // Initialisation de useRouter
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
-  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("🚀 Bouton cliqué, soumission du formulaire...");
+    setErrorMessage(null); // Réinitialiser l'erreur
+    setIsLoading(true); // Activer le chargement
 
-    try {
-      // Appel de l'API Laravel pour se connecter
-      const res = await axios.post("https://localhost:8000/login", {
-        email,
-        password,
-      });
+    const data = await loginUser(email, password);
 
-      const data = res.data;
-
-      // Vérifier si la réponse contient un token
-      if (data.token) {
-        localStorage.setItem("auth_token", data.token); // Enregistrer le token dans le localStorage
-        console.log("Connexion réussie !");
-        // Rediriger l'utilisateur vers le dashboard
-        router.push("/dashboard"); // Redirection vers le dashboard
-      } else {
-        console.error("Erreur de connexion : token manquant");
-      }
-    } catch (error) {
-      console.error("Erreur de connexion :", error);
+    if (data) {
+      console.log("Connexion réussie !");
+      router.push("/dashboard"); // Rediriger après connexion
+    } else {
+      setErrorMessage("Email ou mot de passe incorrect.");
     }
+
+    setIsLoading(false); // Désactiver le chargement
   };
 
   return (
@@ -43,9 +36,11 @@ const Login = () => {
         <Image src="/ul.png" alt="Illustration" width={350} height={100} />
       </div>
       <div>
-        <h1 style={styles.title}>Gestion des Examens Etudiants</h1>
+        <h1 style={styles.title}>Gestion des Examens Étudiants</h1>
         <div style={styles.connexion}>
           <h2 style={styles.subtitle}>Connexion</h2>
+          {errorMessage && <p style={styles.error}>{errorMessage}</p>}{" "}
+          {/* Affichage de l'erreur */}
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.formGroup}>
               <input
@@ -81,8 +76,12 @@ const Login = () => {
               <button type="button" style={styles.cancelButton}>
                 Annuler
               </button>
-              <button type="submit" style={styles.submitButton}>
-                Se connecter
+              <button
+                type="submit"
+                style={styles.submitButton}
+                disabled={isLoading}
+              >
+                {isLoading ? "Connexion..." : "Se connecter"}
               </button>
             </div>
           </form>
@@ -113,7 +112,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: "0.1rem",
     marginTop: "20px",
     fontFamily: "limelight",
-    fontWeight: "Bold",
+    fontWeight: "bold",
     color: "white",
   },
   connexion: {
@@ -132,7 +131,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "2.5rem",
     marginBottom: "2rem",
     fontFamily: "limelight",
-    fontWeight: "Bold",
+    fontWeight: "bold",
     left: "29%",
     color: "#6988ED",
   },
@@ -159,7 +158,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   cancelButton: {
     width: "150px",
-    padding: "5px 20px 5px 20px",
+    padding: "5px 20px",
     fontSize: "1rem",
     backgroundColor: "#B91919",
     border: "none",
@@ -169,13 +168,18 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   submitButton: {
     width: "150px",
-    padding: "5px 20px 5px 20px",
+    padding: "5px 20px",
     fontSize: "1rem",
     backgroundColor: "#1B5A25",
     color: "#fff",
     border: "none",
     borderRadius: "15px",
     cursor: "pointer",
+  },
+  error: {
+    color: "red",
+    textAlign: "center",
+    marginBottom: "1rem",
   },
 };
 

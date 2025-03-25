@@ -16,7 +16,7 @@ Route::get('/test-db-connection', function () {
         return 'Could not connect to the database. Please check your configuration. Error: ' . $e->getMessage();
     }
 });
-
+Route::post('/login', [AuthController::class, 'store']);
 
 
 Route::get('/dashboard', function () {

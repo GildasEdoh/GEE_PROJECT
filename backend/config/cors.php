@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],  // Routes API et Sanctum
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'register'],  // Routes API et Sanctum
 
     'allowed_methods' => ['*'],  // Autoriser toutes les méthodes HTTP
 
