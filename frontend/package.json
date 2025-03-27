@@ -9,16 +9,27 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "axios": "^1.8.4",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+=======
+    "next": "15.2.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0"
+>>>>>>> 2e822bb60bed012d86df8c652853164ec8dcabea
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+<<<<<<< HEAD
     "@types/react": "^19.0.12",
+=======
+    "@types/react": "^19",
+>>>>>>> 2e822bb60bed012d86df8c652853164ec8dcabea
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.3",
