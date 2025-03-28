@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -11,6 +12,33 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\DB;
+=======
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\EtudiantController;
+/*
+|--------------------------------------------------------------------------
+| Routes Web
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+
+// Route principale
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
+
+Route::get('/test-db-connection', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'Database connection successful!';
+    } catch (\Exception $e) {
+        return 'Could not connect to the database. Please check your configuration. Error: ' . $e->getMessage();
+    }
+});
+>>>>>>> 0596282fbb784962250ece5c67f74f9089e69b68
 
 // ====================================
 // 🔍 Gestion des Étudiants
@@ -98,5 +126,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
+<<<<<<< HEAD
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+=======
+Route::post('/login', [AuthController::class, 'store']);
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+require __DIR__.'/settings.php';
+>>>>>>> 0596282fbb784962250ece5c67f74f9089e69b68

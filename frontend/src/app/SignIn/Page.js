@@ -1,19 +1,41 @@
-// components/Login.js
-"use client"; // Ajoutez cette ligne
-import { useState } from 'react';
+"use client"; // 
 import Image from 'next/image';
+import Link from 'next/link';
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { loginUser, getUser } from "../../services/auth";
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const [username, setUsername] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Username:', username);
-        console.log('Password:', password);
-        console.log('Remember Me:', rememberMe);
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("🚀 Bouton cliqué, soumission du formulaire...");
+    setErrorMessage(null); // Réinitialiser l'erreur
+    setIsLoading(true); // Activer le chargement
+    alert("email" + email + " " + password)
+
+    const data = await loginUser(email, password);
+    console.log("Utilisateur connecté :", data);
+
+    if (data) {
+      console.log("Connexion réussie !");
+      console.log("Utilisateur connecté :", data);
+      alert("connexion" + data)
+      router.push("/home"); // Rediriger après connexion
+    } else {
+      setErrorMessage("Email ou mot de passe incorrect.");
+    }
+
+    setIsLoading(false); // Désactiver le chargement
+  };
 
     return (
         <div style={styles.container}>
@@ -26,14 +48,14 @@ const Login = () => {
                     <h2 style={styles.subtitle}>Connexion</h2>
                     <form onSubmit={handleSubmit} style={styles.form}>
                         <div style={styles.formGroup}>
-                            <input
-                                type="text"
-                                id="username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                style={styles.input}
-                                placeholder="Nom d'utilisateur"
-                            />
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            style={styles.input}
+                            placeholder="Adresse email"
+                            required
+                        />
                         </div>
                         <div style={styles.formGroup}>
                             <input
@@ -57,7 +79,17 @@ const Login = () => {
                         </div>
                         <div style={styles.buttonGroup}>
                             <button type="button" style={styles.cancelButton}>Annuler</button>
-                            <button type="submit" style={styles.submitButton}>Se connecter</button>
+                            <button
+                                type="submit"
+                                style={styles.submitButton}
+                                disabled={isLoading}>
+                                {isLoading ? "Connexion..." : "Se connecter"}
+                            </button>
+                        </div>
+                        <div style={styles.textLink}>
+                            <Link href="/SignUp">
+                                <h4>Pas de compte ? Si non...Cliquez</h4>
+                            </Link>
                         </div>
                     </form>
                 </div>
@@ -96,7 +128,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        height: '350px',
+        height: '400px',
         width: '450px',
         marginTop: '50px',
         padding: '20px 30px 0px 30px',
@@ -152,6 +184,15 @@ const styles = {
         borderRadius: '15px',
         cursor: 'pointer',
     },
+    textLink: {
+        position: 'relative',
+        color: 'skyblue',
+        cursor: 'pointer',
+        bottom: '32px',
+        left: '24%',
+        fontFamily: 'limelight',
+        fontWeight: 'Bold',
+    }
 };
 
 export default Login;
