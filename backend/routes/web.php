@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\EtudiantController;
@@ -10,27 +11,6 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\DB;
-
-/*
-|--------------------------------------------------------------------------
-| Routes Web
-|--------------------------------------------------------------------------
-*/
-
-// Route principale
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
-
-// Route de test
-Route::get('/test-db-connection', function () {
-    try {
-        DB::connection()->getPdo();
-        return 'Database connection successful!';
-    } catch (\Exception $e) {
-        return 'Could not connect to the database. Please check your configuration. Error: ' . $e->getMessage();
-    }
-});
 
 // ====================================
 // 🔍 Gestion des Étudiants
@@ -108,7 +88,6 @@ Route::prefix('note')->group(function () {
     Route::put('/{id}', [NoteController::class, 'update'])->name('note.update'); // Mettre à jour une note
     Route::delete('/{id}', [NoteController::class, 'destroy'])->name('note.destroy'); // Supprimer une note
 });
-
 
 // ====================================
 // ⚙️ Routes Authentification (Middleware)
