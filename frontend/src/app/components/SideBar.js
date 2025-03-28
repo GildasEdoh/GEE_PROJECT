@@ -17,6 +17,7 @@ const SideBar = ({ setSelectedMenu }) => {
   const [isNotesOpen, setIsNotesOpen] = useState(false);
 
   const menuItems = [
+    { name: "Acceuil", icon: <FaArchive />, path: "/home" },
     { name: "Étudiants", icon: <FaUsers />, path: "/etudiants" },
     { name: "Matières", icon: <FaBook />, path: "/matieres" },
     { name: "Évaluations", icon: <FaClipboardList />, path: "/evaluations" },

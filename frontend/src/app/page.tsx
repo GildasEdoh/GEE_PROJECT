@@ -52,7 +52,7 @@ import Dashboard from "./components/Dashboard"
 import { useState } from "react";
 
 export default function Home() {
-  const [selectedMenu, setSelectedMenu] = useState("accueil");
+  const [selectedMenu, setSelectedMenu] = useState("Accueil");
 
   return (
     <div className="flex h-screen">
