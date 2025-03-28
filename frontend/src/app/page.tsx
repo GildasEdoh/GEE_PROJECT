@@ -1,14 +1,14 @@
 
-"use client";
-import Login from "./SignIn/page";
+// "use client";
+// import Login from "./SignIn/page";
 
-export default function Home() {
-  return (
-    <div style={{ backgroundColor: "#6988ED", minHeight: "100vh" }}>
-      <Login />
-    </div>
-  );
-}
+// export default function Home() {
+//   return (
+//     <div style={{ backgroundColor: "#6988ED", minHeight: "100vh" }}>
+//       <Login />
+//     </div>
+//   );
+// }
 
 // "use client";
 
@@ -64,3 +64,23 @@ export default function Home() {
 //     </div>
 //   );
 // }
+"use client";
+
+import Navbar from "./components/Dashboard";
+import SideBar from "./components/Dashboard";
+import Dashboard from "./components/Dashboard"
+import { useState } from "react";
+
+export default function Home() {
+  const [selectedMenu, setSelectedMenu] = useState("accueil");
+
+  return (
+    <div className="flex h-screen">
+      <SideBar setSelectedMenu={setSelectedMenu} />
+      <div className="flex-1">
+        <Navbar />
+        <Dashboard selectedMenu={selectedMenu} />
+      </div>
+    </div>
+  );
+}
