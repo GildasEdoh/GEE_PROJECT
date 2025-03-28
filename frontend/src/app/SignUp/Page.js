@@ -138,7 +138,7 @@ const styles = {
         height: '100vh',
         backgroundColor: '#6988ED',
         color: 'black',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
@@ -151,19 +151,19 @@ const styles = {
         width: '350px',
         backgroundColor: 'white',
         marginRight: '215px',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
             marginRight: '0',
             marginBottom: '30px',
             width: '250px'
         },
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: '200px'
         }
     },
     image: {
         width: "100px",
         height: "100px",
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: "80px",
             height: "80px"
         }
@@ -175,11 +175,11 @@ const styles = {
         fontFamily: 'limelight',
         fontWeight: 'Bold',
         color: 'white',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
             textAlign: 'center',
             fontSize: '2rem'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             fontSize: '1.5rem'
         }
     },
@@ -192,12 +192,12 @@ const styles = {
         marginTop: '50px',
         padding: '20px 50px 20px 60px',
         borderRadius: '15px',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: '350px',
             height: 'auto',
             padding: '20px'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '280px',
             padding: '15px'
         }
@@ -210,11 +210,11 @@ const styles = {
         fontWeight: 'Bold',
         left: '32%',
         color: '#6988ED',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             left: '28%',
             fontSize: '1.3rem'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             left: '22%',
             fontSize: '1.1rem'
         }
@@ -223,13 +223,13 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         width: '400px',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: '100%'
         }
     },
     formGroup: {
         marginBottom: '1.4rem',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             marginBottom: '1rem'
         }
     },
@@ -249,10 +249,10 @@ const styles = {
         border: 'none',
         cursor: 'pointer',
         fontSize: '1rem',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             right: '60px'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             right: '40px'
         }
     },
@@ -265,17 +265,17 @@ const styles = {
         border: 'none',
         cursor: 'pointer',
         fontSize: '1rem',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             right: '60px'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             right: '40px'
         }
     },
     buttonGroup: {
         display: 'flex',
         justifyContent: 'space-between',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             flexDirection: 'column',
             gap: '15px'
         }
@@ -289,7 +289,7 @@ const styles = {
         borderRadius: '15px',
         color: '#fff',
         cursor: 'pointer',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '100%'
         }
     },
@@ -302,7 +302,7 @@ const styles = {
         border: 'none',
         borderRadius: '15px',
         cursor: 'pointer',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '100%'
         }
     },
@@ -314,10 +314,10 @@ const styles = {
         left: '27%',
         fontFamily: 'limelight',
         fontWeight: 'Bold',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             left: '22%'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             left: '15%',
             fontSize: '0.9rem'
         }

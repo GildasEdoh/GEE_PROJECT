@@ -116,7 +116,7 @@ const styles = {
         height: '100vh',
         backgroundColor: '#6988ED',
         color: 'black',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
@@ -129,12 +129,12 @@ const styles = {
         width: '350px',
         backgroundColor: 'white',
         marginRight: '260px',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
             marginRight: '0',
             marginBottom: '30px',
             width: '250px'
         },
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: '200px'
         }
     },
@@ -147,12 +147,12 @@ const styles = {
         fontFamily: 'limelight',
         fontWeight: 'Bold',
         color: 'white',
-        '@media (max-width: 1200px)': {
+        '@media (maxWidth: 1200px)': {
             right: '0',
             textAlign: 'center',
             fontSize: '2rem'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             fontSize: '1.5rem'
         }
     },
@@ -166,12 +166,12 @@ const styles = {
         marginTop: '50px',
         padding: '20px 30px 0px 30px',
         borderRadius: '15px',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: '350px',
             height: 'auto',
             padding: '20px'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '280px',
             padding: '15px'
         }
@@ -184,11 +184,11 @@ const styles = {
         fontWeight: 'Bold',
         left: '29%',
         color: '#6988ED',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             fontSize: '2rem',
             left: '25%'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             fontSize: '1.5rem',
             left: '20%'
         }
@@ -197,13 +197,13 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         width: '400px',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             width: '100%'
         }
     },
     formGroup: {
         marginBottom: '2rem',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             marginBottom: '1.5rem'
         }
     },
@@ -213,7 +213,7 @@ const styles = {
         fontSize: '1rem',
         backgroundColor: '#D9D9D9',
         borderRadius: '10px',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '85%'
         }
     },
@@ -222,7 +222,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         marginBottom: '60px',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             flexDirection: 'column',
             alignItems: 'center',
             gap: '15px',
@@ -238,7 +238,7 @@ const styles = {
         borderRadius: '15px',
         color: '#fff',
         cursor: 'pointer',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '100%'
         }
     },
@@ -251,7 +251,7 @@ const styles = {
         border: 'none',
         borderRadius: '15px',
         cursor: 'pointer',
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             width: '100%'
         }
     },
@@ -263,11 +263,11 @@ const styles = {
         left: '24%',
         fontFamily: 'limelight',
         fontWeight: 'Bold',
-        '@media (max-width: 768px)': {
+        '@media (maxWidth: 768px)': {
             left: '20%',
             bottom: '25px'
         },
-        '@media (max-width: 480px)': {
+        '@media (maxWidth: 480px)': {
             left: '15%',
             bottom: '20px',
             fontSize: '0.9rem'
