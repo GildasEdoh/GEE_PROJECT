@@ -6,12 +6,12 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from 'next/link';
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Username:", username);
     console.log("Password:", password);
     console.log("Remember Me:", rememberMe);
-  };
+};
 
 
 const Sign = () => {
@@ -83,7 +83,7 @@ const Sign = () => {
                                 type={showPassword0 ? 'text' : 'password'}
                                 id="password"
                                 value={password}
-                                onChange={(e) => setPassword (e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)}
                                 style={styles.input}
                                 placeholder="Mot de passe"
                             />
@@ -126,7 +126,7 @@ const Sign = () => {
                     </form>
                 </div>
             </div>
-            
+
         </div>
     );
 };
@@ -138,16 +138,35 @@ const styles = {
         height: '100vh',
         backgroundColor: '#6988ED',
         color: 'black',
+        '@media (max-width: 1200px)': {
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 'auto',
+            padding: '20px'
+        }
     },
     imageContainer: {
         position: 'relative',
         width: '350px',
         backgroundColor: 'white',
         marginRight: '215px',
+        '@media (max-width: 1200px)': {
+            marginRight: '0',
+            marginBottom: '30px',
+            width: '250px'
+        },
+        '@media (max-width: 768px)': {
+            width: '200px'
+        }
     },
     image: {
         width: "100px",
         height: "100px",
+        '@media (max-width: 768px)': {
+            width: "80px",
+            height: "80px"
+        }
     },
     title: {
         fontSize: '2.6rem',
@@ -156,8 +175,15 @@ const styles = {
         fontFamily: 'limelight',
         fontWeight: 'Bold',
         color: 'white',
+        '@media (max-width: 1200px)': {
+            textAlign: 'center',
+            fontSize: '2rem'
+        },
+        '@media (max-width: 480px)': {
+            fontSize: '1.5rem'
+        }
     },
-    inscription : {
+    inscription: {
         position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
@@ -166,6 +192,15 @@ const styles = {
         marginTop: '50px',
         padding: '20px 50px 20px 60px',
         borderRadius: '15px',
+        '@media (max-width: 768px)': {
+            width: '350px',
+            height: 'auto',
+            padding: '20px'
+        },
+        '@media (max-width: 480px)': {
+            width: '280px',
+            padding: '15px'
+        }
     },
     subtitle: {
         position: 'relative',
@@ -175,21 +210,35 @@ const styles = {
         fontWeight: 'Bold',
         left: '32%',
         color: '#6988ED',
+        '@media (max-width: 768px)': {
+            left: '28%',
+            fontSize: '1.3rem'
+        },
+        '@media (max-width: 480px)': {
+            left: '22%',
+            fontSize: '1.1rem'
+        }
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
         width: '400px',
+        '@media (max-width: 768px)': {
+            width: '100%'
+        }
     },
     formGroup: {
         marginBottom: '1.4rem',
+        '@media (max-width: 480px)': {
+            marginBottom: '1rem'
+        }
     },
     input: {
         width: '100%',
         padding: '0.5rem',
         fontSize: '1rem',
         backgroundColor: '#ECECEC',
-        borderRadius: '10px',
+        borderRadius: '10px'
     },
     eyeButton: {
         position: 'absolute',
@@ -200,6 +249,12 @@ const styles = {
         border: 'none',
         cursor: 'pointer',
         fontSize: '1rem',
+        '@media (max-width: 768px)': {
+            right: '60px'
+        },
+        '@media (max-width: 480px)': {
+            right: '40px'
+        }
     },
     eyeButton1: {
         position: 'absolute',
@@ -210,10 +265,20 @@ const styles = {
         border: 'none',
         cursor: 'pointer',
         fontSize: '1rem',
+        '@media (max-width: 768px)': {
+            right: '60px'
+        },
+        '@media (max-width: 480px)': {
+            right: '40px'
+        }
     },
     buttonGroup: {
         display: 'flex',
         justifyContent: 'space-between',
+        '@media (max-width: 480px)': {
+            flexDirection: 'column',
+            gap: '15px'
+        }
     },
     cancelButton: {
         width: '120px',
@@ -224,6 +289,9 @@ const styles = {
         borderRadius: '15px',
         color: '#fff',
         cursor: 'pointer',
+        '@media (max-width: 480px)': {
+            width: '100%'
+        }
     },
     submitButton: {
         width: '120px',
@@ -234,6 +302,9 @@ const styles = {
         border: 'none',
         borderRadius: '15px',
         cursor: 'pointer',
+        '@media (max-width: 480px)': {
+            width: '100%'
+        }
     },
     textLink: {
         position: 'relative',
@@ -243,6 +314,13 @@ const styles = {
         left: '27%',
         fontFamily: 'limelight',
         fontWeight: 'Bold',
+        '@media (max-width: 768px)': {
+            left: '22%'
+        },
+        '@media (max-width: 480px)': {
+            left: '15%',
+            fontSize: '0.9rem'
+        }
     }
 };
 
