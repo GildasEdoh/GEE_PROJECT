@@ -17,20 +17,11 @@ import {
 
 const SideBar = ({ setSelectedMenu }) => {
   const [isNotesOpen, setIsNotesOpen] = useState(false);
-
-  const menuItems = [
-    { name: "Acceuil", icon: <FaArchive />, path: "/home" },
-    { name: "Étudiants", icon: <FaUsers />, path: "/etudiants" },
-    { name: "Matières", icon: <FaBook />, path: "/matieres" },
-    { name: "Évaluations", icon: <FaClipboardList />, path: "/evaluations" },
-    { name: "Statistiques", icon: <FaClipboardList />, path: "/statistiques" },
-    { name: "Archives", icon: <FaArchive />, path: "/archives" },
-  ];
   const [isMiseAJourOpen, setIsMiseAJourOpen] = useState(false);
   const [isEvaluationsOpen, setIsEvaluationsOpen] = useState(false);
 
   return (
-    <aside className="w-55 bg-blue-400 text-white h-screen p-4 flex flex-col">
+    <aside className="w-64 bg-blue-500 text-white h-screen p-4 flex flex-col">
       <h1 className="text-2xl font-bold mb-6 text-center">GEE - UL</h1>
 
       <ul className="space-y-2 flex-1">
