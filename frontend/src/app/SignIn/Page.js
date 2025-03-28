@@ -57,6 +57,14 @@ const Login = () => {
                             placeholder="Adresse email"
                             required
                         />
+                            {/* <input
+                                type="text"
+                                id="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                style={styles.input}
+                                placeholder="Nom d'utilisateur"
+                            /> */}
                         </div>
                         <div style={styles.formGroup}>
                             <input
@@ -86,6 +94,7 @@ const Login = () => {
                                 disabled={isLoading}>
                                 {isLoading ? "Connexion..." : "Se connecter"}
                             </button>
+                            {/* <button type="submit" style={styles.submitButton}>Se connecter</button> */}
                         </div>
                         <div style={styles.textLink}>
                             <Link href="/SignUp">
