@@ -14,7 +14,9 @@
 
 // import Navbar from "./components/NavBar";
 // import SideBar from "./components/SideBar";
-// import Dashboard from "./Dashboard"
+// import Dashboard from "./components/Dashboard"
+// import InfoCard from "./components/InfoCard"
+// import ActionButton from "./components/ActionButton"
 // import { useState } from "react";
 
 // export default function Home() {
@@ -22,9 +24,10 @@
 
 //   return (
 //     <div className="flex h-screen">
-//       <SideBar />
+//       <SideBar setSelectedMenu={setSelectedMenu} />
 //       <div className="flex-1">
 //         <Navbar />
+//         <Dashboard selectedMenu={selectedMenu} />
 //         <main className="p-4">
           
 //           <div className="grid grid-cols-4 gap-4">
@@ -44,26 +47,7 @@
 //     </div>
 //   );
 // }
-// "use client";
 
-// import Navbar from "./components/NavBar";
-// import SideBar from "./components/SideBar";
-// import Dashboard from "./components/Dashboard"
-// import { useState } from "react";
-
-// export default function Home() {
-//   const [selectedMenu, setSelectedMenu] = useState("accueil");
-
-//   return (
-//     <div className="flex h-screen">
-//       <SideBar setSelectedMenu={setSelectedMenu} />
-//       <div className="flex-1">
-//         <Navbar />
-//         <Dashboard selectedMenu={selectedMenu} />
-//       </div>
-//     </div>
-//   );
-// }
 "use client";
 
 import Navbar from "./components/Dashboard";
