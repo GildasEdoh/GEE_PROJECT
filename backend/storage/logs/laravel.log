@@ -336,3 +336,18 @@
 #58 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('...')
 #59 {main}
 "} 
+[2025-03-28 09:48:02] local.ERROR: Maximum execution time of 30 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 30 seconds exceeded at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\JsonResponse.php:12)
+[stacktrace]
+#0 {main}
+"} 
+[2025-03-28 09:48:02] local.ERROR: Class "Illuminate\Http\JsonResponse" not found {"exception":"[object] (Error(code: 0): Class \"Illuminate\\Http\\JsonResponse\" not found at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php:976)
+[stacktrace]
+#0 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(709): Illuminate\\Foundation\\Exceptions\\Handler->prepareJsonResponse()
+#1 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(598): Illuminate\\Foundation\\Exceptions\\Handler->renderExceptionResponse()
+#2 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(219): Illuminate\\Foundation\\Exceptions\\Handler->render()
+#3 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(196): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->renderHttpResponse()
+#4 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(232): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleException()
+#5 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#6 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->{closure:Illuminate\\Foundation\\Bootstrap\\HandleExceptions::forwardsTo():255}()
+#7 {main}
+"} 
