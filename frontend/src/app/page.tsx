@@ -56,11 +56,6 @@ export default function Home() {
 
   return (
     <div className="flex h-screen">
-      <SideBar setSelectedMenu={setSelectedMenu} />
-      <div className="flex-1">
-        <Navbar />
-        <Dashboard selectedMenu={selectedMenu} />
-      </div>
     </div>
   );
 }
