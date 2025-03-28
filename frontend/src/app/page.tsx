@@ -1,7 +1,6 @@
 
-// import Login from '../app/SignUp/page'
-// =======
-// import Login from "./login/page";
+"use client";
+import Login from "./SignIn/page";
 
 export default function Home() {
   return (
@@ -10,15 +9,6 @@ export default function Home() {
     </div>
   );
 }
-// import Sign from '../app/sign';
-
-// export default function Home() {
-//   return (
-//     <div style={{ backgroundColor: '#6988ED', minHeight: '100vh' }}>
-//       <Sign />
-//     </div>
-//   );
-// }
 
 // "use client";
 
