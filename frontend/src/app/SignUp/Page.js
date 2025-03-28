@@ -38,25 +38,10 @@ const Sign = () => {
         console.log('Confirm:', confirm);
     };
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.imageContainer}>
-        <Image src="/ul.png" alt="Illustration" width={400} height={100} />
-      </div>
-      <div>
-        <h1 style={styles.title}>Gestion des Examens Etudiants</h1>
-        <div style={styles.inscription}>
-          <h2 style={styles.subtitle}>INSCRIPTION</h2>
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.formGroup}>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                style={styles.input}
-                placeholder="Nom"
-              />
+    return (
+        <div style={styles.container}>
+            <div style={styles.imageContainer}>
+                <Image src="/ul.png" alt="Illustration" width={400} height={100} />
             </div>
             <div>
                 <h1 style={styles.title}>Gestion des Examens Etudiants</h1>
@@ -141,49 +126,9 @@ const Sign = () => {
                     </form>
                 </div>
             </div>
-            <div style={styles.formGroup}>
-              <input
-                type="email"
-                id="mail"
-                value={mail}
-                onChange={(e) => setMail(e.target.value)}
-                style={styles.input}
-                placeholder="Entrez votre adresse email"
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={styles.input}
-                placeholder="Mot de passe"
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={styles.input}
-                placeholder="Confirmer le mot de passe"
-              />
-            </div>
-            <div style={styles.buttonGroup}>
-              <button type="button" style={styles.cancelButton}>
-                Annuler
-              </button>
-              <button type="submit" style={styles.submitButton}>
-                S&apos;inscrire
-              </button>
-            </div>
-          </form>
+            
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 const styles = {
