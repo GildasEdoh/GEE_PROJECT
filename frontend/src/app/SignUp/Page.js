@@ -1,9 +1,18 @@
 // components/Login.js
+
 "use client"; // Ajoutez cette ligne
 
-import Image from 'next/image';
+import Image from "next/image";
+import { useState } from "react";
 import Link from 'next/link';
-import { useState } from 'react';
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Username:", username);
+    console.log("Password:", password);
+    console.log("Remember Me:", rememberMe);
+  };
+
 
 const Sign = () => {
     const [name, setName] = useState('');
