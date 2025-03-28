@@ -51,7 +51,7 @@
 "use client";
 import Navbar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import Dashboard from "./components/Dashboard"
+import Dashboard from "./components/Dashboard";
 import { useState } from "react";
 
 export default function Home() {
