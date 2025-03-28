@@ -1,7 +1,7 @@
 "use client";
-import Matieres from "../matieres/page";
-import Etudiants from "../etudiants/page"
-import Accueil from "../home/page"
+import Matieres from "./Matieres";
+import Etudiants from "./Etudiants"
+import Accueil from "./Accueil"
 
 export default function Dashboard({ selectedMenu }) {
   const renderContent = () => {
