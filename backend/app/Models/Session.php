@@ -15,7 +15,7 @@ class Session extends Model
 
     protected $fillable = [
         'libelle',
-        'nbcompose',
+        'nbcompose', 
         'cloture',
     ];
 
