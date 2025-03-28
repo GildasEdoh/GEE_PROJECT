@@ -29,6 +29,7 @@ const Login = () => {
       console.log("Connexion réussie !");
       console.log("Utilisateur connecté :", data);
       alert("connexion" + data)
+      alert("Connexion reussie ")
       router.push("/home"); // Rediriger après connexion
     } else {
       setErrorMessage("Email ou mot de passe incorrect.");
