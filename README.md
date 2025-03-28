@@ -1,6 +1,6 @@
 # GEE_PROJECT
 
-GEE_PROJECT - Gestion des Étudiants en Ligne
+# GEE_PROJECT - Gestion des Étudiants en Ligne
 
 Description
 
@@ -24,7 +24,7 @@ Gestion des résultats : Saisie et affichage des résultats des étudiants.
 
 Tableau de bord interactif : Visualisation des statistiques et performances des étudiants.
 
-Technologies utilisées
+# Technologies utilisées
 
 Frontend : Next.js, React, Tailwind CSS
 
@@ -36,7 +36,7 @@ Installation et configuration
 
 Installation du Frontend
 
-Cloner le projet :
+# Cloner le projet :
 
 git clone https://github.com/GildasEdoh/GEE_PROJECT.git
 cd GEE_PROJECT/frontend
