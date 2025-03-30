@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-import Login from "../app/login/Page";
-
-export default function Home() {
-  return (
-    <div style={{ backgroundColor: "#6988ED", minHeight: "100vh" }}>
-      <Login />
-    </div>
-  );
-}
-=======
-=======
->>>>>>> abe7541d3fbd6fd94fe9f401f0141af33da24ee1
-
 // "use client";
 // import Login from "./SignIn/page";
 
@@ -23,21 +8,6 @@ export default function Home() {
 //     </div>
 //   );
 // }
-<<<<<<< HEAD
->>>>>>> 2e822bb60bed012d86df8c652853164ec8dcabea
-// import Sign from '../app/sign';
-
-// export default function Home() {
-//   return (
-//     <div style={{ backgroundColor: '#6988ED', minHeight: '100vh' }}>
-//       <Sign />
-//     </div>
-//   );
-// }
-<<<<<<< HEAD
-=======
-=======
->>>>>>> abe7541d3fbd6fd94fe9f401f0141af33da24ee1
 
 // "use client";
 
@@ -58,7 +28,7 @@ export default function Home() {
 //         <Navbar />
 //         <Dashboard selectedMenu={selectedMenu} />
 //         <main className="p-4">
-          
+
 //           <div className="grid grid-cols-4 gap-4">
 //             <InfoCard title="Nombre Total d’étudiants inscrits" value="-----" />
 //             <InfoCard title="Nombre d’examens programmés" value="-----" />
@@ -80,7 +50,7 @@ export default function Home() {
 "use client";
 import Navbar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import Dashboard from "./components/Dashboard"
+import Dashboard from "./components/Dashboard";
 import { useState } from "react";
 
 export default function Home() {
@@ -95,9 +65,4 @@ export default function Home() {
       </div>
     </div>
   );
-<<<<<<< HEAD
 }
->>>>>>> 2e822bb60bed012d86df8c652853164ec8dcabea
-=======
-};
->>>>>>> abe7541d3fbd6fd94fe9f401f0141af33da24ee1
