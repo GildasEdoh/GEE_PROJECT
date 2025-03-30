@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Login from "../app/login/Page";
 
 export default function Home() {
@@ -9,16 +10,20 @@ export default function Home() {
   );
 }
 =======
+=======
+>>>>>>> abe7541d3fbd6fd94fe9f401f0141af33da24ee1
 
-// import Login from '../app/SignIn/page'
+// "use client";
+// import Login from "./SignIn/page";
 
 // export default function Home() {
 //   return (
-//     <div style={{ backgroundColor: '#6988ED', minHeight: '100vh' }}>
+//     <div style={{ backgroundColor: "#6988ED", minHeight: "100vh" }}>
 //       <Login />
 //     </div>
 //   );
 // }
+<<<<<<< HEAD
 >>>>>>> 2e822bb60bed012d86df8c652853164ec8dcabea
 // import Sign from '../app/sign';
 
@@ -31,12 +36,16 @@ export default function Home() {
 // }
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> abe7541d3fbd6fd94fe9f401f0141af33da24ee1
 
 // "use client";
 
 // import Navbar from "./components/NavBar";
 // import SideBar from "./components/SideBar";
-// import Dashboard from "./Dashboard"
+// import Dashboard from "./components/Dashboard"
+// import InfoCard from "./components/InfoCard"
+// import ActionButton from "./components/ActionButton"
 // import { useState } from "react";
 
 // export default function Home() {
@@ -44,9 +53,10 @@ export default function Home() {
 
 //   return (
 //     <div className="flex h-screen">
-//       <SideBar />
+//       <SideBar setSelectedMenu={setSelectedMenu} />
 //       <div className="flex-1">
 //         <Navbar />
+//         <Dashboard selectedMenu={selectedMenu} />
 //         <main className="p-4">
           
 //           <div className="grid grid-cols-4 gap-4">
@@ -66,8 +76,8 @@ export default function Home() {
 //     </div>
 //   );
 // }
-"use client";
 
+"use client";
 import Navbar from "./components/NavBar";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard"
@@ -85,5 +95,9 @@ export default function Home() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
 >>>>>>> 2e822bb60bed012d86df8c652853164ec8dcabea
+=======
+};
+>>>>>>> abe7541d3fbd6fd94fe9f401f0141af33da24ee1

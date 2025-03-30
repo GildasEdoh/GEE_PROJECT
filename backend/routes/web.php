@@ -9,14 +9,14 @@ use App\Http\Controllers\EtudiantController;
 | Routes Web
 |--------------------------------------------------------------------------
 */
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 // Route principale
 Route::get('/', function () {
-
-    return view('welcome');
-});
-=======
     return Inertia::render('welcome');
+})->name('home');
+
 Route::get('/test-db-connection', function () {
     try {
         DB::connection()->getPdo();
@@ -24,22 +24,7 @@ Route::get('/test-db-connection', function () {
         return 'Could not connect to the database. Please check your configuration. Error: ' . $e->getMessage();
     }
 });
-Route::post('/login', [AuthController::class, 'store']);
 
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';
-=======
 // ====================================
 // 🔍 Gestion des Étudiants
 // ====================================
@@ -84,6 +69,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+Route::post('/login', [AuthController::class, 'store']);
 
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+require __DIR__.'/settings.php';

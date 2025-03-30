@@ -14,8 +14,8 @@ class VerifyCsrfToken extends Middleware
     
     protected $except = [
         'http://localhost:3000/*', // Désactive CSRF pour toutes les routes API
-        '/login',
-        '/sanctum/csrf-cookie',
+        '/sanctum/csrf-cookie', // Exclure toutes les routes API de la vérification CSRF
+        'login'
     ];
     
 }

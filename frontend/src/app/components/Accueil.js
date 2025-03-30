@@ -1,7 +1,7 @@
 "use client";
 
-import InfoCard from "../components/InfoCard"
-import ActionButton from "../components/ActionButton"
+import InfoCard from "./InfoCard"
+import ActionButton from "./ActionButton"
 
 const Accueil = () => {
   return (

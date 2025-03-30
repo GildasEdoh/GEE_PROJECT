@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { loginUser } from "../../services/auth";
+import { loginUser, getUser } from "../../services/auth";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,9 +19,12 @@ const Login = () => {
     setIsLoading(true); // Activer le chargement
 
     const data = await loginUser(email, password);
+    console.log("Utilisateur connecté :", data);
 
     if (data) {
       console.log("Connexion réussie !");
+      console.log("Utilisateur connecté :", data);
+      alert("connexion" + data)
       router.push("/dashboard"); // Rediriger après connexion
     } else {
       setErrorMessage("Email ou mot de passe incorrect.");
