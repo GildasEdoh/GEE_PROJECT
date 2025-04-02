@@ -7,36 +7,36 @@ import { useRouter } from "next/navigation";
 import { loginUser, getUser } from "../../services/auth";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const [username, setUsername] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("🚀 Bouton cliqué, soumission du formulaire...");
-    setErrorMessage(null); // Réinitialiser l'erreur
-    setIsLoading(true); // Activer le chargement
-    alert("email" + email + " " + password)
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("🚀 Bouton cliqué, soumission du formulaire...");
+        setErrorMessage(null); // Réinitialiser l'erreur
+        setIsLoading(true); // Activer le chargement
+        alert("email" + email + " " + password)
 
-    const data = await loginUser(email, password);
-    console.log("Utilisateur connecté :", data);
+        const data = await loginUser(email, password);
+        console.log("Utilisateur connecté :", data);
 
-    if (data) {
-      console.log("Connexion réussie !");
-      console.log("Utilisateur connecté :", data);
-      alert("connexion" + data)
-      alert("Connexion reussie ")
-      router.push("/dashboard"); // Rediriger après connexion
-    } else {
-      setErrorMessage("Email ou mot de passe incorrect.");
-    }
+        if (data) {
+            console.log("Connexion réussie !");
+            console.log("Utilisateur connecté :", data);
+            alert("connexion" + data)
+            alert("Connexion reussie ")
+            router.push("/dashboard"); // Rediriger après connexion
+        } else {
+            setErrorMessage("Email ou mot de passe incorrect.");
+        }
 
-    setIsLoading(false); // Désactiver le chargement
-  };
+        setIsLoading(false); // Désactiver le chargement
+    };
 
     return (
         <div style={styles.container}>
@@ -49,14 +49,14 @@ const Login = () => {
                     <h2 style={styles.subtitle}>Connexion</h2>
                     <form onSubmit={handleSubmit} style={styles.form}>
                         <div style={styles.formGroup}>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            style={styles.input}
-                            placeholder="Adresse email"
-                            required
-                        />
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                style={styles.input}
+                                placeholder="Adresse email"
+                                required
+                            />
                             {/* <input
                                 type="text"
                                 id="username"
@@ -104,7 +104,7 @@ const Login = () => {
                     </form>
                 </div>
             </div>
-            
+
         </div>
     );
 };
@@ -116,12 +116,27 @@ const styles = {
         height: '100vh',
         backgroundColor: '#6988ED',
         color: 'black',
+        '@media (maxWidth: 1200px)': {
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 'auto',
+            padding: '20px'
+        }
     },
     imageContainer: {
         position: 'relative',
         width: '350px',
         backgroundColor: 'white',
         marginRight: '260px',
+        '@media (maxWidth: 1200px)': {
+            marginRight: '0',
+            marginBottom: '30px',
+            width: '250px'
+        },
+        '@media (maxWidth: 768px)': {
+            width: '200px'
+        }
     },
     title: {
         position: 'relative',
@@ -132,8 +147,16 @@ const styles = {
         fontFamily: 'limelight',
         fontWeight: 'Bold',
         color: 'white',
+        '@media (maxWidth: 1200px)': {
+            right: '0',
+            textAlign: 'center',
+            fontSize: '2rem'
+        },
+        '@media (maxWidth: 480px)': {
+            fontSize: '1.5rem'
+        }
     },
-    connexion : {
+    connexion: {
         position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
@@ -143,6 +166,15 @@ const styles = {
         marginTop: '50px',
         padding: '20px 30px 0px 30px',
         borderRadius: '15px',
+        '@media (maxWidth: 768px)': {
+            width: '350px',
+            height: 'auto',
+            padding: '20px'
+        },
+        '@media (maxWidth: 480px)': {
+            width: '280px',
+            padding: '15px'
+        }
     },
     subtitle: {
         position: 'relative',
@@ -152,14 +184,28 @@ const styles = {
         fontWeight: 'Bold',
         left: '29%',
         color: '#6988ED',
+        '@media (maxWidth: 768px)': {
+            fontSize: '2rem',
+            left: '25%'
+        },
+        '@media (maxWidth: 480px)': {
+            fontSize: '1.5rem',
+            left: '20%'
+        }
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
         width: '400px',
+        '@media (maxWidth: 768px)': {
+            width: '100%'
+        }
     },
     formGroup: {
         marginBottom: '2rem',
+        '@media (maxWidth: 480px)': {
+            marginBottom: '1.5rem'
+        }
     },
     input: {
         width: '90%',
@@ -167,12 +213,21 @@ const styles = {
         fontSize: '1rem',
         backgroundColor: '#D9D9D9',
         borderRadius: '10px',
+        '@media (maxWidth: 480px)': {
+            width: '85%'
+        }
     },
     buttonGroup: {
         position: 'relative',
         display: 'flex',
         justifyContent: 'space-between',
         marginBottom: '60px',
+        '@media (maxWidth: 480px)': {
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '15px',
+            marginBottom: '30px'
+        }
     },
     cancelButton: {
         width: '150px',
@@ -183,6 +238,9 @@ const styles = {
         borderRadius: '15px',
         color: '#fff',
         cursor: 'pointer',
+        '@media (maxWidth: 480px)': {
+            width: '100%'
+        }
     },
     submitButton: {
         width: '150px',
@@ -193,6 +251,9 @@ const styles = {
         border: 'none',
         borderRadius: '15px',
         cursor: 'pointer',
+        '@media (maxWidth: 480px)': {
+            width: '100%'
+        }
     },
     textLink: {
         position: 'relative',
@@ -202,6 +263,15 @@ const styles = {
         left: '24%',
         fontFamily: 'limelight',
         fontWeight: 'Bold',
+        '@media (maxWidth: 768px)': {
+            left: '20%',
+            bottom: '25px'
+        },
+        '@media (maxWidth: 480px)': {
+            left: '15%',
+            bottom: '20px',
+            fontSize: '0.9rem'
+        }
     }
 };
 
