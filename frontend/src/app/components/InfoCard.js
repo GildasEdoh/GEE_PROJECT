@@ -1,5 +1,7 @@
 "use client"; // Assure que ce composant s'exécute côté client
-
+/**
+ * 
+ */
 const InfoCard = ({ title, value }) => {
   return (
     <div className="bg-white shadow-md rounded-lg p-4 w-48 text-center">

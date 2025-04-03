@@ -1,6 +1,8 @@
 import { useState } from "react";
-
-const MatieresNote = () => {
+/**
+ * 
+ */
+const MajNotes = () => {
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   const matieres = [
@@ -81,4 +83,4 @@ const MatieresNote = () => {
   );
 };
 
-export default MatieresNote;
+export default MajNotes;
