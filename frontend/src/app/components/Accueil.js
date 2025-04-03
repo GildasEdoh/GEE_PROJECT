@@ -2,7 +2,9 @@
 
 import InfoCard from "./InfoCard"
 import ActionButton from "./ActionButton"
-
+/**
+ * Return the home dashboard
+ */
 const Accueil = () => {
   return (
     <main className="p-4">

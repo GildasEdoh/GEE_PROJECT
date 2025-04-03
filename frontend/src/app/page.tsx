@@ -1,4 +1,3 @@
-
 // "use client";
 // import Login from "./SignIn/page";
 
@@ -29,7 +28,7 @@
 //         <Navbar />
 //         <Dashboard selectedMenu={selectedMenu} />
 //         <main className="p-4">
-          
+
 //           <div className="grid grid-cols-4 gap-4">
 //             <InfoCard title="Nombre Total d’étudiants inscrits" value="-----" />
 //             <InfoCard title="Nombre d’examens programmés" value="-----" />
@@ -51,7 +50,7 @@
 "use client";
 import Navbar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import Dashboard from "./components/Dashboard"
+import Dashboard from "./components/Dashboard";
 import { useState } from "react";
 
 export default function Home() {
@@ -66,4 +65,4 @@ export default function Home() {
       </div>
     </div>
   );
-};
+}

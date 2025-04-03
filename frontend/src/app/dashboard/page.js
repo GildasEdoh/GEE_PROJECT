@@ -5,7 +5,9 @@ import SideBar from "../components/SideBar";
 import Dashboard from "../components/Dashboard"
 import { useState } from "react";
 import React from "react";
-
+/**
+ * 
+ */
 export default function Home() {
   const [selectedMenu, setSelectedMenu] = useState("accueil");
 
