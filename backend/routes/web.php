@@ -11,6 +11,26 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\DB;
+/*
+|--------------------------------------------------------------------------
+| Routes Web
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+
+// Route principale
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
+
+Route::get('/test-db-connection', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'Database connection successful!';
+        return 'Could not connect to the database. Please check your configuration. Error: ' . $e->getMessage();
+    }
+});
 
 // ====================================
 // 🔍 Gestion des Étudiants

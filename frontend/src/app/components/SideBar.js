@@ -15,6 +15,10 @@ import {
   FaUserTimes,
 } from "react-icons/fa";
 
+/**
+ * 
+ */
+
 const SideBar = ({ setSelectedMenu }) => {
   const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [isMiseAJourOpen, setIsMiseAJourOpen] = useState(false);
@@ -153,7 +157,8 @@ const SideBar = ({ setSelectedMenu }) => {
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Mise à jour Notes")}
+                  onClick={() => {
+                    setSelectedMenu("Mise à jour Notes")}}
                 >
                   <FaFileAlt />
                   <span>Notes</span>
