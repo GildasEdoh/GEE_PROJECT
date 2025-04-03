@@ -3,7 +3,7 @@
 import InfoCard from "./InfoCard"
 import ActionButton from "./ActionButton"
 /**
- * 
+ * Return the home dashboard
  */
 const Accueil = () => {
   return (

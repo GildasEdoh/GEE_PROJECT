@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 /**
- * 
+ * Return the page which contains the table of students
  */
 const Etudiants = () => {
   const [etudiants, setEtudiants] = useState([
