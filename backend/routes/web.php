@@ -1,6 +1,7 @@
 <?php
 
-
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\EtudiantController;
@@ -10,17 +11,42 @@ use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TypeDetailsController;
 use Illuminate\Support\Facades\DB;
+
+use App\Http\Controllers\ProfileController;
+
+/*
+|--------------------------------------------------------------------------
+| Routes Web
+|--------------------------------------------------------------------------
+*/
+
+
+// Route principale
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
+
+Route::get('/test-db-connection', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'Database connection successful!';
+    } catch (\Exception $e) {
+        return 'Could not connect to the database. Please check your configuration. Error: ' . $e->getMessage();
+    }
+});
+
 
 // ====================================
 // 🔍 Gestion des Étudiants
 // ====================================
 Route::prefix('etudiant')->group(function () {
     Route::get('/', [EtudiantController::class, 'index'])->name('etudiant.index'); // Obtenir la liste des etudiant
-    Route::post('/', [EtudiantController::class, 'store'])->name('etudiants.store'); // Enregistrer
-    Route::get('/{id}', [EtudiantController::class, 'show'])->name('etudiants.show');       // Afficher un étudiant
-    Route::put('/{id}', [EtudiantController::class, 'update'])->name('etudiants.update');   // Mettre à jour
-    Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy'); // Supprimer
+    Route::post('/', [EtudiantController::class, 'store'])->name('etudiant.store'); // Enregistrer
+    Route::get('/{id}', [EtudiantController::class, 'show'])->name('etudiant.show');       // Afficher un étudiant
+    Route::put('/{id}', [EtudiantController::class, 'update'])->name('etudiant.update');   // Mettre à jour
+    Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiant.destroy'); // Supprimer
 });
 
 // ====================================
@@ -90,6 +116,17 @@ Route::prefix('note')->group(function () {
 });
 
 // ====================================
+// 🏆 Gestion des TypeDetails
+// ====================================
+Route::prefix('typedetails')->group(function () {
+    Route::get('/', [TypeDetailsController::class, 'index'])->name('typedetail.index'); // Obtenir la liste des notes
+    Route::post('/', [TypeDetailsController::class, 'store'])->name('typedetail.store'); // Enregistrer une note
+    Route::get('/{id}', [TypeDetailsController::class, 'show'])->name('typedetail.show'); // Afficher une note spécifique
+    Route::put('/{id}', [TypeDetailsController::class, 'update'])->name('typedetail.update'); // Mettre à jour une note
+    Route::delete('/{id}', [TypeDetailsController::class, 'destroy'])->name('typedetail.destroy'); // Supprimer une note
+});
+
+// ====================================
 // ⚙️ Routes Authentification (Middleware)
 // ====================================
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -98,5 +135,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-require __DIR__ . '/settings.php';
+Route::post('/login', [AuthController::class, 'store']);
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 require __DIR__ . '/auth.php';
+require __DIR__ . '/settings.php';
