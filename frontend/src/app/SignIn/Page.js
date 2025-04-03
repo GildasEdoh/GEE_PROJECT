@@ -14,28 +14,58 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const [username, setUsername] = useState("");
+    const [showSessionPopup, setShowSessionPopup] = useState(false);
+    const [selectedSession, setSelectedSession] = useState('');
+    const [selectedYear, setSelectedYear] = useState('');
 
-    const handleSubmit = async (e) => {
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     console.log("🚀 Bouton cliqué, soumission du formulaire...");
+    //     setErrorMessage(null); // Réinitialiser l'erreur
+    //     setIsLoading(true); // Activer le chargement
+    //     alert("email" + email + " " + password)
+
+    //     const data = await loginUser(email, password);
+    //     console.log("Utilisateur connecté :", data);
+
+    //     if (data) {
+    //         console.log("Connexion réussie !");
+    //         console.log("Utilisateur connecté :", data);
+    //         alert("connexion" + data)
+    //         alert("Connexion reussie ")
+    //         router.push("/dashboard"); // Rediriger après connexion
+    //     } else {
+    //         setErrorMessage("Email ou mot de passe incorrect.");
+    //     }
+
+    //     setIsLoading(false); // Désactiver le chargement
+    // };
+
+    const sessions = [
+        { id: 'session1', name: 'Session Principale 2023' },
+        { id: 'session2', name: 'Session de Rattrapage 2023' },
+        { id: 'session3', name: 'Session Spéciale 2023' }
+    ];
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("🚀 Bouton cliqué, soumission du formulaire...");
-        setErrorMessage(null); // Réinitialiser l'erreur
-        setIsLoading(true); // Activer le chargement
-        alert("email" + email + " " + password)
+        setShowSessionPopup(true); // Afficher la popup immédiatement
+    };
 
-        const data = await loginUser(email, password);
-        console.log("Utilisateur connecté :", data);
+    const handleSessionSelect = (sessionId) => {
+        setSelectedSession(sessionId);
+    };
 
-        if (data) {
-            console.log("Connexion réussie !");
-            console.log("Utilisateur connecté :", data);
-            alert("connexion" + data)
-            alert("Connexion reussie ")
-            router.push("/dashboard"); // Rediriger après connexion
-        } else {
-            setErrorMessage("Email ou mot de passe incorrect.");
+    const confirmSession = () => {
+        if (selectedSession) {
+            setIsLoading(true);
+            // Ici vous ajouterez votre logique de connexion réelle
+            // avec email, password et selectedSession
+            setTimeout(() => {
+                setIsLoading(false);
+                window.location.href = '/dashboard';
+            }, 1500);
         }
-
-        setIsLoading(false); // Désactiver le chargement
     };
 
     return (
@@ -94,6 +124,7 @@ const Login = () => {
                                 disabled={isLoading}>
                                 {isLoading ? "Connexion..." : "Se connecter"}
                             </button>
+
                             {/* <button type="submit" style={styles.submitButton}>Se connecter</button> */}
                         </div>
                         <div style={styles.textLink}>
@@ -105,6 +136,68 @@ const Login = () => {
                 </div>
             </div>
 
+            {showSessionPopup && (
+                <div style={styles.popupOverlay}>
+                    <div style={styles.popupContent}>
+                        <h3 style={styles.popupTitle}>Sélectionnez la session et l&apos;année</h3>
+
+                        <div style={styles.formGroup}>
+                            <label style={styles.dropdownLabel}>Session</label>
+                            <select
+                                value={selectedSession}
+                                onChange={(e) => setSelectedSession(e.target.value)}
+                                style={styles.dropdown}
+                            >
+                                <option value="">-- Sélectionnez une session --</option>
+                                <option value="harmattan">Session Harmattan</option>
+                                <option value="mousson">Session de Mousson</option>
+                                <option value="rattrapage">Session de Rattrapage</option>
+                            </select>
+                        </div>
+
+                        <div style={styles.formGroup}>
+                            <label style={styles.dropdownLabel}>Année</label>
+                            <select
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(e.target.value)}
+                                style={styles.dropdown}
+                            >
+                                <option value="">-- Sélectionnez une année --</option>
+                                <option value="2023">2025</option>
+                                <option value="2022">2024</option>
+                                <option value="2021">2023</option>
+                                <option value="2020">2022</option>
+                                <option value="2020">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2020">2019</option>
+                                <option value="2020">2018</option>
+                                <option value="2020">2017</option>
+                                <option value="2020">2016</option>
+                                <option value="2020">2015</option>
+                            </select>
+                        </div>
+
+                        <div style={styles.popupButtons}>
+                            <button
+                                style={styles.popupCancelButton}
+                                onClick={() => setShowSessionPopup(false)}
+                            >
+                                Retour
+                            </button>
+                            <button
+                                style={{
+                                    ...styles.popupConfirmButton,
+                                    ...((!selectedSession || !selectedYear) && styles.disabledButton)
+                                }}
+                                onClick={confirmSession}
+                                disabled={!selectedSession || !selectedYear}
+                            >
+                                Confirmer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -272,7 +365,98 @@ const styles = {
             bottom: '20px',
             fontSize: '0.9rem'
         }
-    }
+    },
+
+    loadingButton: {
+        opacity: 0.7,
+    },
+    dropdownLabel: {
+        display: 'block',
+        marginBottom: '8px',
+        fontWeight: '500',
+        color: '#555',
+    },
+    dropdown: {
+        width: '100%',
+        padding: '10px 15px',
+        fontSize: '16px',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        backgroundColor: '#f9f9f9',
+        marginBottom: '20px',
+    },
+    formGroup: {
+        marginBottom: '20px',
+    },
+    popupOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+    },
+    popupContent: {
+        backgroundColor: 'white',
+        padding: '30px',
+        borderRadius: '10px',
+        width: '400px',
+        maxWidth: '90%',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+    },
+    popupTitle: {
+        textAlign: 'center',
+        color: '#6988ED',
+        marginBottom: '20px',
+        fontSize: '1.5rem',
+    },
+    sessionList: {
+        marginBottom: '25px',
+    },
+    sessionItem: {
+        padding: '12px 15px',
+        margin: '8px 0',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+        ':hover': {
+            backgroundColor: '#e9e9e9',
+        },
+    },
+    selectedSession: {
+        backgroundColor: '#6988ED',
+        color: 'white',
+    },
+    popupButtons: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    popupCancelButton: {
+        padding: '10px 20px',
+        backgroundColor: '#B91919',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    popupConfirmButton: {
+        padding: '10px 20px',
+        backgroundColor: '#1B5A25',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    disabledButton: {
+        backgroundColor: '#cccccc',
+        cursor: 'not-allowed',
+    },
+
 };
 
 export default Login;
