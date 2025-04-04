@@ -11,18 +11,38 @@ import {
   FaEdit,
   FaClipboardCheck,
   FaChartBar,
-  FaUserCheck,
-  FaUserTimes,
+  FaWindowClose,
+  FaBars,
+  FaTools,
+  FaHome,
 } from "react-icons/fa";
 
 const SideBar = ({ setSelectedMenu }) => {
   const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [isMiseAJourOpen, setIsMiseAJourOpen] = useState(false);
   const [isEvaluationsOpen, setIsEvaluationsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <aside className="w-64 bg-blue-500 text-white h-screen p-4 flex flex-col">
-      <h1 className="text-2xl font-bold mb-6 text-center">GEE - UL</h1>
+    <aside
+      className={`bg-blue-500 text-white h-screen p-4 flex z-100 flex-col fixed top-0 left-0 overflow-y-auto transition-all ${
+        isSidebarOpen ? "w-60" : "w-20"
+      }`}
+    >
+      <button
+        className="p-2 mb-4 bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer transition self-end"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? <FaWindowClose/> : <FaBars/>}
+      </button>
+
+      <h1
+        className={`text-2xl font-bold mb-6 text-center transition-all ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
+      >
+        GEE - UL
+      </h1>
 
       <ul className="space-y-2 flex-1">
         <li>
@@ -30,8 +50,8 @@ const SideBar = ({ setSelectedMenu }) => {
             className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
             onClick={() => setSelectedMenu("Accueil")}
           >
-            <span className="text-lg">🏠</span>
-            <span>Accueil</span>
+            <span className="text-lg"><FaHome/></span>
+            {isSidebarOpen && <span>Accueil</span>}
           </button>
         </li>
 
@@ -42,7 +62,7 @@ const SideBar = ({ setSelectedMenu }) => {
             onClick={() => setSelectedMenu("Étudiants")}
           >
             <FaUsers />
-            <span>Étudiants</span>
+            {isSidebarOpen && <span>Étudiants</span>}
           </button>
         </li>
 
@@ -53,7 +73,7 @@ const SideBar = ({ setSelectedMenu }) => {
             onClick={() => setSelectedMenu("Matières")}
           >
             <FaBook />
-            <span>Matières</span>
+            {isSidebarOpen && <span>Matières</span>}
           </button>
         </li>
 
@@ -65,71 +85,29 @@ const SideBar = ({ setSelectedMenu }) => {
           >
             <div className="flex items-center space-x-3">
               <FaClipboardList />
-              <span>Évaluations</span>
+              {isSidebarOpen && <span>Évaluations</span>}
             </div>
-            {isEvaluationsOpen ? <FaChevronUp /> : <FaChevronDown />}
+            {isSidebarOpen &&
+              (isEvaluationsOpen ? <FaChevronUp /> : <FaChevronDown />)}
           </button>
-          {isEvaluationsOpen && (
+          {isEvaluationsOpen && isSidebarOpen && (
             <ul className="ml-6 space-y-2">
-              {/* <button
-                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Évaluations Notes")}
-                >
-                  <FaFileAlt />
-                  <span>Notes</span>
-                </button> */}
-
-              {/* Notes avec sous-menus */}
-              <li>
-                <button
-                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setIsNotesOpen(!isNotesOpen)}
-                >
-                  <div className="flex items-center space-x-3">
-                    <FaClipboardList />
-                    <span>Notes</span>
-                  </div>
-                  {isNotesOpen ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
-                {isNotesOpen && (
-                  <ul className="ml-6 space-y-2">
-                    <li>
-                      <button
-                        className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                        onClick={() => setSelectedMenu("Édition Notes")}
-                      >
-                        <FaEdit />
-                        <span>Édition</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                        onClick={() => setSelectedMenu("Relevés de Notes")}
-                      >
-                        <FaClipboardCheck />
-                        <span>Relevées</span>
-                      </button>
-                    </li>
-                  </ul>
-                )}
-              </li>
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Évaluations Admis")}
+                  onClick={() => setSelectedMenu("Examens")}
                 >
-                  <FaUserCheck />
-                  <span>Admis</span>
+                  <FaClipboardCheck />
+                  <span>Examens</span>
                 </button>
               </li>
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Évaluations Échoués")}
+                  onClick={() => setSelectedMenu("Résultats")}
                 >
-                  <FaUserTimes />
-                  <span>Échoués</span>
+                  <FaChartBar />
+                  <span>Résultats</span>
                 </button>
               </li>
             </ul>
@@ -144,18 +122,19 @@ const SideBar = ({ setSelectedMenu }) => {
           >
             <div className="flex items-center space-x-3">
               <FaArchive />
-              <span>Mise à jour</span>
+              {isSidebarOpen && <span>Mise à jour</span>}
             </div>
-            {isMiseAJourOpen ? <FaChevronUp /> : <FaChevronDown />}
+            {isSidebarOpen &&
+              (isMiseAJourOpen ? <FaChevronUp /> : <FaChevronDown />)}
           </button>
-          {isMiseAJourOpen && (
+          {isMiseAJourOpen && isSidebarOpen && (
             <ul className="ml-6 space-y-2">
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
                   onClick={() => setSelectedMenu("Mise à jour Notes")}
                 >
-                  <FaFileAlt />
+                  {isNotesOpen ? <FaEdit /> : <FaFileAlt />}
                   <span>Notes</span>
                 </button>
               </li>
@@ -188,7 +167,7 @@ const SideBar = ({ setSelectedMenu }) => {
             onClick={() => setSelectedMenu("Statistiques")}
           >
             <FaChartBar />
-            <span>Statistiques</span>
+            {isSidebarOpen && <span>Statistiques</span>}
           </button>
         </li>
 
@@ -198,16 +177,15 @@ const SideBar = ({ setSelectedMenu }) => {
             className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
             onClick={() => setSelectedMenu("Paramètres")}
           >
-            ⚙️
-            <span>Paramètres</span>
+            <FaTools />
+            {isSidebarOpen && <span>Paramètres</span>}
           </button>
         </li>
       </ul>
 
-      {/* Déconnexion */}
-      <button className="p-3 bg-red-500 flex items-center justify-center space-x-2 rounded-lg hover:bg-red-600 transition">
+      <button className="p-3 bg-red-500 flex items-center justify-center cursor-pointer space-x-2 rounded-lg hover:bg-red-600 transition">
         <FaSignOutAlt />
-        <span>Se déconnecter</span>
+        {isSidebarOpen && <span>Se déconnecter</span>}
       </button>
     </aside>
   );

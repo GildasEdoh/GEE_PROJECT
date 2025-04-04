@@ -1,6 +1,6 @@
 export default function Etudiants() {
   return (
-    <div>
+    <div className="ml-64 mt-20">
       <h1 className="text-2xl font-bold text-center">Liste des Étudiants</h1>
       <div className="border p-4 mt-4">
         <table className="w-full border-collapse border">
