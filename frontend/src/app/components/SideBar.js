@@ -3,23 +3,22 @@ import {
   FaBook,
   FaUsers,
   FaClipboardList,
-  FaArchive,
   FaSignOutAlt,
   FaChevronDown,
   FaChevronUp,
   FaFileAlt,
   FaEdit,
-  FaClipboardCheck,
   FaChartBar,
   FaWindowClose,
   FaBars,
   FaTools,
   FaHome,
+  FaFile,
 } from "react-icons/fa";
 
 const SideBar = ({ setSelectedMenu }) => {
   const [isNotesOpen, setIsNotesOpen] = useState(false);
-  const [isMiseAJourOpen, setIsMiseAJourOpen] = useState(false);
+  const [isEditionOpen, setIsEditionOpen] = useState(false);
   const [isEvaluationsOpen, setIsEvaluationsOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -33,7 +32,7 @@ const SideBar = ({ setSelectedMenu }) => {
         className="p-2 mb-4 bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer transition self-end"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
-        {isSidebarOpen ? <FaWindowClose/> : <FaBars/>}
+        {isSidebarOpen ? <FaWindowClose /> : <FaBars />}
       </button>
 
       <h1
@@ -50,7 +49,9 @@ const SideBar = ({ setSelectedMenu }) => {
             className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
             onClick={() => setSelectedMenu("Accueil")}
           >
-            <span className="text-lg"><FaHome/></span>
+            <span className="text-lg">
+              <FaHome />
+            </span>
             {isSidebarOpen && <span>Accueil</span>}
           </button>
         </li>
@@ -95,65 +96,83 @@ const SideBar = ({ setSelectedMenu }) => {
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Examens")}
+                  onClick={() => setSelectedMenu("Notes")}
                 >
-                  <FaClipboardCheck />
-                  <span>Examens</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Résultats")}
-                >
-                  <FaChartBar />
-                  <span>Résultats</span>
-                </button>
-              </li>
-            </ul>
-          )}
-        </li>
-
-        {/* Mise à jour avec sous-menus */}
-        <li>
-          <button
-            className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition"
-            onClick={() => setIsMiseAJourOpen(!isMiseAJourOpen)}
-          >
-            <div className="flex items-center space-x-3">
-              <FaArchive />
-              {isSidebarOpen && <span>Mise à jour</span>}
-            </div>
-            {isSidebarOpen &&
-              (isMiseAJourOpen ? <FaChevronUp /> : <FaChevronDown />)}
-          </button>
-          {isMiseAJourOpen && isSidebarOpen && (
-            <ul className="ml-6 space-y-2">
-              <li>
-                <button
-                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Mise à jour Notes")}
-                >
-                  {isNotesOpen ? <FaEdit /> : <FaFileAlt />}
+                  <FaEdit />
                   <span>Notes</span>
                 </button>
               </li>
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Mise à jour Étudiants")}
+                  onClick={() => setSelectedMenu("Admis")}
                 >
                   <FaUsers />
-                  <span>Étudiants</span>
+                  <span>Admis</span>
                 </button>
               </li>
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Mise à jour Matières")}
+                  onClick={() => setSelectedMenu("Echoues")}
+                >
+                  <FaUsers />
+                  <span>Echoues</span>
+                </button>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Edition avec sous-menus */}
+        <li>
+          <button
+            className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition"
+            onClick={() => setIsEditionOpen(!isEditionOpen)}
+          >
+            <div className="flex items-center space-x-3">
+              <FaEdit />
+              {isSidebarOpen && <span>Edition</span>}
+            </div>
+            {isSidebarOpen &&
+              (isEditionOpen ? <FaChevronUp /> : <FaChevronDown />)}
+          </button>
+          {isEditionOpen && isSidebarOpen && (
+            <ul className="ml-6 space-y-2">
+              <li>
+                <button
+                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                  onClick={() => setSelectedMenu()}
+                >
+                  <FaUsers />
+                  <span>Liste des inscrits</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                  onClick={() => setSelectedMenu()}
+                >
+                  <FaFile />
+                  <span>Notes par Matières</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                  onClick={() => setSelectedMenu()}
+                >
+                  <FaFileAlt />
+                  <span>PV individuels de notes</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                  onClick={() => setSelectedMenu()}
                 >
                   <FaBook />
-                  <span>Matières</span>
+                  <span>Releves</span>
                 </button>
               </li>
             </ul>
