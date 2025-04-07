@@ -37,12 +37,10 @@ const Etudiants = () => {
   };
 
   return (
-    <div className="p-6 bg-transparent w-full flex flex-col gap-6">
-      {/* TABLEAU DES ETUDIANTS */}
-      <div className="w-full">
-        <h2 className="text-lg font-bold text-center">Liste des étudiants</h2>
-        <div className="overflow-auto rounded-lg shadow-md mt-4">
-          <table className="w-full text-left border-collapse">
+    <div className="ml-64 mt-20">
+      <h1 className="text-2xl font-bold text-center">Liste des Étudiants</h1>
+      <div className="border p-4 mt-4">
+      <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-4 py-2 text-gray-700 text-sm text-center">
@@ -172,7 +170,17 @@ const Etudiants = () => {
               ))}
             </tbody>
           </table>
-        </div>
+      </div>
+      <div className="flex justify-center mt-4 space-x-2">
+        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          Importer un fichier excel
+        </button>
+        <button className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+          Imprimer la liste des matieres 
+        </button>
+        <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+          Exporter la liste au format excel
+        </button>
       </div>
     </div>
   );
