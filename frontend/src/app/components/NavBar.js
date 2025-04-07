@@ -10,11 +10,7 @@ const Navbar = () => {
   return (
     <nav className="bg-blue-400 p-4 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0">
       {/* Barre de recherche */}
-<<<<<<< HEAD
-      <div className="bg-white relative w-1/3">
-=======
       <div className="relative w-1/4">
->>>>>>> 727b0ef5ad8966e8d0002d7f4f55adca539dd91d
         <input
           type="text"
           placeholder="Rechercher..."
