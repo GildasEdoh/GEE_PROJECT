@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; //
 const Navbar = () => {
   const [year, setYear] = useState("2024-2025");
   const [session, setSession] = useState("Normale");
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState("acceuil")
 
   const user = {
     avatar: "https://via.placeholder.com/100", // Remplace par l'URL de l'image de profil
@@ -33,7 +35,7 @@ const Navbar = () => {
       <div>
         <button
           className="w-full flex items-center space-x-3 p-2 rounded-lg cursor-pointer"
-          onClick={() => setSelectedMenu()}
+          onClick={() => setSelectedMenu("acceuil")}
         >
           <FaSms />
         </button>
@@ -71,7 +73,7 @@ const Navbar = () => {
       <div>
         <button
           className="w-full flex items-center space-x-3 p-2 rounded-lg cursor-pointer"
-          onClick={() => setSelectedMenu()}
+          onClick={() => setSelectedMenu("acceuil")}
         >
           <FaBell />
         </button>

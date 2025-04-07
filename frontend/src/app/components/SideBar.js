@@ -146,21 +146,7 @@ const SideBar = ({ setSelectedMenu }) => {
               <li>
                 <button
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-<<<<<<< HEAD
-                  onClick={() => {
-                    setSelectedMenu("Mise à jour Notes")}}
-                >
-                  <FaFileAlt />
-                  <span>Notes</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
-                  onClick={() => setSelectedMenu("Mise à jour Étudiants")}
-=======
                   onClick={() => setSelectedMenu()}
->>>>>>> dashboard/rahim
                 >
                   <FaUsers />
                   <span>Liste des inscrits</span>
