@@ -7,7 +7,8 @@ import ActionButton from "./ActionButton"
  */
 const Accueil = () => {
   return (
-    <main className="p-4">
+    <div className="flex justify-center mt-30">
+      <main className="p-4">
       <div className="flex justify-center gap-8">
         <InfoCard title="Nombre Total d’étudiants inscrits" value="300" />
         <InfoCard title="Nombre d’examens programmés" value="3" />
@@ -21,6 +22,7 @@ const Accueil = () => {
         <ActionButton label="Nouvelle inscription" onClick={() => alert("Nouvelle inscription")} />
       </div>
     </main>
+    </div>
   );
 };
 
