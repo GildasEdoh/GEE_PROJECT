@@ -1,5 +1,7 @@
 // components/Login.js
-
+/**
+ * 
+ */
 "use client"; // Ajoutez cette ligne
 
 import Image from "next/image";
@@ -126,7 +128,6 @@ const Sign = () => {
                     </form>
                 </div>
             </div>
-
         </div>
     );
 };

@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser, getUser } from "../../services/auth";
-
+/**
+ * 
+ */
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
