@@ -1,20 +1,12 @@
 "use client";
-<<<<<<< HEAD
-import { motion } from "framer-motion";
-=======
 
 import { FaUser, FaSearch, FaBell, FaSms } from "react-icons/fa";
->>>>>>> dashboard/rahim
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Import du composant Avatar
 
 const Navbar = () => {
   const [year, setYear] = useState("2024-2025");
-<<<<<<< HEAD
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-=======
   const [session, setSession] = useState("Normale");
->>>>>>> dashboard/rahim
 
   const user = {
     avatar: "https://via.placeholder.com/100", // Remplace par l'URL de l'image de profil
@@ -85,18 +77,11 @@ const Navbar = () => {
         </button>
       </div>
       {/* Icône Profil */}
-<<<<<<< HEAD
-      <div className="flex items-center space-x-2 text-white cursor-pointer"
-       onClick={() => setIsProfileOpen(true)}>
-        <span className="text-xl">👤</span>
-        <span>Compte</span>
-=======
       <div className="flex items-center flex-col space-x-2 text-white gap-y-1 cursor-pointer">
         <span className="text-xl">
           <FaUser />
         </span>
         <span className="text-sm font-bold">Compte</span>
->>>>>>> dashboard/rahim
       </div>
 
           {/* Fenêtre latérale */}
