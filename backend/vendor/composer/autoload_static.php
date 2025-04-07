@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6d580901de64f9d577d8c139cea61306
+class ComposerStaticInit2d10956196a336e8c2f576ae0f343429
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3811,6 +3811,7 @@ class ComposerStaticInit6d580901de64f9d577d8c139cea61306
         'Monolog\\Registry' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Registry.php',
         'Monolog\\ResettableInterface' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/ResettableInterface.php',
         'Monolog\\SignalHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/SignalHandler.php',
+        'Monolog\\Test\\MonologTestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/MonologTestCase.php',
         'Monolog\\Test\\TestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/TestCase.php',
         'Monolog\\Utils' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Utils.php',
         'Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -7595,9 +7596,9 @@ class ComposerStaticInit6d580901de64f9d577d8c139cea61306
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6d580901de64f9d577d8c139cea61306::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6d580901de64f9d577d8c139cea61306::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6d580901de64f9d577d8c139cea61306::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2d10956196a336e8c2f576ae0f343429::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2d10956196a336e8c2f576ae0f343429::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2d10956196a336e8c2f576ae0f343429::$classMap;
 
         }, null, ClassLoader::class);
     }

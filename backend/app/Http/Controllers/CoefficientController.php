@@ -10,8 +10,20 @@ class CoefficientController extends Controller
     // Créer un coefficient
     public function store(Request $request)
     {
-        $coefficient = Coefficient::create($request->all());
-        return response()->json($coefficient, 201);
+        // Validation des données
+        $validatedData = $request->validate([
+            'session_id' => 'required|exists:Session,id',
+            'matiere_id' => 'required|exists:Matiere,id',
+            'coef' => 'required|numeric|min:0',
+        ]);
+
+        // Création du coefficient
+        $coefficient = Coefficient::create($validatedData);
+
+        return response()->json([
+            'message' => 'Coefficient créé avec succès',
+            'coefficient' => $coefficient
+        ], 201);
     }
 
     // Lire tous les coefficients
@@ -38,8 +50,21 @@ class CoefficientController extends Controller
         if (!$coefficient) {
             return response()->json(['message' => 'Coefficient non trouvé'], 404);
         }
-        $coefficient->update($request->all());
-        return response()->json($coefficient);
+
+        // Validation des données
+        $validatedData = $request->validate([
+            'session_id' => 'sometimes|exists:Session,id',
+            'matiere_id' => 'sometimes|exists:Matiere,id',
+            'coef' => 'sometimes|numeric|min:0',
+        ]);
+
+        // Mise à jour du coefficient
+        $coefficient->update($validatedData);
+
+        return response()->json([
+            'message' => 'Coefficient mis à jour avec succès',
+            'coefficient' => $coefficient
+        ]);
     }
 
     // Supprimer un coefficient
@@ -49,7 +74,8 @@ class CoefficientController extends Controller
         if (!$coefficient) {
             return response()->json(['message' => 'Coefficient non trouvé'], 404);
         }
+
         $coefficient->delete();
-        return response()->json(['message' => 'Coefficient supprimé']);
+        return response()->json(['message' => 'Coefficient supprimé avec succès']);
     }
 }
