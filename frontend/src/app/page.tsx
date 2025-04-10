@@ -67,9 +67,12 @@
 //   );
 // }
 
-"use client";
-import Statistique from './components/Statistique';
+import StatistiqueComponent from './components/Statistique';
 
-export default function Statistique() {
-  return <Statistique />;
+export default function StatistiquePage() {
+  return (
+    <div className="p-4">
+      <StatistiqueComponent />
+    </div>
+  );
 }

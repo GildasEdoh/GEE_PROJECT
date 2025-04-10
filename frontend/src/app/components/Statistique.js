@@ -1,7 +1,54 @@
+'use client';
 import React from 'react';
 import { FiBarChart2, FiUsers, FiBook, FiAward, FiXCircle } from 'react-icons/fi';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+// Enregistrer les composants nécessaires de Chart.js
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Statistique = () => {
+
+    // Données pour le graphique
+    const chartData = {
+        labels: ['Mathématiques', 'Physique', 'Informatique', 'Chimie'],
+        datasets: [
+            {
+                label: 'Taux de réussite (%)',
+                data: [85, 72, 91, 68],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Moyenne /20',
+                data: [14.5, 12.8, 15.2, 11.9],
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }
+        ]
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Performance par matière',
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    };
+
     // Données statistiques simulées
     const statsData = {
         general: [
@@ -56,7 +103,7 @@ const Statistique = () => {
             </div>
 
             {/* Graphique principal */}
-            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+            {/* <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-lg font-semibold">Performance par matière</h2>
                     <button className="text-blue-600 hover:text-blue-800 text-sm">
@@ -66,6 +113,18 @@ const Statistique = () => {
                 <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
                     <FiBarChart2 className="text-gray-400 text-4xl" />
                     <p className="ml-2 text-gray-500">Graphique des performances</p>
+                </div>
+            </div> */}
+
+            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-semibold">Performance par matière</h2>
+                    <button className="text-blue-600 hover:text-blue-800 text-sm">
+                        Exporter les données
+                    </button>
+                </div>
+                <div className="h-64">
+                    <Bar data={chartData} options={options} />
                 </div>
             </div>
 
