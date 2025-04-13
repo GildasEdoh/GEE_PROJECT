@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class EtudiantController extends Controller
 {
+
+
     // Créer un étudiant
     public function store(Request $request)
     {
@@ -31,16 +33,31 @@ class EtudiantController extends Controller
         return response()->json($etudiant);
     }
 
-    // Mettre à jour un étudiant
     public function update(Request $request, $id)
     {
+        // Validation des données reçues
+        $validatedData = $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'nullable|string|max:255'
+
+        ]);
+
+        // Recherche de l'étudiant
         $etudiant = Etudiant::find($id);
         if (!$etudiant) {
-            return response()->json(['message' => 'Etudiant non trouvé'], 404);
+            return response()->json(['message' => 'Étudiant non trouvé'], 404);
         }
-        $etudiant->update($request->all());
-        return response()->json($etudiant);
+
+        // Mise à jour des champs
+        $etudiant->update($validatedData);
+
+        // Retourner la réponse avec les données mises à jour
+        return response()->json([
+            'message' => 'Étudiant mis à jour avec succès',
+            'etudiant' => $etudiant
+        ]);
     }
+
 
     // Supprimer un étudiant
     public function destroy($id)
