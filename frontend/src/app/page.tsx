@@ -1,18 +1,5 @@
-<<<<<<< HEAD
-import Login from "./login/Page";
-
-export default function Home() {
-  return (
-    <div style={{ backgroundColor: "#6988ED", minHeight: "100vh" }}>
-      <Login />
-    </div>
-  );
-}
-// import Sign from '../app/sign';
-=======
 // "use client";
 // import Login from "./SignIn/page";
->>>>>>> ab1ba9574cd96cc1368ddb3d4fe0df0f94abb2e8
 
 // export default function Home() {
 //   return (
