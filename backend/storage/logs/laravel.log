@@ -548,3 +548,7 @@
 #64 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('...')
 #65 {main}
 "} 
+[2025-04-07 00:38:26] local.ERROR: Cannot use try without catch or finally {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use try without catch or finally at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\routes\\web.php:28)
+[stacktrace]
+#0 {main}
+"} 
