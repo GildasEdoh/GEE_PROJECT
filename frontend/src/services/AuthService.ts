@@ -32,3 +32,5 @@ class AuthService {
       return api.get("/api/user");
     };
 }
+
+export default AuthService.getInstance();

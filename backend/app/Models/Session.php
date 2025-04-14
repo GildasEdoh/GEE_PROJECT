@@ -9,7 +9,7 @@ class Session extends Model
 {
     use HasFactory;
 
-    protected $table = 'Session';
+    protected $table = 'sessions';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
@@ -21,16 +21,16 @@ class Session extends Model
 
     public function coefficients()
     {
-        return $this->hasMany(Coefficient::class, 'session_id');
+        return $this->hasMany(Coefficient::class, 'fk_session');
     }
 
     public function evaluations()
     {
-        return $this->hasMany(Evaluation::class, 'session_id');
+        return $this->hasMany(Evaluation::class, 'fk_session');
     }
 
     public function inscriptions()
     {
-        return $this->hasMany(Inscription::class, 'session_id');
+        return $this->hasMany(Inscription::class, 'fk_session');
     }
 }

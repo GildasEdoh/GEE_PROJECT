@@ -10,8 +10,20 @@ class SessionController extends Controller
     // Créer une session
     public function store(Request $request)
     {
-        $session = Session::create($request->all());
-        return response()->json($session, 201);
+        // Validation des données
+        $validatedData = $request->validate([
+            'libelle' => 'required|string|max:255',
+            'nbcompose' => 'required|integer|min:1',
+            'cloture' => 'required|boolean',
+        ]);
+
+        // Création de la session
+        $session = Session::create($validatedData);
+
+        return response()->json([
+            'message' => 'Session créée avec succès',
+            'sessions' => $session
+        ], 201);
     }
 
     // Lire toutes les sessions
@@ -31,15 +43,23 @@ class SessionController extends Controller
         return response()->json($session);
     }
 
-    // Mettre à jour une session
     public function update(Request $request, $id)
     {
         $session = Session::find($id);
         if (!$session) {
             return response()->json(['message' => 'Session non trouvée'], 404);
         }
-        $session->update($request->all());
-        return response()->json($session);
+
+        $session->libelle = $request->libelle ?? $session->libelle;
+        $session->nbcompose = $request->nbcompose ?? $session->nbcompose;
+        $session->cloture = $request->cloture ?? $session->cloture;
+
+        $session->save();
+
+        return response()->json([
+            'message' => 'Session mise à jour avec succès',
+            'sessions' => $session
+        ]);
     }
 
     // Supprimer une session
@@ -49,7 +69,8 @@ class SessionController extends Controller
         if (!$session) {
             return response()->json(['message' => 'Session non trouvée'], 404);
         }
+
         $session->delete();
-        return response()->json(['message' => 'Session supprimée']);
+        return response()->json(['message' => 'Session supprimée avec succès']);
     }
 }

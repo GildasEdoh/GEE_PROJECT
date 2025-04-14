@@ -12,7 +12,7 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::all();
+        $notes = Note::with(['evaluations', 'etudiants'])->get();
         return response()->json($notes);
     }
 
@@ -22,16 +22,13 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'etudiant_id' => 'required|exists:etudiants,id',
-            'matiere_id' => 'required|exists:matieres,id',
+            'fk_etudiant' => 'required|exists:etudiants,id',
+            'fk_evaluation' => 'required|exists:evaluations,id',
             'valeur' => 'required|numeric|min:0|max:20',
+            'gele' => 'nullable|boolean',
         ]);
 
-        $note = Note::create([
-            'etudiant_id' => $request->etudiant_id,
-            'matiere_id' => $request->matiere_id,
-            'valeur' => $request->valeur,
-        ]);
+        $note = Note::create($request->all());
 
         return response()->json([
             'message' => 'Note ajoutée avec succès.',
@@ -44,7 +41,7 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        $note = Note::find($id);
+        $note = Note::with(['evaluations', 'etudiants'])->find($id);
 
         if (!$note) {
             return response()->json(['message' => 'Note non trouvée.'], 404);
@@ -65,12 +62,11 @@ class NoteController extends Controller
         }
 
         $request->validate([
-            'valeur' => 'required|numeric|min:0|max:20',
+            'valeur' => 'sometimes|numeric|min:0|max:20',
+            'gele' => 'sometimes|boolean',
         ]);
 
-        $note->update([
-            'valeur' => $request->valeur
-        ]);
+        $note->update($request->all());
 
         return response()->json([
             'message' => 'Note mise à jour avec succès.',
