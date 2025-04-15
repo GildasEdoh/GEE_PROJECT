@@ -9,7 +9,7 @@ class Evaluation extends Model
 {
     use HasFactory;
 
-    protected $table = 'Evaluation';
+    protected $table = 'evaluations';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
@@ -18,22 +18,21 @@ class Evaluation extends Model
         'abreviation',
         'moyenneAdmissible',
         'cloture',
-        'session_id',
-        'matiere_id',
+        'fk_session'
     ];
 
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(Session::class, 'fk_session');
     }
 
     public function matiere()
     {
-        return $this->belongsTo(Matiere::class, 'matiere_id');
+        return $this->belongsTo(Matiere::class, 'fk_matiere');
     }
 
     public function notes()
     {
-        return $this->hasMany(Note::class, 'evaluation_id');
+        return $this->hasMany(Note::class, 'fk_evaluation');
     }
 }

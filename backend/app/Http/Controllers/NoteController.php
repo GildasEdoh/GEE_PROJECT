@@ -2,54 +2,91 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Session;
 use Illuminate\Http\Request;
+use App\Models\Note;
 
-class SessionController extends Controller
+class NoteController extends Controller
 {
-    // Créer une session
-    public function store(Request $request)
-    {
-        $session = Session::create($request->all());
-        return response()->json($session, 201);
-    }
-
-    // Lire toutes les sessions
+    /**
+     * Afficher la liste des notes.
+     */
     public function index()
     {
-        $sessions = Session::all();
-        return response()->json($sessions);
+        $notes = Note::with(['evaluations', 'etudiants'])->get();
+        return response()->json($notes);
     }
 
-    // Lire une session par ID
+    /**
+     * Enregistrer une nouvelle note.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'fk_etudiant' => 'required|exists:etudiants,id',
+            'fk_evaluation' => 'required|exists:evaluations,id',
+            'valeur' => 'required|numeric|min:0|max:20',
+            'gele' => 'nullable|boolean',
+        ]);
+
+        $note = Note::create($request->all());
+
+        return response()->json([
+            'message' => 'Note ajoutée avec succès.',
+            'note' => $note
+        ], 201);
+    }
+
+    /**
+     * Afficher une note spécifique.
+     */
     public function show($id)
     {
-        $session = Session::find($id);
-        if (!$session) {
-            return response()->json(['message' => 'Session non trouvée'], 404);
+        $note = Note::with(['evaluations', 'etudiants'])->find($id);
+
+        if (!$note) {
+            return response()->json(['message' => 'Note non trouvée.'], 404);
         }
-        return response()->json($session);
+
+        return response()->json($note);
     }
 
-    // Mettre à jour une session
+    /**
+     * Mettre à jour une note.
+     */
     public function update(Request $request, $id)
     {
-        $session = Session::find($id);
-        if (!$session) {
-            return response()->json(['message' => 'Session non trouvée'], 404);
+        $note = Note::find($id);
+
+        if (!$note) {
+            return response()->json(['message' => 'Note non trouvée.'], 404);
         }
-        $session->update($request->all());
-        return response()->json($session);
+
+        $request->validate([
+            'valeur' => 'sometimes|numeric|min:0|max:20',
+            'gele' => 'sometimes|boolean',
+        ]);
+
+        $note->update($request->all());
+
+        return response()->json([
+            'message' => 'Note mise à jour avec succès.',
+            'note' => $note
+        ]);
     }
 
-    // Supprimer une session
+    /**
+     * Supprimer une note.
+     */
     public function destroy($id)
     {
-        $session = Session::find($id);
-        if (!$session) {
-            return response()->json(['message' => 'Session non trouvée'], 404);
+        $note = Note::find($id);
+
+        if (!$note) {
+            return response()->json(['message' => 'Note non trouvée.'], 404);
         }
-        $session->delete();
-        return response()->json(['message' => 'Session supprimée']);
+
+        $note->delete();
+
+        return response()->json(['message' => 'Note supprimée avec succès.']);
     }
 }
