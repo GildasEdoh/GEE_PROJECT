@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser, getUser } from "../../services/auth";
+import AuthService from "../../services/AuthService"
 /**
  * 
  */
@@ -50,8 +51,25 @@ const Login = () => {
     ];
 
     const handleSubmit = (e) => {
+        console.log("username : " + email + "password : " + password);
         e.preventDefault();
-        setShowSessionPopup(true); // Afficher la popup immédiatement
+        console.log("🚀 Bouton cliqué, soumission du formulaire...");
+        console.log("🚀 Appel de authservice ...");
+        const data = AuthService.loginUser(email, password)
+        setErrorMessage(null); // Réinitialiser l'erreur
+        setIsLoading(true); // Activer le chargement
+        console.log("Utilisateur connecté :", data);
+        if (data) {
+            console.log("Connexion réussie !");
+            console.log("Utilisateur connecté :", data);
+            alert("connexion" + data)
+            alert("Connexion reussie ")
+            router.push("/dashboard"); // Rediriger après connexion
+        } else {
+            setErrorMessage("Email ou mot de passe incorrect.");
+        }
+        
+        // setShowSessionPopup(true); // Afficher la popup immédiatement
     };
 
     const handleSessionSelect = (sessionId) => {

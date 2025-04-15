@@ -22,7 +22,7 @@ class SessionController extends Controller
 
         return response()->json([
             'message' => 'Session créée avec succès',
-            'session' => $session
+            'sessions' => $session
         ], 201);
     }
 
@@ -58,7 +58,7 @@ class SessionController extends Controller
 
         return response()->json([
             'message' => 'Session mise à jour avec succès',
-            'session' => $session
+            'sessions' => $session
         ]);
     }
 

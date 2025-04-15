@@ -9,7 +9,7 @@ class Bareme extends Model
 {
     use HasFactory;
 
-    protected $table = 'Bareme';
+    protected $table = 'baremes';
     protected $primaryKey = 'id';
     public $timestamps = false; // Si vous n'avez pas de colonnes created_at et updated_at
 

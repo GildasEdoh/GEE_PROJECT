@@ -12,8 +12,8 @@ class CoefficientController extends Controller
     {
         // Validation des données
         $validatedData = $request->validate([
-            'session_id' => 'required|exists:Session,id',
-            'matiere_id' => 'required|exists:Matiere,id',
+            'fk_session' => 'required|exists:sessions,id',
+            'fk_matiere' => 'required|exists:matieres,id',
             'coef' => 'required|numeric|min:0',
         ]);
 
@@ -53,8 +53,8 @@ class CoefficientController extends Controller
 
         // Validation des données
         $validatedData = $request->validate([
-            'session_id' => 'sometimes|exists:Session,id',
-            'matiere_id' => 'sometimes|exists:Matiere,id',
+            'fk_session' => 'sometimes|exists:sessions,id',
+            'fk_matiere' => 'sometimes|exists:matieres,id',
             'coef' => 'sometimes|numeric|min:0',
         ]);
 
@@ -63,7 +63,7 @@ class CoefficientController extends Controller
 
         return response()->json([
             'message' => 'Coefficient mis à jour avec succès',
-            'coefficient' => $coefficient
+            'coefficients' => $coefficient
         ]);
     }
 

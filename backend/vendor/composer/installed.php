@@ -3,7 +3,7 @@
         'name' => 'laravel/react-starter-kit',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'abe7541d3fbd6fd94fe9f401f0141af33da24ee1',
+        'reference' => 'f9405fbbd7e783af3d365605dc4701112e844902',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -469,11 +469,7 @@
         'laravel/react-starter-kit' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-<<<<<<<<< Temporary merge branch 1
-            'reference' => '075555c7933d2395bc78488c0afb7cbcf9fbc536',
-=========
-            'reference' => 'c114f5b0e5451312443104eecbed6dd45a04df2d',
->>>>>>>>> Temporary merge branch 2
+            'reference' => 'f9405fbbd7e783af3d365605dc4701112e844902',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

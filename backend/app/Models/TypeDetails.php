@@ -9,7 +9,7 @@ class TypeDetails extends Model
 {
     use HasFactory;
 
-    protected $table = 'TypeDetails';
+    protected $table = 'type_details';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
