@@ -52,10 +52,10 @@ const Statistique = () => {
     // Données statistiques simulées
     const statsData = {
         general: [
-            { title: "Total Étudiants", value: "1,245", icon: <FiUsers className="text-blue-500" />, change: "+5.2%" },
-            { title: "Matières enseignées", value: "48", icon: <FiBook className="text-green-500" />, change: "+2" },
-            { title: "Taux de réussite", value: "78%", icon: <FiAward className="text-yellow-500" />, change: "+3%" },
-            { title: "Taux d'échec", value: "22%", icon: <FiXCircle className="text-red-500" />, change: "-3%" },
+            { title: "Répartitions des notes/Matière", value: "1,245", icon: <FiUsers className="text-blue-500" />, change: "+5.2%" },
+            { title: "Répartitions des étudiants/Mention", value: "48", icon: <FiBook className="text-green-500" />, change: "+2" },
+            { title: "Fréquences des récalés /Matière", value: "78%", icon: <FiAward className="text-yellow-500" />, change: "+3%" },
+            { title: "Fréquences des récalés /Matière", value: "22%", icon: <FiXCircle className="text-red-500" />, change: "-3%" },
         ],
         parMatiere: [
             { matiere: "Mathématiques", reussite: "85%", moyenne: "14.5" },
@@ -74,11 +74,21 @@ const Statistique = () => {
                         <option>2023-2024</option>
                         <option>2022-2023</option>
                         <option>2021-2022</option>
+                        <option>2020-2021</option>
+                        <option>2019-2020</option>
+                        <option>2018-2019</option>
+                        <option>2017-2018</option>
+                        <option>2016-2017</option>
+                        <option>2015-2016</option>
                     </select>
                     <select className="border rounded-lg px-4 py-2 bg-white">
-                        <option>Session Normale</option>
+                        <option>Session Harmattan</option>
+                        <option>Session Mousson</option>
                         <option>Session Rattrapage</option>
                     </select>
+                </div>
+                <div className="border raduis px-20">
+                    <img src="" alt="" />
                 </div>
             </div>
 
@@ -102,24 +112,10 @@ const Statistique = () => {
                 ))}
             </div>
 
-            {/* Graphique principal */}
-            {/* <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold">Performance par matière</h2>
-                    <button className="text-blue-600 hover:text-blue-800 text-sm">
-                        Exporter les données
-                    </button>
-                </div>
-                <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <FiBarChart2 className="text-gray-400 text-4xl" />
-                    <p className="ml-2 text-gray-500">Graphique des performances</p>
-                </div>
-            </div> */}
-
             <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-lg font-semibold">Performance par matière</h2>
-                    <button className="text-blue-600 hover:text-blue-800 text-sm">
+                    <button className="text-blue-600 hover:text-blue-800 text-sm cursor-pointer">
                         Exporter les données
                     </button>
                 </div>
@@ -156,7 +152,7 @@ const Statistique = () => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">{item.moyenne}/20</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <button className="text-blue-600 hover:text-blue-800 text-sm">
+                                    <button className="text-blue-600 hover:text-blue-800 text-sm cursor-pointer">
                                         Voir détail
                                     </button>
                                 </td>

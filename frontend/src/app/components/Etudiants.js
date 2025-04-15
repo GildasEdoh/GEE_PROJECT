@@ -176,7 +176,7 @@ const Etudiants = () => {
           Importer un fichier excel
         </button>
         <button className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
-          Imprimer la liste des matieres 
+          Imprimer la liste des matieres
         </button>
         <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
           Exporter la liste au format excel
