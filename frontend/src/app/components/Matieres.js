@@ -265,13 +265,13 @@ const Matieres = () => {
                 <tbody>
                   {matieres.map((matiere, index) => (
                     <tr
-                      key={matiere.numero}
+                      key={matiere.id}
                       className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
                     >
                       {editIndex === index ? (
                         <>
                           <td className="px-4 py-2 text-center">
-                            {matiere.numero}
+                            {matiere.id}
                           </td>
                           <td className="px-4 py-2 text-center">
                             <input
@@ -319,7 +319,7 @@ const Matieres = () => {
                       ) : (
                         <>
                           <td className="px-4 py-2 text-center">
-                            {matiere.numero}
+                            {matiere.id}
                           </td>
                           <td className="px-4 py-2 text-center">
                             {matiere.libelle}
