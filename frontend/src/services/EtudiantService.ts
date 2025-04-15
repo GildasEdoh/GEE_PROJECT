@@ -30,13 +30,13 @@ class EtudiantService {
     }
 
     // Update a etudiant
-    public async updateEtudiant(): Promise<any> {
-
+    public async updateEtudiant(student: String): Promise<any> {
+        const response = api.put(path, student)
     }
 
     // Delete a etudiant
     public async deleteEtudiant() : Promise<any>{
-
+        // const rresponse = api.delete(path)
     }
 }
 
