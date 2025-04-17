@@ -25,18 +25,21 @@ class EtudiantService {
     }
 
     // Create a new etudiant
-    public async addEtudiant(nom: string): Promise<any> {
-        const response = await api.post(path, {nom})
+    public async addEtudiant(student: any): Promise<any> {
+        const response = await api.post(path, student)
+        return response.data
     }
 
     // Update a etudiant
-    public async updateEtudiant(student: String): Promise<any> {
-        const response = api.put(path, student)
+    public async updateEtudiant(student: any): Promise<Object> {
+        const response = await api.put(path + `/${student.numero_carte}`, student)
+        return response.data
     }
 
     // Delete a etudiant
-    public async deleteEtudiant() : Promise<any>{
-        // const rresponse = api.delete(path)
+    public async deleteEtudiant(id: string) : Promise<any>{
+        const response = await api.delete(path + `/${id}`)
+        return response.data
     }
 }
 
