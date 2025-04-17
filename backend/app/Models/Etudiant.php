@@ -9,8 +9,8 @@ class Etudiant extends Model
 {
     use HasFactory;
 
-    protected $table = 'Etudiant';
-    protected $primaryKey = 'id';
+    protected $table = 'etudiants';
+    protected $primaryKey = 'numero_carte';
     public $timestamps = false;
 
     protected $fillable = [
@@ -18,20 +18,16 @@ class Etudiant extends Model
         'prenom',
         'dateNaissance',
         'lieuNaissance',
-        'numero_carte',
-        'sexe',
-        'notes',
-        'moyenne',
-        'rang',
+        'sexe'
     ];
 
     public function inscriptions()
     {
-        return $this->hasMany(Inscription::class, 'etudiant_id');
+        return $this->hasMany(Inscription::class, 'fk_etudiant');
     }
 
     public function notes()
     {
-        return $this->hasMany(Note::class, 'etudiant_id');
+        return $this->hasMany(Note::class, 'fk_etudiant');
     }
 }

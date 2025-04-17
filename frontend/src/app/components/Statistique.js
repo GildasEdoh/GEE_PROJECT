@@ -88,7 +88,7 @@ const Statistique = () => {
                     </select>
                 </div>
                 <div className="border raduis px-20">
-                    <img src="" alt="" />
+                    {/* <img src="" alt="" /> */}
                 </div>
             </div>
 
