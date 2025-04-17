@@ -12,7 +12,7 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::with(['evaluation', 'etudiant'])->get();
+        $notes = Note::with(['evaluations', 'etudiants'])->get();
         return response()->json($notes);
     }
 
@@ -22,8 +22,8 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'etudiant_id' => 'required|exists:etudiants,id',
-            'evaluation_id' => 'required|exists:evaluations,id',
+            'fk_etudiant' => 'required|exists:etudiants,id',
+            'fk_evaluation' => 'required|exists:evaluations,id',
             'valeur' => 'required|numeric|min:0|max:20',
             'gele' => 'nullable|boolean',
         ]);
@@ -41,7 +41,7 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        $note = Note::with(['evaluation', 'etudiant'])->find($id);
+        $note = Note::with(['evaluations', 'etudiants'])->find($id);
 
         if (!$note) {
             return response()->json(['message' => 'Note non trouvée.'], 404);

@@ -13,8 +13,8 @@ class InscriptionController extends Controller
         // Validation des données
         $validatedData = $request->validate([
             'annee' => 'required|integer|min:2000|max:2100',
-            'etudiant_id' => 'required|exists:Etudiant,id',
-            'session_id' => 'required|exists:Session,id',
+            'fk_etudiant' => 'required|exists:etudiants,id',
+            'fk_session' => 'required|exists:sessions,id',
         ]);
 
         // Création de l'inscription
@@ -22,21 +22,21 @@ class InscriptionController extends Controller
 
         return response()->json([
             'message' => 'Inscription créée avec succès',
-            'inscription' => $inscription
+            'inscriptions' => $inscription
         ], 201);
     }
 
     // Lire toutes les inscriptions
     public function index()
     {
-        $inscriptions = Inscription::with(['etudiant', 'session'])->get();
+        $inscriptions = Inscription::with(['etudiants', 'sessions'])->get();
         return response()->json($inscriptions);
     }
 
     // Lire une inscription par ID
     public function show($id)
     {
-        $inscription = Inscription::with(['etudiant', 'session'])->find($id);
+        $inscription = Inscription::with(['etudiants', 'sessions'])->find($id);
         if (!$inscription) {
             return response()->json(['message' => 'Inscription non trouvée'], 404);
         }
@@ -54,8 +54,8 @@ class InscriptionController extends Controller
         // Validation des données
         $validatedData = $request->validate([
             'annee' => 'sometimes|integer|min:2000|max:2100',
-            'etudiant_id' => 'sometimes|exists:Etudiant,id',
-            'session_id' => 'sometimes|exists:Session,id',
+            'fk_etudiant' => 'sometimes|exists:Etudiant,id',
+            'fk_session' => 'sometimes|exists:Session,id',
         ]);
 
         // Mise à jour

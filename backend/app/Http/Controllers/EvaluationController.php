@@ -16,8 +16,8 @@ class EvaluationController extends Controller
             'abreviation' => 'nullable|string|max:50',
             'moyenneAdmissible' => 'required|numeric|min:0|max:20',
             'cloture' => 'required|boolean',
-            'session_id' => 'required|exists:Session,id',
-            'matiere_id' => 'required|exists:Matiere,id',
+            'fk_session' => 'required|exists:Session,id',
+            'fk_matiere' => 'required|exists:Matiere,id',
         ]);
 
         // Création de l'évaluation
@@ -32,14 +32,14 @@ class EvaluationController extends Controller
     // Lire toutes les évaluations
     public function index()
     {
-        $evaluations = Evaluation::with(['session', 'matiere'])->get();
+        $evaluations = Evaluation::with(['sessions', 'matieres'])->get();
         return response()->json($evaluations);
     }
 
     // Lire une évaluation par ID
     public function show($id)
     {
-        $evaluation = Evaluation::with(['session', 'matiere'])->find($id);
+        $evaluation = Evaluation::with(['sessions', 'matieres'])->find($id);
         if (!$evaluation) {
             return response()->json(['message' => 'Évaluation non trouvée'], 404);
         }
@@ -60,8 +60,8 @@ class EvaluationController extends Controller
             'abreviation' => 'sometimes|nullable|string|max:50',
             'moyenneAdmissible' => 'sometimes|numeric|min:0|max:20',
             'cloture' => 'sometimes|boolean',
-            'session_id' => 'sometimes|exists:Session,id',
-            'matiere_id' => 'sometimes|exists:Matiere,id',
+            'fk_session' => 'sometimes|exists:sessions,id',
+            'fk_matiere' => 'sometimes|exists:matieres,id',
         ]);
 
         // Mise à jour

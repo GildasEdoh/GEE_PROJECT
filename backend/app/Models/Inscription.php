@@ -9,23 +9,23 @@ class Inscription extends Model
 {
     use HasFactory;
 
-    protected $table = 'Inscription';
-    protected $primaryKey = 'id_inscription';
+    protected $table = 'inscriptions';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
         'annee',
-        'etudiant_id',
-        'session_id',
+        'fk_etudiant',
+        'fk_session',
     ];
 
     public function etudiant()
     {
-        return $this->belongsTo(Etudiant::class, 'etudiant_id');
+        return $this->belongsTo(Etudiant::class, 'fk_etudiant');
     }
 
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(Session::class, 'fk_session');
     }
 }
