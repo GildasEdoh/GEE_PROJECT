@@ -15,6 +15,8 @@ const Matieres = () => {
   const [optionnelle, setOptionnelle] = useState("Non");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [majMessage, setMajMessage] = useState(null)
+  const [majIsSucces, setMajIsSucces] = useState(false)
 
   const handleEditClick = (index, matiere) => {
     setEditIndex(index);
@@ -25,36 +27,77 @@ const Matieres = () => {
     setEditData({ ...editData, [field]: e.target.value });
   };
 
+  // Saving the mdifications
   const handleSave = (index) => {
     const updatedMatieres = [...matieres];
     updatedMatieres[index] = editData;
     setMatieres(updatedMatieres);
     setEditIndex(null);
+
+    // 
+    MatiereService.updateMatiere(editData)
+    .then((response) => {
+      console.log(" Mise a jour ..");
+      setMajMessage(`Matiere ${editData.libelle} mise a jour avec succes !`);
+      setMajIsSucces(true);
+    })
+    .catch((error) => {
+      setMajMessage(`Erreur lors de la mise a jour !`);
+      setMajIsSucces(false);
+    });
   };
 
   const handleCancel = () => {
     setEditIndex(null);
   };
 
+  // Deleting a matiere
   const handleDelete = (index) => {
     if (window.confirm("Voulez-vous vraiment supprimer cette matière ?")) {
       setMatieres(matieres.filter((_, i) => i !== index));
     }
+    // 
+    const matiereDeleted = matieres[index]
+    MatiereService.deleteMatiere(matiereDeleted.id)
+    .then((response) => {
+      console.log(" Suppression ..");
+      setMajMessage(`Suppression de la matiere ${matiereDeleted.libelle} effectuee avec succes !`);
+      setMajIsSucces(true);
+    })
+    .catch((error) => {
+      setMajMessage(`Erreur lors de la suppression !`);
+      setMajIsSucces(false);
+    });
   };
 
   const handleAdd = () => {
-    const newMatiere = {
-      id: `MAT${matieres.length + 1}01`,
+    const computeId = matieres.length + 1
+    let newMatiere = {
+      id: computeId.toString(),
       libelle,
       abreviation,
-      optionnelle,
+      optionnelle
     };
+    newMatiere.optionnelle =  newMatiere.optionnelle == "Oui" ? "1": "0"
+    console.log("optionnelle : " + newMatiere.optionnelle)
     setMatieres([...matieres, newMatiere]);
     setLibelle("");
     setAbreviation("");
     setOptionnelle("Non");
+
+    MatiereService.addMatiere(newMatiere)
+    .then((response) => {
+      console.log(" ajout ..");
+      setMajMessage(`Matiere ajoutee effectuee avec succes !`);
+      setMajIsSucces(true);
+    })
+    .catch((error) => {
+      setMajMessage(`Erreur lors de la Creation de la matiere !`);
+      setMajIsSucces(false);
+    });
   };
 
+  // Get all the matieres from the backend
   useEffect(() => {
     MatiereService.getAllMatiere()
     .then((response) => {
@@ -246,7 +289,7 @@ const Matieres = () => {
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      NUMERO
+                      CODE 
                     </th>
                     <th className="px-4 py-2 text-gray-700 text-sm text-center">
                       LIBELLE
@@ -271,7 +314,7 @@ const Matieres = () => {
                       {editIndex === index ? (
                         <>
                           <td className="px-4 py-2 text-center">
-                            {matiere.id}
+                            {`MAT${matieres.length + 1}${matiere.id}`}
                           </td>
                           <td className="px-4 py-2 text-center">
                             <input
@@ -319,7 +362,7 @@ const Matieres = () => {
                       ) : (
                         <>
                           <td className="px-4 py-2 text-center">
-                            {matiere.id}
+                            {`MAT${matieres.length + 1}${matiere.id}`}
                           </td>
                           <td className="px-4 py-2 text-center">
                             {matiere.libelle}
@@ -328,7 +371,7 @@ const Matieres = () => {
                             {matiere.abreviation}
                           </td>
                           <td className="px-4 py-2 text-center">
-                            {matiere.optionnelle}
+                            {matiere.optionnelle == 1 ? "Oui" : "Non"}
                           </td>
                           <td className="px-4 py-2 text-center">
                             <div className="flex gap-2 justify-center">
@@ -394,6 +437,15 @@ const Matieres = () => {
             </div>
           </div>
           {/* Boutons d'action */}
+          {majMessage && (
+                <div
+                  className={`p-4 my-4 rounded shadow text-center ${
+                    majIsSucces ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {majMessage}
+                </div>
+            )}
           <div className="flex justify-center gap-4 mt-6">
             <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer">
               Imprimer la liste

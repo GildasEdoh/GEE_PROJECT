@@ -23,25 +23,56 @@ const Etudiants = () => {
   const [editedData, setEditedData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false)
+  const [majMessage, setMajMessage] = useState(null)
+  const [majIsSucces, setMajIsSucces] = useState(false)
 
+  // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
     if (window.confirm("Voulez-vous vraiment supprimer cet étudiant ?")) {
       setEtudiants(etudiants.filter((_, i) => i !== index));
     }
+    const deleteEtudiant = etudiants[index]
+    // 
+    EtudiantService.deleteEtudiant(deleteEtudiant.numero_carte)
+    .then((res) => {
+      setMajMessage(`Suppression de l'etudiant ${deleteEtudiant.nom} effectuee avec succes !`);
+      setMajIsSucces(true);
+    })
+    .catch((err) => {
+      console.error("Erreur :", err);
+      setMajMessage("Échec de la Suppression.");
+      setMajIsSucces(false);
+    });
   };
 
   const handleEditEtudiant = (index) => {
     setEditIndex(index);
     setEditedData(etudiants[index]);
+    const etudiant = etudiants[index];
+    console.log("etudiant: " + etudiant.numero_carte)
   };
-
+  // Submission of the edition
   const handleSaveEdit = (index) => {
     const updatedEtudiants = [...etudiants];
     updatedEtudiants[index] = editedData;
+    console.log("etudiant updated : " + editedData.numero_carte)
     setEtudiants(updatedEtudiants);
     setEditIndex(null);
+
+    // Maj student
+    EtudiantService.updateEtudiant(editedData)
+    .then((res) => {
+      setMajMessage("Mise à jour réussie !");
+      setMajIsSucces(true);
+    })
+    .catch((err) => {
+      console.error("Erreur :", err);
+      setMajMessage("Échec de la mise à jour.");
+      setMajIsSucces(false);
+    });
   };
   
+  // Get the list of students
   useEffect(() => {
     EtudiantService.getAllEtudiant()
     .then((response) => {
@@ -308,6 +339,7 @@ const Etudiants = () => {
   }
   else {
     return (
+      
       <div className="ml-64 mt-20">
         <h1 className="text-2xl font-bold text-center">Liste des Étudiants</h1>
           <div className="border p-4 mt-4">
@@ -438,6 +470,15 @@ const Etudiants = () => {
                   ))}
                 </tbody>
               </table>
+              {majMessage && (
+                <div
+                  className={`p-4 my-4 rounded shadow text-center ${
+                    majIsSucces ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {majMessage}
+                </div>
+            )}
           </div>
         <div className="flex justify-center mt-4 space-x-2">
           <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer">
