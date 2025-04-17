@@ -66,3 +66,13 @@ export default function Home() {
     </div>
   );
 }
+
+// import StatistiqueComponent from './components/Statistique';
+
+// export default function StatistiquePage() {
+//   return (
+//     <div className="p-4">
+//       <StatistiqueComponent />
+//     </div>
+//   );
+// }
