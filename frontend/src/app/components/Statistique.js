@@ -66,8 +66,8 @@ const Statistique = () => {
     };
 
     return (
-        <div className="p-6">
-            <div className="flex justify-between items-center mb-8 bg-sky-100 p-4 rounded-lg">
+        <div className="ml-64 mt-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 space-y-6 bg-gray-100">
+            {/*<div className="flex justify-between items-center mb-8 bg-sky-100 p-4 rounded-lg">
                 <div className="flex items-center space-x-160">
                     <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
                     <div className="flex space-x-10">
@@ -90,13 +90,6 @@ const Statistique = () => {
                     </div>
                 </div>
 
-                {/* <div className="flex items-center">
-                    <img
-                        src="" // Remplacez par le chemin de votre icône
-                        alt="Icône statistiques"
-                        className="h-8 w-8" // Ajustez la taille selon besoin
-                    />
-                </div> */}
                 <div className="flex items-center">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +106,7 @@ const Statistique = () => {
                         />
                     </svg>
                 </div>
-            </div>
+            </div>  */}
 
             {/* Cartes statistiques */}
             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
