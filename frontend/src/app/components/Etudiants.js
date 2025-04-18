@@ -51,6 +51,7 @@ const Etudiants = () => {
     const etudiant = etudiants[index];
     console.log("etudiant: " + etudiant.numero_carte)
   };
+
   // Submission of the edition
   const handleSaveEdit = (index) => {
     const updatedEtudiants = [...etudiants];
@@ -265,7 +266,8 @@ const Etudiants = () => {
             };
           })
           .filter((etudiant) => etudiant !== null);
-
+        
+        console.log("etudiants : " + formattedData[0])
         // Générer un fichier JSON
         const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
           type: "application/json",

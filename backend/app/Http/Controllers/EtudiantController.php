@@ -69,4 +69,25 @@ class EtudiantController extends Controller
         $etudiant->delete();
         return response()->json(['message' => 'Etudiant supprimé']);
     }
+
+    // Supprimer plusieurs etudiants
+    public function destroyAll()
+    {
+        Etudiant::truncate(); // Supprime tout proprement (reset auto-increment aussi)
+        return response()->json(['message' => 'Tous les étudiants ont été supprimés.']);
+    }
+
+    // Ajouter plusieurs etudiants
+    public function bulkStore(Request $request)
+    {
+        $data = $request->validate([
+            'etudiants' => 'required|array',
+            'etudiants.*.nom' => 'required|string',
+            'etudiants.*.prenom' => 'required|string',
+        ]);
+
+        Etudiant::insert($data['etudiants']);
+
+        return response()->json(['message' => 'Étudiants ajoutés avec succès.']);
+    }
 }

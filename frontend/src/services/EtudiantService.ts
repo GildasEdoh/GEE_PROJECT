@@ -41,6 +41,18 @@ class EtudiantService {
         const response = await api.delete(path + `/${id}`)
         return response.data
     }
+
+    // Remove all from the table
+    public async removeAll() : Promise<any>{
+        const response = await api.delete(path)
+        return response.data
+    }
+
+    // Add multiples students
+    public async addAll() : Promise<any>{
+        const response = await api.post(path + "/bulk")
+        return response.data
+    }
 }
 
 export default EtudiantService.getInstance();
