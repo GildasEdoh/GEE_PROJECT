@@ -4,12 +4,12 @@ import api from "./ApiService"
  */
 
 // Base path for etudiants
-const path = "/etudiants" 
+const path = "/etudiants"
 class EtudiantService {
     private static instance: EtudiantService;
 
     // Default constructor
-    private constructor() {}
+    private constructor() { }
 
     public static getInstance(): EtudiantService {
         if (!EtudiantService.instance) {
@@ -37,9 +37,15 @@ class EtudiantService {
     }
 
     // Delete a etudiant
-    public async deleteEtudiant(id: string) : Promise<any>{
+    public async deleteEtudiant(id: string): Promise<any> {
         const response = await api.delete(path + `/${id}`)
         return response.data
+    }
+
+    // Resultats
+    public async getMoyennesParEtudiantSession(): Promise<any> {
+        const response = await api.get(`${path}/moyennes`);
+        return response.data;
     }
 }
 

@@ -66,6 +66,7 @@ Route::get('/test-db-connection', function () {
 Route::prefix('etudiants')->group(function () {
     Route::get('/', [EtudiantController::class, 'index'])->name('etudiants.index'); // Obtenir la liste des etudiant
     Route::post('/', [EtudiantController::class, 'store'])->name('etudiants.store'); // Enregistrer
+    Route::get('/moyennes', [EtudiantController::class, 'moyennesParEtudiantSession'])->name('etudiants.moyennesParEtudiantSession');
     Route::get('/{id}', [EtudiantController::class, 'show'])->name('etudiants.show');       // Afficher un étudiant
     Route::put('/{id}', [EtudiantController::class, 'update'])->name('etudiants.update');   // Mettre à jour
     Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy'); // Supprimer
@@ -132,6 +133,13 @@ Route::prefix('inscriptions')->group(function () {
 Route::prefix('notes')->group(function () {
     Route::get('/', [NoteController::class, 'index'])->name('notes.index'); // Obtenir la liste des notes
     Route::post('/', [NoteController::class, 'store'])->name('notes.store'); // Enregistrer une note
+    Route::get('/liste', [NoteController::class, 'listeNotes'])->name('notes.listeNotes');
+    Route::get('/liste_evaluation/{id}', [NoteController::class, 'listeNotesParEvaluation'])->name('notes.listeNotesParEvaluation');
+    Route::get('/listeAdmissible', [NoteController::class, 'listeNotesAdmissibles'])->name('notes.listeNotesAdmissibles');
+    Route::get('/releve_etudiant/{numero_carte}', [NoteController::class, 'notesEtMoyenneEtudiant'])->name('notesEtMoyenneEtudiant');
+    Route::get('/notes_matieres', [NoteController::class, 'notesParMatiereEtudiant'])->name('notesParMatiereEtudiant');
+    Route::get('/statistique_matieres', [NoteController::class, 'statistiquesParMentionParMatiere'])->name('statistiquesParMentionParMatiere');
+    Route::get('/moyenne_mention', [NoteController::class, 'moyenneEtMentionParEtudiant'])->name('moyenneEtMentionParEtudiant');
     Route::get('/{id}', [NoteController::class, 'show'])->name('notes.show'); // Afficher une note spécifique
     Route::put('/{id}', [NoteController::class, 'update'])->name('notes.update'); // Mettre à jour une note
     Route::delete('/{id}', [NoteController::class, 'destroy'])->name('notes.destroy'); // Supprimer une note

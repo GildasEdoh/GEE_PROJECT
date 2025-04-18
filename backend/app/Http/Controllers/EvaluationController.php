@@ -32,7 +32,7 @@ class EvaluationController extends Controller
     // Lire toutes les évaluations
     public function index()
     {
-        $evaluations = Evaluation::with(['sessions', 'matieres'])->get();
+        $evaluations = Evaluation::with(['session', 'matiere'])->get();
         return response()->json($evaluations);
     }
 

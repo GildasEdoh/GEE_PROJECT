@@ -23,11 +23,11 @@ class Etudiant extends Model
 
     public function inscriptions()
     {
-        return $this->hasMany(Inscription::class, 'fk_etudiant');
+        return $this->hasMany(Inscription::class, 'fk_etudiant', 'numero_carte');
     }
 
     public function notes()
     {
-        return $this->hasMany(Note::class, 'fk_etudiant');
+        return $this->hasMany(Note::class, 'fk_etudiant', 'numero_carte');
     }
 }
