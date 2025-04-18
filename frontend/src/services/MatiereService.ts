@@ -24,18 +24,21 @@ class MatiereService {
     }
 
     // Create a new matiere
-    public async addMatiere(nom: string): Promise<any> {
-        const response = await api.post(path, {nom})
+    public async addMatiere(matiere: any): Promise<any> {
+        const response = await api.post(path, matiere)
+        return response.data
     }
 
     // Update a matiere
-    public async updateMatiere(): Promise<any> {
-
+    public async updateMatiere(student: any): Promise<any> {
+        const response = await api.put(path + `/${student.id}`, student)
+        return response.data
     }
 
     // Delete a matiere
-    public async deleteMatiere() : Promise<any>{
-
+    public async deleteMatiere(id: String) : Promise<any> {
+        const response = await api.delete(path + `/${id}`)
+        return response.data
     }
 }
 
