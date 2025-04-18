@@ -67,33 +67,56 @@ const Statistique = () => {
 
     return (
         <div className="p-6">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
-                <div className="flex space-x-4">
-                    <select className="border rounded-lg px-4 py-2 bg-white">
-                        <option>2023-2024</option>
-                        <option>2022-2023</option>
-                        <option>2021-2022</option>
-                        <option>2020-2021</option>
-                        <option>2019-2020</option>
-                        <option>2018-2019</option>
-                        <option>2017-2018</option>
-                        <option>2016-2017</option>
-                        <option>2015-2016</option>
-                    </select>
-                    <select className="border rounded-lg px-4 py-2 bg-white">
-                        <option>Session Harmattan</option>
-                        <option>Session Mousson</option>
-                        <option>Session Rattrapage</option>
-                    </select>
+            <div className="flex justify-between items-center mb-8 bg-sky-100 p-4 rounded-lg">
+                <div className="flex items-center space-x-160">
+                    <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
+                    <div className="flex space-x-10">
+                        <select className="border rounded-lg px-4 py-2 bg-white shadow-sm">
+                            <option>2023-2024</option>
+                            <option>2022-2023</option>
+                            <option>2021-2022</option>
+                            <option>2020-2021</option>
+                            <option>2019-2020</option>
+                            <option>2018-2019</option>
+                            <option>2017-2018</option>
+                            <option>2016-2017</option>
+                            <option>2015-2016</option>
+                        </select>
+                        <select className="border rounded-lg px-4 py-2 bg-white shadow-sm">
+                            <option>Session Harmattan</option>
+                            <option>Session Mousson</option>
+                            <option>Session Rattrapage</option>
+                        </select>
+                    </div>
                 </div>
-                <div className="border raduis px-20">
-                    {/* <img src="" alt="" /> */}
+
+                {/* <div className="flex items-center">
+                    <img
+                        src="" // Remplacez par le chemin de votre icône
+                        alt="Icône statistiques"
+                        className="h-8 w-8" // Ajustez la taille selon besoin
+                    />
+                </div> */}
+                <div className="flex items-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-8 w-8 text-blue-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                        />
+                    </svg>
                 </div>
             </div>
 
             {/* Cartes statistiques */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {statsData.general.map((stat, index) => (
                     <div key={index} className="bg-white rounded-xl shadow-md p-6 flex items-start">
                         <div className="p-3 rounded-full bg-gray-100 mr-4">
@@ -110,7 +133,31 @@ const Statistique = () => {
                         </div>
                     </div>
                 ))}
+            </div> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {statsData.general.map((stat, index) => (
+                    <button
+                        key={index}
+                        type="button"
+                        className="bg-white rounded-xl shadow-md p-6 flex items-start text-left hover:shadow-lg transition duration-200 cursor-pointer "
+                        onClick={() => console.log(`Clicked on ${stat.title}`)} // Tu peux modifier l'action ici
+                    >
+                        <div className="p-3 rounded-full bg-gray-100 mr-4">
+                            {stat.icon}
+                        </div>
+                        <div>
+                            <p className="text-gray-500 text-sm">{stat.title}</p>
+                            <div className="flex items-end">
+                                <p className="text-2xl font-bold mr-2">{stat.value}</p>
+                                <span className={`text-sm ${stat.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+                                    {stat.change}
+                                </span>
+                            </div>
+                        </div>
+                    </button>
+                ))}
             </div>
+
 
             <div className="bg-white rounded-xl shadow-md p-6 mb-8">
                 <div className="flex justify-between items-center mb-4">
