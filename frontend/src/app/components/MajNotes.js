@@ -13,7 +13,7 @@ const MajNotes = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
-  const [evaluation, setEvaluation] = useState("Normale");
+  const [evaluation, setEvaluation] = useState("Devoir");
 
   useEffect(() => {
     MatiereService.getAllMatiere()
@@ -107,24 +107,24 @@ const MajNotes = () => {
       );
     } else {
       return (
-        <div className="ml-20 mt-0  w-full ">
+        <div className="ml-20 mt-0 w-full">
           <div className="flex items-center space-x-10 mt-2 ml-60">
             <span className="text-black font-bold text-sm">Evaluation</span>
             <select
               value={evaluation}
-              onChange={(e) => {
-                setSession(e.target.value);
-              }}
-              className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm"
+              onChange={(e) => setEvaluation(e.target.value)}
+              className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white"
             >
               <option>Devoir</option>
               <option>Examen</option>
             </select>
           </div>
+
           <h1 className="text-2xl font-bold text-center mt-10">
             Liste des Étudiants inscrits
           </h1>
-          <div className="border p-4 ">
+
+          <div className="border p-4">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-100">
@@ -162,7 +162,8 @@ const MajNotes = () => {
                               devoir: e.target.value,
                             })
                           }
-                          className="w-16 text-center border rounded"
+                          disabled={evaluation === "Examen"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
                         etudiant.devoir
@@ -180,7 +181,8 @@ const MajNotes = () => {
                               examen: e.target.value,
                             })
                           }
-                          className="w-16 text-center border rounded"
+                          disabled={evaluation === "Devoir"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
                         etudiant.examen
@@ -198,7 +200,8 @@ const MajNotes = () => {
                               moyenne: e.target.value,
                             })
                           }
-                          className="w-16 text-center border rounded"
+                          disabled={evaluation === "Devoir"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
                         etudiant.moyenne
