@@ -21,7 +21,6 @@ import {
  */
 
 const SideBar = ({ setSelectedMenu }) => {
-  const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [isEditionOpen, setIsEditionOpen] = useState(false);
   const [isEvaluationsOpen, setIsEvaluationsOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

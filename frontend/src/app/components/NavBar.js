@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-400 p-4 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0">
+    <nav className="bg-blue-400 p-2 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0">
       {/* Barre de recherche */}
       <div className="relative w-1/4">
         <input
@@ -103,7 +103,7 @@ const Navbar = () => {
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ duration: 0.3 }}
-          className="fixed top-4 right-4 z-50 w-[400px] bg-white shadow-lg rounded-xl p-6"
+          className="fixed top-4 right-4 z-50 w-[400px] bg-white shadow-lg rounded-xl p-6 z-100"
         >
           <button
             className="text-red-500 font-bold text-lg absolute top-2 right-4"
