@@ -9,8 +9,8 @@ class Matiere extends Model
 {
     use HasFactory;
 
-    protected $table = 'Matiere';
-    protected $primaryKey = 'id_matiere';
+    protected $table = 'matieres';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
@@ -21,11 +21,11 @@ class Matiere extends Model
 
     public function coefficients()
     {
-        return $this->hasMany(Coefficient::class, 'matiere_id');
+        return $this->hasMany(Coefficient::class, 'fk_matiere');
     }
 
     public function evaluations()
     {
-        return $this->hasMany(Evaluation::class, 'matiere_id');
+        return $this->hasMany(Evaluation::class, 'fk_matiere');
     }
 }

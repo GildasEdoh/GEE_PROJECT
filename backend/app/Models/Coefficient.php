@@ -9,7 +9,7 @@ class Coefficient extends Model
 {
     use HasFactory;
 
-    protected $table = 'Coefficient';
+    protected $table = 'Coefficients';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
@@ -21,11 +21,11 @@ class Coefficient extends Model
 
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(Session::class, 'fk_session');
     }
 
     public function matiere()
     {
-        return $this->belongsTo(Matiere::class, 'matiere_id');
+        return $this->belongsTo(Matiere::class, 'fk_matiere');
     }
 }

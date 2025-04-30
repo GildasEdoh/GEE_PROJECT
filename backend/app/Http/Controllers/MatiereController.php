@@ -31,12 +31,44 @@ class MatiereController extends Controller
         return response()->json($matiere);
     }
 
+
     // Mettre à jour une matière
     public function update(Request $request, $id)
     {
+        // Vérifier si la matière existe
         $matiere = Matiere::find($id);
         if (!$matiere) {
             return response()->json(['message' => 'Matière non trouvée'], 404);
         }
+
+        // Validation des données
+        $validatedData = $request->validate([
+            'libelle' => 'required|string|max:255',
+            'abreviation' => 'nullable|string|max:10',
+            'optionnelle' => 'boolean',
+        ]);
+
+        // Mettre à jour la matière
+        $matiere->update($validatedData);
+
+        return response()->json([
+            'message' => 'Matière mise à jour avec succès',
+            'matiere' => $matiere
+        ]);
+    }
+
+    // Supprimer une matière
+    public function destroy($id)
+    {
+        // Vérifier si la matière existe
+        $matiere = Matiere::find($id);
+        if (!$matiere) {
+            return response()->json(['message' => 'Matière non trouvée'], 404);
+        }
+
+        // Supprimer la matière
+        $matiere->delete();
+
+        return response()->json(['message' => 'Matière supprimée avec succès']);
     }
 }

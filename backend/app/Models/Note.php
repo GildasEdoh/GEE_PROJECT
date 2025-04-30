@@ -9,24 +9,24 @@ class Note extends Model
 {
     use HasFactory;
 
-    protected $table = 'Note';
+    protected $table = 'notes';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
         'valeur',
         'gele',
-        'evaluation_id',
-        'etudiant_id',
+        'fk_evaluation',
+        'fk_etudiant',
     ];
 
     public function evaluation()
     {
-        return $this->belongsTo(Evaluation::class, 'evaluation_id');
+        return $this->belongsTo(Evaluation::class, 'fk_evaluation');
     }
 
     public function etudiant()
     {
-        return $this->belongsTo(Etudiant::class, 'etudiant_id');
+        return $this->belongsTo(Etudiant::class, 'fk_etudiant');
     }
 }
