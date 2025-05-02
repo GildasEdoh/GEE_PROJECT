@@ -7,12 +7,40 @@ import * as XLSX from "xlsx";
  */
 
 const Etudiants = () => {
+<<<<<<< HEAD
+=======
+  const [etudiants, setEtudiants] = useState([
+    {
+      numero_carte: "123456",
+      nom: "Koffi",
+      prenom: "Jean",
+      dateNaissance: "Lome",
+      lieuNaissance: "Logone",
+      sexe: "M",
+    },
+    {
+      numero_carte: "654321",
+      nom: "Doe",
+      prenom: "Alice",
+      dateNaissance: "Lome",
+      lieuNaissance: "Logone",
+      sexe: "F",
+    },
+  ]);
+
+>>>>>>> dashboard/rahim
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
+<<<<<<< HEAD
+=======
+  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
+>>>>>>> dashboard/rahim
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -78,6 +106,10 @@ const Etudiants = () => {
         setError(true);
       });
   }, []);
+<<<<<<< HEAD
+=======
+
+>>>>>>> dashboard/rahim
   // fonction pour importer un fichier excel
   const handleImportEtudiantsExcel = (e) => {
     const file = e.target.files[0];
@@ -330,8 +362,52 @@ const Etudiants = () => {
   } else {
     return (
       <div className="ml-64 mt-20">
+<<<<<<< HEAD
         <h1 className="text-2xl font-bold text-center">Liste des Étudiants</h1>
         <div className="border p-4 mt-4">
+=======
+
+        <div className="bg-white flex items-center fixed top-15 right-0 left-68 z-4 pt-3 pb-3  pr-4 justify-between">
+          <h1 className="text-2xl font-bold">Liste des Étudiants</h1>
+
+          <div className="flex items-center gap-4">
+            <div>
+              <select
+                value={typeParcours}
+                onChange={(e) => setTypeParcours(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Licence</option>
+                <option value="echoues">Master</option>
+              </select>
+            </div>
+            <div>
+              <select
+                value={typeFiliere}
+                onChange={(e) => setTypeFiliere(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Genie Logiciel</option>
+                <option value="echoues">Genie Civil</option>
+                <option value="admis">Systèmes et Réseaux</option>
+                <option value="echoues">Informatique et Systèmes</option>
+              </select>
+            </div>
+            <div>
+              <select
+                value={typeAnneEtude}
+                onChange={(e) => setypeAnneEtude(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">1ere année</option>
+                <option value="echoues">2e année</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="border p-4 mt-4 mt-27">
+>>>>>>> dashboard/rahim
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-100">
