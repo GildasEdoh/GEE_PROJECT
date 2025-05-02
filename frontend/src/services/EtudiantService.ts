@@ -37,25 +37,6 @@ class EtudiantService {
     return response.data;
   }
 
-<<<<<<< HEAD
-    // Delete a etudiant
-    public async deleteEtudiant(id: string) : Promise<any>{
-        const response = await api.delete(path + `/${id}`)
-        return response.data
-    }
-
-    // Remove all from the table
-    public async removeAll() : Promise<any>{
-        const response = await api.delete(path)
-        return response.data
-    }
-
-    // Add multiples students
-    public async addAll() : Promise<any>{
-        const response = await api.post(path + "/bulk")
-        return response.data
-    }
-=======
   // Delete a etudiant
   public async deleteEtudiant(id: string): Promise<any> {
     const response = await api.delete(path + `/${id}`);
@@ -66,7 +47,6 @@ class EtudiantService {
     const response = await api.get(path + `/matieres/${id_matiere}`);
     return response.data;
   }
->>>>>>> lena
 }
 
 export default EtudiantService.getInstance();

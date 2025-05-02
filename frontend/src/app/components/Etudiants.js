@@ -7,8 +7,6 @@ import * as XLSX from "xlsx";
  */
 
 const Etudiants = () => {
-<<<<<<< HEAD
-=======
   const [etudiants, setEtudiants] = useState([
     {
       numero_carte: "123456",
@@ -28,19 +26,15 @@ const Etudiants = () => {
     },
   ]);
 
->>>>>>> dashboard/rahim
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-<<<<<<< HEAD
-=======
   const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
   const [typeParcours, setTypeParcours] = useState("Licence");
   const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
->>>>>>> dashboard/rahim
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -106,10 +100,7 @@ const Etudiants = () => {
         setError(true);
       });
   }, []);
-<<<<<<< HEAD
-=======
 
->>>>>>> dashboard/rahim
   // fonction pour importer un fichier excel
   const handleImportEtudiantsExcel = (e) => {
     const file = e.target.files[0];
@@ -362,10 +353,6 @@ const Etudiants = () => {
   } else {
     return (
       <div className="ml-64 mt-20">
-<<<<<<< HEAD
-        <h1 className="text-2xl font-bold text-center">Liste des Étudiants</h1>
-        <div className="border p-4 mt-4">
-=======
 
         <div className="bg-white flex items-center fixed top-15 right-0 left-68 z-4 pt-3 pb-3  pr-4 justify-between">
           <h1 className="text-2xl font-bold">Liste des Étudiants</h1>
@@ -407,7 +394,6 @@ const Etudiants = () => {
         </div>
 
         <div className="border p-4 mt-4 mt-27">
->>>>>>> dashboard/rahim
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-100">
