@@ -257,6 +257,9 @@ const MajNotes = () => {
                     <th className="px-4 py-2 text-sm text-center">
                       OPTIONNELLE
                     </th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      COEFFICIENT
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -281,6 +284,9 @@ const MajNotes = () => {
                       </td>
                       <td className="px-4 py-2 text-center">
                         {matiere.optionnelle === 1 ? "Oui" : "Non"}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.coefficient}
                       </td>
                     </tr>
                   ))}
