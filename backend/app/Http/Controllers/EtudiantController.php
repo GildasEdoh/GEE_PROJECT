@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Etudiant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class EtudiantController extends Controller
 {
@@ -69,6 +71,7 @@ class EtudiantController extends Controller
         $etudiant->delete();
         return response()->json(['message' => 'Etudiant supprimé']);
     }
+<<<<<<< HEAD
 
     // Supprimer plusieurs etudiants
     public function destroyAll()
@@ -90,4 +93,36 @@ class EtudiantController extends Controller
 
         return response()->json(['message' => 'Étudiants ajoutés avec succès.']);
     }
+=======
+    
+    // Lire les étudiants par matière
+   
+    public function getAllEtudiantsBySubject($idMatiere)
+{
+    $anneeEnCours = "2024-2025"; 
+
+    $etudiants = DB::table('notes as n')
+    ->distinct()
+    ->join('etudiants as et', 'n.fk_etudiant', '=', 'et.numero_carte')
+    ->join('inscriptions as i', 'i.fk_etudiant', '=', 'et.numero_carte')
+    ->join('evaluations as e', 'n.fk_evaluation', '=', 'e.id')
+    ->join('evaluation_matiere as em', 'e.id', '=', 'em.fk_evaluation')
+    ->join('matieres as m', 'em.fk_matiere', '=', 'm.id')
+    ->where('m.id', $idMatiere)
+    ->where('i.annee', $anneeEnCours)
+    ->select(
+        'et.numero_carte',   // ✅ numéro de carte avec son vrai nom
+        'et.nom',
+        'et.prenom',
+        'et.sexe',           // ✅ ajout du champ sexe
+        'm.libelle as matiere',
+        'i.annee'
+    )
+    ->get();
+
+
+    return response()->json($etudiants);
+}
+
+>>>>>>> lena
 }
