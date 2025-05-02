@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Evaluation extends Model
+class TypeEvaluation extends Model
 {
     use HasFactory;
 
-    protected $table = 'evaluations';
+    protected $table = 'types_evaluation';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
         'libelle',
-        'cloture',
+        'abreviation'
     ];
 }

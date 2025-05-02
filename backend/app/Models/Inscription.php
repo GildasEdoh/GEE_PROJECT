@@ -14,18 +14,26 @@ class Inscription extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'annee',
+        'fk_annee_univ',
         'fk_etudiant',
-        'fk_session',
+        'fk_parcours_annee_etude',
     ];
 
+    // 
+    public function anneeUniv()
+    {
+        return $this->belongsTo(AnneeUniv::class, 'fk_annee_univ');
+    }
+
+    // 
     public function etudiant()
     {
         return $this->belongsTo(Etudiant::class, 'fk_etudiant');
     }
 
-    public function session()
+    // 
+    public function parcoursAnneeEtude()
     {
-        return $this->belongsTo(Session::class, 'fk_session');
+        return $this->belongsTo(ParcoursAnneesEtude::class, 'fk_parcours_annee_etude');
     }
 }
