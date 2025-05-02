@@ -69,7 +69,9 @@ Route::prefix('etudiants')->group(function () {
     Route::get('/{id}', [EtudiantController::class, 'show'])->name('etudiants.show');       // Afficher un étudiant
     Route::put('/{id}', [EtudiantController::class, 'update'])->name('etudiants.update');   // Mettre à jour
     Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy'); // Supprimer
+    Route::get('/matieres/{id_matiere}', [EtudiantController::class, 'getAllEtudiantsBySubject'])->name('etudiants.getAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
 });
+
 
 // ====================================
 // ⚙️ Gestion des Coefficients

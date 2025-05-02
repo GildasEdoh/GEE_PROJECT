@@ -10,28 +10,15 @@ const MajNotes = () => {
   const [etudiants, setEtudiants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
+  const [evaluation, setEvaluation] = useState("Devoir");
 
   useEffect(() => {
     MatiereService.getAllMatiere()
       .then((response) => {
         setMatieres(response);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur :", error);
-        setIsLoading(false);
-        setError(true);
-      });
-  }, []);
-
-  useEffect(() => {
-    EtudiantService.getAllEtudiant()
-      .then((response) => {
-        setEtudiants(response);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -57,10 +44,11 @@ const MajNotes = () => {
 
   const fetchEtudiantsForMatiere = (idMatiere) => {
     setIsLoading(true);
-    EtudiantService.getAllEtudiant()
+    EtudiantService.getAllEtudiantsBySubject(idMatiere)
       .then((response) => {
         setEtudiants(response);
         setIsLoading(false);
+        console.log("response", response);
       })
       .catch((error) => {
         console.error("Erreur :", error);
@@ -119,11 +107,24 @@ const MajNotes = () => {
       );
     } else {
       return (
-        <div className="ml-20 mt-0  w-full ">
-          <h1 className="text-2xl font-bold text-center">
-            Liste des Étudiants
+        <div className="ml-20 mt-0 w-full">
+          <div className="flex items-center space-x-10 mt-2 ml-60">
+            <span className="text-black font-bold text-sm">Evaluation</span>
+            <select
+              value={evaluation}
+              onChange={(e) => setEvaluation(e.target.value)}
+              className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white"
+            >
+              <option>Devoir</option>
+              <option>Examen</option>
+            </select>
+          </div>
+
+          <h1 className="text-2xl font-bold text-center mt-10">
+            Liste des Étudiants inscrits
           </h1>
-          <div className="border p-4 ">
+
+          <div className="border p-4">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-100">
@@ -140,7 +141,7 @@ const MajNotes = () => {
               <tbody>
                 {etudiants.map((etudiant, index) => (
                   <tr
-                    key={etudiant.numero_carte}
+                    key={`${etudiant.numero_carte}-${index}`}
                     className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
                   >
                     <td className="px-4 py-2 text-center">
@@ -161,7 +162,8 @@ const MajNotes = () => {
                               devoir: e.target.value,
                             })
                           }
-                          className="w-16 text-center border rounded"
+                          disabled={evaluation === "Examen"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
                         etudiant.devoir
@@ -179,7 +181,8 @@ const MajNotes = () => {
                               examen: e.target.value,
                             })
                           }
-                          className="w-16 text-center border rounded"
+                          disabled={evaluation === "Devoir"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
                         etudiant.examen
@@ -197,7 +200,8 @@ const MajNotes = () => {
                               moyenne: e.target.value,
                             })
                           }
-                          className="w-16 text-center border rounded"
+                          disabled={evaluation === "Devoir"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
                         etudiant.moyenne
