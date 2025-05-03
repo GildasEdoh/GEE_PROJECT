@@ -7,25 +7,6 @@ import * as XLSX from "xlsx";
  */
 
 const Etudiants = () => {
-  const [etudiants, setEtudiants] = useState([
-    {
-      numero_carte: "123456",
-      nom: "Koffi",
-      prenom: "Jean",
-      dateNaissance: "Lome",
-      lieuNaissance: "Logone",
-      sexe: "M",
-    },
-    {
-      numero_carte: "654321",
-      nom: "Doe",
-      prenom: "Alice",
-      dateNaissance: "Lome",
-      lieuNaissance: "Logone",
-      sexe: "F",
-    },
-  ]);
-
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +16,7 @@ const Etudiants = () => {
   const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
   const [typeParcours, setTypeParcours] = useState("Licence");
   const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
+  const [etudiants, setEtudiants] = useState([]);
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -123,9 +105,10 @@ const Etudiants = () => {
           "numero_carte",
           "nom",
           "prenom",
-          "dateNaissance",
-          "lieuNaissance",
+          "date_naissance",
+          "lieu_naissance",
           "sexe",
+          "telephone",
         ];
         const sheetColumns = Object.keys(jsonData[0] || {});
         const isValidStructure = requiredColumns.every((col) =>
@@ -146,18 +129,20 @@ const Etudiants = () => {
               numero_carte,
               nom,
               prenom,
-              dateNaissance,
-              lieuNaissance,
+              date_naissance,
+              lieu_naissance,
               sexe,
+              telephone,
             } = row;
 
             if (
               !numero_carte ||
               !nom ||
               !prenom ||
-              !dateNaissance ||
-              !lieuNaissance ||
-              !sexe
+              !date_naissance ||
+              !lieu_naissance ||
+              !sexe ||
+              !telephone
             ) {
               alert(
                 "Certaines données sont manquantes dans le fichier Excel. Veuillez vérifier chaque ligne."
@@ -220,9 +205,10 @@ const Etudiants = () => {
           "numero_carte",
           "nom",
           "prenom",
-          "dateNaissance",
-          "lieuNaissance",
+          "date_naissance",
+          "lieu_naissance",
           "sexe",
+          "telephone",
         ];
 
         const sheetColumns = Object.keys(jsonData[0] || {});
@@ -243,18 +229,20 @@ const Etudiants = () => {
               numero_carte,
               nom,
               prenom,
-              dateNaissance,
-              lieuNaissance,
+              date_naissance,
+              lieu_naissance,
               sexe,
+              telephone,
             } = row;
 
             if (
               !numero_carte ||
               !nom ||
               !prenom ||
-              !dateNaissance ||
-              !lieuNaissance ||
-              !sexe
+              !date_naissance ||
+              !lieu_naissance ||
+              !sexe ||
+              !telephone
             ) {
               alert(
                 `Ligne incomplète détectée : ${JSON.stringify(row)}. Ignorée.`
@@ -273,14 +261,15 @@ const Etudiants = () => {
               carte: numero_carte.toString(),
               nom,
               prenoms: prenom,
-              dateNaissance,
-              lieuNaissance,
+              date_naissance: date_naissance.toString(),
+              lieu_naissance: lieu_naissance,
               sexe: sexe.toUpperCase(),
+              telephone: telephone.toString(),
             };
           })
           .filter((etudiant) => etudiant !== null);
-        
-        console.log("etudiants : " + formattedData[0])
+
+        console.log("etudiants : " + formattedData[0]);
         // Générer un fichier JSON
         const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
           type: "application/json",
@@ -353,7 +342,6 @@ const Etudiants = () => {
   } else {
     return (
       <div className="ml-64 mt-20">
-
         <div className="bg-white flex items-center fixed top-15 right-0 left-68 z-4 pt-3 pb-3  pr-4 justify-between">
           <h1 className="text-2xl font-bold">Liste des Étudiants</h1>
 
@@ -413,10 +401,13 @@ const Etudiants = () => {
                   Lieu de Naissance
                 </th>
                 <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                  SEXE
+                  Sexe
                 </th>
                 <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                  ACTIONS
+                  Téléphone
+                </th>
+                <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -455,11 +446,47 @@ const Etudiants = () => {
                       </td>
                       <td className="px-4 py-2 text-center">
                         <input
+                          value={editedData.date_naissance}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              date_naissance: e.target.value,
+                            })
+                          }
+                          className="border p-1 w-full"
+                        />
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <input
+                          value={editedData.lieu_naissance}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              lieu_naissance: e.target.value,
+                            })
+                          }
+                          className="border p-1 w-full"
+                        />
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <input
                           value={editedData.sexe}
                           onChange={(e) =>
                             setEditedData({
                               ...editedData,
                               sexe: e.target.value,
+                            })
+                          }
+                          className="border p-1 w-full"
+                        />
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <input
+                          value={editedData.telephone}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              telephone: e.target.value,
                             })
                           }
                           className="border p-1 w-full"
@@ -508,13 +535,17 @@ const Etudiants = () => {
                       </td>
                       <td className="px-4 py-2 text-center">
                         {" "}
-                        {etudiant.dateNaissance}{" "}
+                        {etudiant.date_naissance}{" "}
                       </td>
                       <td className="px-4 py-2 text-center">
                         {" "}
-                        {etudiant.lieuNaissance}{" "}
+                        {etudiant.lieu_naissance}{" "}
                       </td>
                       <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
+                      <td className="px-4 py-2 text-center">
+                        {" "}
+                        {etudiant.telephone}{" "}
+                      </td>
                       <td className="px-4 py-2 text-center">
                         <div className="flex gap-2 justify-center">
                           <button
