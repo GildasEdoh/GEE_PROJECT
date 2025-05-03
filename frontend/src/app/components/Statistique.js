@@ -67,27 +67,18 @@ const Statistique = () => {
 
     return (
         <div className="ml-64 mt-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 space-y-6 bg-gray-100">
-            {/*<div className="flex justify-between items-center mb-8 bg-sky-100 p-4 rounded-lg">
-                <div className="flex items-center space-x-160">
-                    <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
-                    <div className="flex space-x-10">
-                        <select className="border rounded-lg px-4 py-2 bg-white shadow-sm">
-                            <option>2023-2024</option>
-                            <option>2022-2023</option>
-                            <option>2021-2022</option>
-                            <option>2020-2021</option>
-                            <option>2019-2020</option>
-                            <option>2018-2019</option>
-                            <option>2017-2018</option>
-                            <option>2016-2017</option>
-                            <option>2015-2016</option>
-                        </select>
-                        <select className="border rounded-lg px-4 py-2 bg-white shadow-sm">
-                            <option>Session Harmattan</option>
-                            <option>Session Mousson</option>
-                            <option>Session Rattrapage</option>
-                        </select>
-                    </div>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
+                <div className="flex space-x-4">
+                    <select className="border rounded-lg px-4 py-2 bg-white">
+                        <option>2023-2024</option>
+                        <option>2022-2023</option>
+                        <option>2021-2022</option>
+                    </select>
+                    <select className="border rounded-lg px-4 py-2 bg-white">
+                        <option>Session Normale</option>
+                        <option>Session Rattrapage</option>
+                    </select>
                 </div>
 
                 <div className="flex items-center">
@@ -106,7 +97,7 @@ const Statistique = () => {
                         />
                     </svg>
                 </div>
-            </div>  */}
+            </div> 
 
             {/* Cartes statistiques */}
             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
