@@ -4,33 +4,34 @@
 
 "use client";
 import Matieres from "./Matieres";
-<<<<<<< HEAD
-import Etudiants from "./Etudiants";
-import Accueil from "./Accueil";
-import MajNotes from "./MajNotes";
-=======
 import Etudiants from "./Etudiants"
 import Accueil from "./Accueil"
 import MajNotes from "./MajNotes"
 import Statistique from "./Statistique";
->>>>>>> 81c7cf033318ddf75373da768563169d82d20e84
+import ListeInscrits from "./edition/ListeInscrits";
+import NotesMatieres from "./edition/NotesMatieres";
+import PVIndividuels from "./edition/PVIndividuels";
+import Releves from "./edition/Releves";
+
 export default function Dashboard({ selectedMenu }) {
   const renderContent = () => {
     switch (selectedMenu) {
       case "Matières":
         return <Matieres />;
       case "Étudiants":
-<<<<<<< HEAD
-        return <Etudiants />;
-      case "Notes":
-        return <MajNotes />;
-=======
-        return <Etudiants/>
+        return <Etudiants/>;
       case "Mise à jour Notes":
-        return <MajNotes/>
+        return <MajNotes/>;
       case "Statistiques":
-        return <Statistique/>
->>>>>>> 81c7cf033318ddf75373da768563169d82d20e84
+        return <Statistique/>;
+      case "Liste des inscrits":
+        return <ListeInscrits />;
+      case "Notes par Matières":
+        return <NotesMatieres />;
+      case "PV individuels":
+        return <PVIndividuels />;
+      case "Releves":
+        return <Releves />;
       default:
         return <Accueil />;
     }
