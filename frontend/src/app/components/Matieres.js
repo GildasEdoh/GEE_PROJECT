@@ -15,8 +15,11 @@ const Matieres = () => {
   const [optionnelle, setOptionnelle] = useState("Non");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [majMessage, setMajMessage] = useState(null)
-  const [majIsSucces, setMajIsSucces] = useState(false)
+  const [majMessage, setMajMessage] = useState(null);
+  const [majIsSucces, setMajIsSucces] = useState(false);
+  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
 
   const handleEditClick = (index, matiere) => {
     setEditIndex(index);
@@ -34,17 +37,17 @@ const Matieres = () => {
     setMatieres(updatedMatieres);
     setEditIndex(null);
 
-    // 
+    //
     MatiereService.updateMatiere(editData)
-    .then((response) => {
-      console.log(" Mise a jour ..");
-      setMajMessage(`Matiere ${editData.libelle} mise a jour avec succes !`);
-      setMajIsSucces(true);
-    })
-    .catch((error) => {
-      setMajMessage(`Erreur lors de la mise a jour !`);
-      setMajIsSucces(false);
-    });
+      .then((response) => {
+        console.log(" Mise a jour ..");
+        setMajMessage(`Matiere ${editData.libelle} mise a jour avec succes !`);
+        setMajIsSucces(true);
+      })
+      .catch((error) => {
+        setMajMessage(`Erreur lors de la mise a jour !`);
+        setMajIsSucces(false);
+      });
   };
 
   const handleCancel = () => {
@@ -56,62 +59,64 @@ const Matieres = () => {
     if (window.confirm("Voulez-vous vraiment supprimer cette matière ?")) {
       setMatieres(matieres.filter((_, i) => i !== index));
     }
-    // 
-    const matiereDeleted = matieres[index]
+    //
+    const matiereDeleted = matieres[index];
     MatiereService.deleteMatiere(matiereDeleted.id)
-    .then((response) => {
-      console.log(" Suppression ..");
-      setMajMessage(`Suppression de la matiere ${matiereDeleted.libelle} effectuee avec succes !`);
-      setMajIsSucces(true);
-    })
-    .catch((error) => {
-      setMajMessage(`Erreur lors de la suppression !`);
-      setMajIsSucces(false);
-    });
+      .then((response) => {
+        console.log(" Suppression ..");
+        setMajMessage(
+          `Suppression de la matiere ${matiereDeleted.libelle} effectuee avec succes !`
+        );
+        setMajIsSucces(true);
+      })
+      .catch((error) => {
+        setMajMessage(`Erreur lors de la suppression !`);
+        setMajIsSucces(false);
+      });
   };
 
   const handleAdd = () => {
-    const computeId = matieres.length + 1
+    const computeId = matieres.length + 1;
     let newMatiere = {
       id: computeId.toString(),
       libelle,
       abreviation,
-      optionnelle
+      optionnelle,
     };
-    newMatiere.optionnelle =  newMatiere.optionnelle == "Oui" ? "1": "0"
-    console.log("optionnelle : " + newMatiere.optionnelle)
+    newMatiere.optionnelle = newMatiere.optionnelle == "Oui" ? "1" : "0";
+    console.log("optionnelle : " + newMatiere.optionnelle);
     setMatieres([...matieres, newMatiere]);
     setLibelle("");
     setAbreviation("");
     setOptionnelle("Non");
 
     MatiereService.addMatiere(newMatiere)
-    .then((response) => {
-      console.log(" ajout ..");
-      setMajMessage(`Matiere ajoutee effectuee avec succes !`);
-      setMajIsSucces(true);
-    })
-    .catch((error) => {
-      setMajMessage(`Erreur lors de la Creation de la matiere !`);
-      setMajIsSucces(false);
-    });
+      .then((response) => {
+        console.log(" ajout ..");
+        setMajMessage(`Matiere ajoutee effectuee avec succes !`);
+        setMajIsSucces(true);
+      })
+      .catch((error) => {
+        setMajMessage(`Erreur lors de la Creation de la matiere !`);
+        setMajIsSucces(false);
+      });
   };
 
   // Get all the matieres from the backend
   useEffect(() => {
     MatiereService.getAllMatiere()
-    .then((response) => {
-      console.log("🚀 Reponse brute de l'API :", response[0]);
-      console.log(Array.isArray(response))
-      setMatieres(response)
-      setIsLoading(false)
-    })
-    .catch((error) => {
-      console.error("Erreur :", error);
-      setIsLoading(false);
-      setError(true)
-    });
-  }, [])
+      .then((response) => {
+        console.log("🚀 Reponse brute de l'API :", response[0]);
+        console.log(Array.isArray(response));
+        setMatieres(response);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur :", error);
+        setIsLoading(false);
+        setError(true);
+      });
+  }, []);
 
   // fonction pour importer et traiter le fichier excel
   const handleImportExcel = (e) => {
@@ -261,35 +266,63 @@ const Matieres = () => {
     link.click();
     document.body.removeChild(link);
   };
-    if (isLoading) {
-      return (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    );
+  } else if (!isLoading && error) {
+    return (
+      <div className="ml-64 mt-20 w-2/3">
+        <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
+          ⚠️Impossible de récupérer la liste. erreur serveur
         </div>
-        )
-    } else if (!isLoading && error) {
-      return (
-        <div className="ml-64 mt-20 w-2/3">
-          <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
-            ⚠️Impossible de récupérer la liste. erreur serveur
-          </div>
-        </div>
-      );
-    } else {
-      // Return the content of the page
-      return (
-        <div className=" ml-64 mt-15 ">
-          <div className="p-6 bg-transparent w-full flex mt-4 gap-6">
-            {/* Tableau des matières */}
-            <div className="overflow-auto rounded-lg border border-gray-200 shadow-md w-2/3">
-              <h2 className="text-lg font-bold text-center m-2">
-                Liste des matières
-              </h2>
+      </div>
+    );
+  } else {
+    // Return the content of the page
+    return (
+      <div className=" ml-64 mt-10">
+        <div className="p-6 bg-transparent w-full flex mt-4 gap-6">
+          {/* Tableau des matières */}
+          <div className="rounded-sm  shadow-sm w-2/3 flex flex-col">
+            <div className="h-[500px] overflow-y-auto pl-4 pr-4 pb-3">
+              <div className=" bg-white sticky top-0 z-2 flex items-center justify-between fixed mb-5 pt-2 pb-4">
+                <h2 className="text-2xl font-bold text-center">
+                  Liste des matières
+                </h2>
+
+                <div className="flex items-center gap-2">
+                  <div>
+                    <select
+                      value={typeParcours}
+                      onChange={(e) => setTypeParcours(e.target.value)}
+                      className="p-2 border-none rounded-md shadow-sm text-sm"
+                    >
+                      <option value="admis">Licence</option>
+                      <option value="echoues">Master</option>
+                    </select>
+                  </div>
+                  <div>
+                    <select
+                      value={typeFiliere}
+                      onChange={(e) => setTypeFiliere(e.target.value)}
+                      className="p-2 border-none rounded-md shadow-sm text-sm"
+                    >
+                      <option value="admis">Genie Logiciel</option>
+                      <option value="echoues">Genie Civil</option>
+                      <option value="admis">Systèmes et Réseaux</option>
+                      <option value="echoues">Informatique et Systèmes</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      CODE 
+                      CODE
                     </th>
                     <th className="px-4 py-2 text-gray-700 text-sm text-center">
                       LIBELLE
@@ -329,14 +362,18 @@ const Matieres = () => {
                               type="text"
                               className="w-full p-1 border rounded"
                               value={editData.abreviation}
-                              onChange={(e) => handleInputChange(e, "abreviation")}
+                              onChange={(e) =>
+                                handleInputChange(e, "abreviation")
+                              }
                             />
                           </td>
                           <td className="px-4 py-2 text-center">
                             <select
                               className="w-full p-1 border rounded"
                               value={editData.optionnelle}
-                              onChange={(e) => handleInputChange(e, "optionnelle")}
+                              onChange={(e) =>
+                                handleInputChange(e, "optionnelle")
+                              }
                             >
                               <option value="Oui">Oui</option>
                               <option value="Non">Non</option>
@@ -396,80 +433,83 @@ const Matieres = () => {
                 </tbody>
               </table>
             </div>
-            {/* FORMULAIRE D'AJOUT */}
-            <div className="bg-white shadow-md rounded-lg p-6 w-1/3 h-1/3">
-              <h2 className="text-lg font-bold mb-4">Créer une matière</h2>
-              <label className="block mb-2 text-sm font-semibold">Libellé</label>
-              <input
-                type="text"
-                className="w-full p-1 border rounded mb-3"
-                placeholder="Ex: Mathématiques"
-                value={libelle}
-                onChange={(e) => setLibelle(e.target.value)}
-              />
-              <label className="block mb-2 text-sm font-semibold">
-                Abréviation
-              </label>
-              <input
-                type="text"
-                className="w-full p-1 border rounded mb-3"
-                placeholder="Ex: MATH"
-                value={abreviation}
-                onChange={(e) => setAbreviation(e.target.value)}
-              />
-              <label className="block mb-2 text-sm font-semibold">
-                Optionnelle
-              </label>
-              <select
-                className="w-full p-1 border rounded mb-3"
-                value={optionnelle}
-                onChange={(e) => setOptionnelle(e.target.value)}
-              >
-                <option value="Oui">Oui</option>
-                <option value="Non">Non</option>
-              </select>
-              <button
-                className="w-full bg-blue-500 text-white p-1 rounded-lg hover:bg-blue-600"
-                onClick={handleAdd}
-              >
-                Ajouter
-              </button>
-            </div>
           </div>
-          {/* Boutons d'action */}
-          {majMessage && (
-                <div
-                  className={`p-4 my-4 rounded shadow text-center ${
-                    majIsSucces ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {majMessage}
-                </div>
-            )}
-          <div className="flex justify-center gap-4 mt-6">
-            <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer">
-              Imprimer la liste
-            </button>
-
-            <label className="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
-              Importer fichier Excel
-              <input
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={handleImportExcel}
-                className="hidden"
-              />
+          {/* FORMULAIRE D'AJOUT */}
+          <div className="bg-white shadow-md rounded-lg p-6 w-1/3 h-1/3">
+            <h2 className="text-lg font-bold mb-4">Créer une matière</h2>
+            <label className="block mb-2 text-sm font-semibold">Libellé</label>
+            <input
+              type="text"
+              className="w-full p-1 border rounded mb-3"
+              placeholder="Ex: Mathématiques"
+              value={libelle}
+              onChange={(e) => setLibelle(e.target.value)}
+            />
+            <label className="block mb-2 text-sm font-semibold">
+              Abréviation
             </label>
-
-            <button
-              onClick={() => exportMatieresToExcel(matieres)}
-              className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 cursor-pointer"
+            <input
+              type="text"
+              className="w-full p-1 border rounded mb-3"
+              placeholder="Ex: MATH"
+              value={abreviation}
+              onChange={(e) => setAbreviation(e.target.value)}
+            />
+            <label className="block mb-2 text-sm font-semibold">
+              Optionnelle
+            </label>
+            <select
+              className="w-full p-1 border rounded mb-3"
+              value={optionnelle}
+              onChange={(e) => setOptionnelle(e.target.value)}
             >
-              Exporter au format excel
+              <option value="Oui">Oui</option>
+              <option value="Non">Non</option>
+            </select>
+            <button
+              className="w-full bg-blue-500 text-white p-1 rounded-lg hover:bg-blue-600"
+              onClick={handleAdd}
+            >
+              Ajouter
             </button>
           </div>
         </div>
-      );
-    };
-}
+        {/* Boutons d'action */}
+        {majMessage && (
+          <div
+            className={`p-4 my-4 rounded shadow text-center ${
+              majIsSucces
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {majMessage}
+          </div>
+        )}
+        <div className="flex justify-center gap-4 mt-6">
+          <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer">
+            Imprimer la liste
+          </button>
+
+          <label className="inline-block px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
+            Importer fichier Excel
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleImportExcel}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={() => exportMatieresToExcel(matieres)}
+            className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 cursor-pointer"
+          >
+            Exporter au format excel
+          </button>
+        </div>
+      </div>
+    );
+  }
+};
 export default Matieres;

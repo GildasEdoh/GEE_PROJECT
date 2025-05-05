@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-400 p-2 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0">
+    <nav className="bg-blue-400 p-2 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0 z-10">
       {/* Barre de recherche */}
       <div className="relative w-1/4">
         <input
