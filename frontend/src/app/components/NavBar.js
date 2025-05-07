@@ -11,6 +11,7 @@ const Navbar = () => {
   const [session, setSession] = useState("Normale");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [setSelectedMenu] = useState("acceuil");
+  const [showSearch, setShowSearch] = useState(true);
   const router = useRouter(); // pour rediriger
 
   const user = {
@@ -26,18 +27,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-400 p-2 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0 z-10">
+    <nav className=" lg:w-full bg-blue-400 p-3 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0 z-10">
       {/* Barre de recherche */}
-      <div className="relative w-1/4">
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          className="w-full px-3 py-1 rounded-lg border-none bg-white focus:outline-none"
-        />
-        <span className="absolute right-3 top-2 text-gray-500">
-          <FaSearch />
-        </span>
-      </div>
+      {showSearch && (
+        <div className="hidden md:block relative lg:w-1/4 md:w-0.5/4">
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            className="w-full px-3 py-1 md:px-1 md:py-1 rounded-lg border-none bg-white focus:outline-none"
+          />
+          <span className="absolute right-3 top-2 text-gray-500">
+            <FaSearch />
+          </span>
+        </div>
+      )}
+
       {/* Icone de messagerie */}
       <div>
         <button
@@ -103,7 +107,7 @@ const Navbar = () => {
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ duration: 0.3 }}
-          className="fixed top-4 right-4 z-50 w-[400px] bg-white shadow-lg rounded-xl p-6 z-100"
+          className="fixed top-17 right-3 w-[400px] bg-white shadow-md rounded-sm p-6 z-100"
         >
           <button
             className="text-red-500 font-bold text-lg absolute top-2 right-4"
@@ -113,7 +117,7 @@ const Navbar = () => {
           </button>
 
           {/* Avatar */}
-          <Avatar className="w-24 h-24 border-2 border-gray-300 mx-auto mt-6">
+          <Avatar className="w-15 h-15 border-2 border-gray-300 mx-auto">
             <AvatarImage src={user.avatar} alt="Profil" />
             <AvatarFallback>
               {user.firstName[0]}
@@ -122,19 +126,19 @@ const Navbar = () => {
           </Avatar>
 
           {/* Nom complet */}
-          <h2 className="text-xl font-semibold mt-4 text-center">
+          <h2 className="lg:text-lg md:text-md text-sm font-semibold mt-4 text-center">
             {user.firstName} {user.lastName}
           </h2>
 
           {/* Statut */}
-          <span className="bg-blue-200 text-blue-800 px-3 py-1 mt-2 rounded-lg text-sm block text-center">
+          <span className="bg-blue-200 text-blue-800 px-1 py-2 mt-2 rounded-md text-sm block text-center">
             {user.status}
           </span>
 
           {/* Bouton Gérer le compte */}
           <button
             onClick={handleRedirect}
-            className="mt-6 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
           >
             Gérer mon compte
           </button>

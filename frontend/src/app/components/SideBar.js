@@ -16,10 +16,6 @@ import {
   FaFile,
 } from "react-icons/fa";
 
-/**
- * 
- */
-
 const SideBar = ({ setSelectedMenu }) => {
   const [isEditionOpen, setIsEditionOpen] = useState(false);
   const [isEvaluationsOpen, setIsEvaluationsOpen] = useState(false);
@@ -27,7 +23,7 @@ const SideBar = ({ setSelectedMenu }) => {
 
   return (
     <aside
-      className={`bg-blue-500 text-white h-screen p-4 flex z-100 flex-col fixed top-0 left-0 overflow-y-auto transition-all ${
+      className={`hidden xl:block bg-blue-500 text-white h-screen p-4 flex z-100 flex-col fixed top-0 left-0 overflow-y-auto transition-all ${
         isSidebarOpen ? "w-60" : "w-20"
       }`}
     >
