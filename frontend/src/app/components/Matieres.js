@@ -283,9 +283,9 @@ const Matieres = () => {
   } else {
     // Return the content of the page
     return (
-      <div className="lg:ml-64 lg:mt-10 md:ml-10 md:mt-4">
-        <div className="md:flex md:flex-col md:items-center lg:flex">
-          <div className="p-6 bg-transparent w-full md:flex md:flex-col md:gap-6 mt-4 lg:flex-row lg:gap-6">
+      <div className="flex-grow">
+        <div className="sm:flex sm:flex-col sm:items-center xl:flex">
+          <div className="p-6 bg-transparent w-full sm:flex sm:flex-col xl:flex-row gap-6">
             {/* Tableau des matières */}
             <div className=" lg:w-full rounded-sm md:w-full shadow-sm w-2/3 flex flex-col">
               <div className="h-[500px] overflow-y-auto pl-4 pr-4 pb-3 w-full">
@@ -324,19 +324,19 @@ const Matieres = () => {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-gray-100">
-                      <th className="lg:px-4 lg:py-2 lg:text-base sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
+                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
                         CODE
                       </th>
-                      <th className="lg:px-4 lg:py-2 lg:text-base sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
+                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
                         LIBELLE
                       </th>
-                      <th className="lg:px-4 lg:py-2 lg:text-base sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
+                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
                         ABRÉVIATION
                       </th>
-                      <th className="lg:px-4 lg:py-2 lg:text-base sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
+                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
                         OPTIONNELLE
                       </th>
-                      <th className="lg:px-4 lg:py-2 lg:text-base sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
+                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
                         ACTIONS
                       </th>
                     </tr>

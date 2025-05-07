@@ -16,29 +16,15 @@ import {
   FaFile,
 } from "react-icons/fa";
 
-const SideBar = ({ setSelectedMenu }) => {
+const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
   const [isEditionOpen, setIsEditionOpen] = useState(false);
   const [isEvaluationsOpen, setIsEvaluationsOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <aside
-      className={`hidden xl:block bg-blue-500 text-white h-screen p-4 flex z-100 flex-col fixed top-0 left-0 overflow-y-auto transition-all ${
-        isSidebarOpen ? "w-60" : "w-20"
-      }`}
+      className={`${isSidebarOpen ? 'block' : 'hidden'} bg-blue-500 text-white h-screen p-4 flex z-50 flex-col fixed top-0 left-0 overflow-y-auto`}
     >
-      <button
-        className="p-2 mb-4 bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer transition self-end"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        {isSidebarOpen ? <FaWindowClose /> : <FaBars />}
-      </button>
-
-      <h1
-        className={`text-2xl font-bold mb-6 text-center transition-all ${
-          isSidebarOpen ? "block" : "hidden"
-        }`}
-      >
+      <h1 className={`text-2xl font-bold mb-6 text-center transition-all `}>
         GEE - UL
       </h1>
 
