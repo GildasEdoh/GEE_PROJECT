@@ -8,14 +8,38 @@ const Releves = () => {
             date: '15/06/2024',
             lien: '/releves/releve-123.pdf'
         },
+        {
+            annee: '2023-2024',
+            session: 'Session Principale',
+            date: '15/06/2024',
+            lien: '/releves/releve-123.pdf'
+        },
+        {
+            annee: '2023-2024',
+            session: 'Session Principale',
+            date: '15/06/2024',
+            lien: '/releves/releve-123.pdf'
+        },
+        {
+            annee: '2023-2024',
+            session: 'Session Principale',
+            date: '15/06/2024',
+            lien: '/releves/releve-123.pdf'
+        },
+        {
+            annee: '2023-2024',
+            session: 'Session Principale',
+            date: '15/06/2024',
+            lien: '/releves/releve-123.pdf'
+        },
         // ... autres relevés
     ];
 
     return (
-        <div className="p-6">
+        <div className="p-6 w-300 pl-70 pt-15">
             <h1 className="text-2xl font-bold mb-6">Relevés de Notes</h1>
 
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden w-260">
                 <table className="min-w-full">
                     <thead className="bg-gray-100">
                         <tr>

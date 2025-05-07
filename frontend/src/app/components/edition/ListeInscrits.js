@@ -4,14 +4,18 @@ const ListeInscrits = () => {
     // Données simulées
     const etudiants = [
         { id: 1, nom: 'Doe', prenom: 'John', matricule: 'MAT001', filiere: 'Informatique' },
+        { id: 1, nom: 'Doe', prenom: 'John', matricule: 'MAT001', filiere: 'Informatique' },
+        { id: 1, nom: 'Doe', prenom: 'John', matricule: 'MAT001', filiere: 'Informatique' },
+        { id: 1, nom: 'Doe', prenom: 'John', matricule: 'MAT001', filiere: 'Informatique' },
+        { id: 1, nom: 'Doe', prenom: 'John', matricule: 'MAT001', filiere: 'Informatique' },
         // ... autres étudiants
     ];
 
     return (
-        <div className="p-6">
+        <div className="p-6 w-300 pl-70 pt-15">
             <h1 className="text-2xl font-bold mb-6">Liste des étudiants inscrits</h1>
 
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden w-260">
                 <table className="min-w-full">
                     <thead className="bg-gray-100">
                         <tr>
@@ -30,7 +34,7 @@ const ListeInscrits = () => {
                                 <td className="px-6 py-4">{etudiant.prenom}</td>
                                 <td className="px-6 py-4">{etudiant.filiere}</td>
                                 <td className="px-6 py-4">
-                                    <button className="text-blue-600 hover:text-blue-800 mr-3">
+                                    <button className="text-blue-600 hover:text-blue-800 mr-3 cursor-pointer">
                                         Voir
                                     </button>
                                 </td>

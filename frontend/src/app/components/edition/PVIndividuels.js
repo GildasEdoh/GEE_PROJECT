@@ -11,14 +11,47 @@ const PVIndividuels = () => {
             ],
             moyenne: 14.5
         },
+        {
+            etudiant: 'Doe John',
+            matricule: 'MAT001',
+            notes: [
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                // ... autres notes
+            ],
+            moyenne: 14.5
+        },
+        {
+            etudiant: 'Doe John',
+            matricule: 'MAT001',
+            notes: [
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                // ... autres notes
+            ],
+            moyenne: 14.5
+        },
+        {
+            etudiant: 'Doe John',
+            matricule: 'MAT001',
+            notes: [
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                { matiere: 'Mathématiques', note: 15, credit: 4 },
+                // ... autres notes
+            ],
+            moyenne: 14.5
+        },
         // ... autres PV
     ];
 
     return (
-        <div className="p-6">
+        <div className="p-6 w-300 pl-70 pt-15">
             <h1 className="text-2xl font-bold mb-6">PV Individuels de Notes</h1>
 
-            <div className="space-y-6">
+            <div className="space-y-6 w-260">
                 {pvEtudiants.map((pv, index) => (
                     <div key={index} className="bg-white rounded-lg shadow-md p-6">
                         <div className="flex justify-between items-start mb-4">
@@ -51,7 +84,7 @@ const PVIndividuels = () => {
                         </table>
 
                         <div className="mt-4 flex justify-end">
-                            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">
                                 Imprimer PV
                             </button>
                         </div>

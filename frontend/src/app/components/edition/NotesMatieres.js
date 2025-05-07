@@ -6,6 +6,10 @@ const NotesMatieres = () => {
       nom: "Mathématiques",
       notes: [
         { etudiant: "Doe John", note: 15, rang: 2 },
+        { etudiant: "Doe John", note: 15, rang: 2 },
+        { etudiant: "Doe John", note: 15, rang: 2 },
+        { etudiant: "Doe John", note: 15, rang: 2 },
+        { etudiant: "Doe John", note: 15, rang: 2 },
         // ... autres notes
       ],
     },
@@ -13,12 +17,12 @@ const NotesMatieres = () => {
   ];
 
   return (
-    <div className="p-6">
+    <div className="p-6 w-300 pl-70 pt-15">
       <h1 className="text-2xl font-bold mb-6">Notes par Matières</h1>
 
       <div className="space-y-6">
         {matieres.map((matiere) => (
-          <div key={matiere.nom} className="bg-white rounded-lg shadow-md p-4">
+          <div key={matiere.nom} className="bg-white rounded-lg shadow-md p-4 w-260">
             <h2 className="text-xl font-semibold mb-4">{matiere.nom}</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full">
