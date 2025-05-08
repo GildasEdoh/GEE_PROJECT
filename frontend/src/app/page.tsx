@@ -59,10 +59,10 @@ export default function Home() {
 
   return (
     <div className="flex">
-      <div className={`transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-0"}`}>
+      <div className={`transition-all duration-600 ease-in-out ${isSidebarOpen ? "w-64" : "w-0"}`}>
         <SideBar isSidebarOpen={isSidebarOpen} setSelectedMenu={setSelectedMenu} />
       </div>
-      <div className="flex-1 flex flex-col mt-16 ml-4 transition-all duration-300">
+      <div className="flex-1 flex flex-col mt-16 ml-4">
         <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <Dashboard selectedMenu={selectedMenu} />
       </div>

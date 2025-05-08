@@ -24,14 +24,14 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
     <aside
       className={`${isSidebarOpen ? 'block' : 'hidden'} bg-blue-500 text-white h-screen p-4 flex z-50 flex-col fixed top-0 left-0 overflow-y-auto`}
     >
-      <h1 className={`text-2xl font-bold mb-6 text-center transition-all `}>
+      <h1 className={`text-2xl font-bold mb-6 text-center`}>
         GEE - UL
       </h1>
 
       <ul className="space-y-2 flex-1">
         <li>
           <button
-            className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
+            className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600"
             onClick={() => setSelectedMenu("Accueil")}
           >
             <span className="text-lg">

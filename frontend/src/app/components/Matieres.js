@@ -285,43 +285,41 @@ const Matieres = () => {
     return (
       <div className="flex-grow">
         <div className="sm:flex sm:flex-col sm:items-center xl:flex">
-          <div className="p-6 bg-transparent w-full sm:flex sm:flex-col xl:flex-row gap-6">
+          <div className="p-6 bg-transparent w-full h-full sm:flex sm:flex-col xl:flex-row gap-6">
             {/* Tableau des matières */}
-            <div className=" lg:w-full rounded-sm md:w-full shadow-sm w-2/3 flex flex-col">
-              <div className="h-[500px] overflow-y-auto pl-4 pr-4 pb-3 w-full">
-                <div className=" bg-white sticky top-0 z-2 flex items-center justify-between fixed mb-5 pt-2 pb-4">
-                  <h2 className="md:text-lg lg:text-xl text-md font-bold text-center">
-                    Liste des matières
-                  </h2>
+            <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
+              <div className=" bg-white sticky top-0 z-2 flex items-center justify-between  mb-5 p-3">
+                <h2 className="md:text-lg lg:text-xl text-md font-bold text-center">
+                  Liste des matières
+                </h2>
 
-                  <div className="flex items-center gap-2">
-                    <div>
-                      <select
-                        value={typeParcours}
-                        onChange={(e) => setTypeParcours(e.target.value)}
-                        className="p-2 border-none rounded-md shadow-sm text-sm"
-                      >
-                        <option value="admis">Licence</option>
-                        <option value="echoues">Master</option>
-                      </select>
-                    </div>
-                    <div>
-                      <select
-                        value={typeFiliere}
-                        onChange={(e) => setTypeFiliere(e.target.value)}
-                        className="p-2 border-none rounded-md shadow-sm text-sm"
-                      >
-                        <option value="admis">Genie Logiciel</option>
-                        <option value="echoues">Genie Civil</option>
-                        <option value="admis">Systèmes et Réseaux</option>
-                        <option value="echoues">
-                          Informatique et Systèmes
-                        </option>
-                      </select>
-                    </div>
+                <div className="flex items-center gap-2">
+                  <div>
+                    <select
+                      value={typeParcours}
+                      onChange={(e) => setTypeParcours(e.target.value)}
+                      className="p-2 border-none rounded-md shadow-sm text-sm"
+                    >
+                      <option value="admis">Licence</option>
+                      <option value="echoues">Master</option>
+                    </select>
+                  </div>
+                  <div>
+                    <select
+                      value={typeFiliere}
+                      onChange={(e) => setTypeFiliere(e.target.value)}
+                      className="p-2 border-none rounded-md shadow-sm text-sm"
+                    >
+                      <option value="admis">Genie Logiciel</option>
+                      <option value="echoues">Genie Civil</option>
+                      <option value="admis">Systèmes et Réseaux</option>
+                      <option value="echoues">Informatique et Systèmes</option>
+                    </select>
                   </div>
                 </div>
-                <table className="w-full text-left border-collapse">
+              </div>
+              <div className="h-[350px] overflow-y-auto pl-4 pr-4 pb-3 flex flex-col w-full">
+                <table className="text-left border-collapse">
                   <thead>
                     <tr className="bg-gray-100">
                       <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
@@ -472,8 +470,12 @@ const Matieres = () => {
                 value={optionnelle}
                 onChange={(e) => setOptionnelle(e.target.value)}
               >
-                <option className="text-base" value="Oui">Oui</option>
-                <option className="text-base" value="Non">Non</option>
+                <option className="text-base" value="Oui">
+                  Oui
+                </option>
+                <option className="text-base" value="Non">
+                  Non
+                </option>
               </select>
               <button
                 className="w-full bg-blue-500 text-white text-sm font-bold lg:p-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-600"
@@ -496,12 +498,11 @@ const Matieres = () => {
             </div>
           )}
           <div className="lg:flex-row lg:items-center lg:gap-4 lg:mt-6 lg:w-full md:flex md:flex-col md:gap-2">
-
             <button className="px-2 py-2 md:w-72 lg:w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
               Imprimer la liste
             </button>
 
-            <label className="md:flex md:items-center md:justify-center md:gap-2 md:w-72 lg:flex-row lg:w-full px-2 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 transition">
+            <label className="md:flex md:items-center md:justify-center md:gap-2 md:w-72 lg:flex-row lg:w-full px-2 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
               <FiUpload className="text-xl" />
               <span className="text-sm font-medium">
                 Importer un fichier Excel

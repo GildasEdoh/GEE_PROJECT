@@ -4,7 +4,7 @@ import { FaUser, FaSearch, FaBell, FaSms, FaBars } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Import du composant Avatar
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = ({ toggleSidebar }) => {
   const [year, setYear] = useState("2024-2025");
@@ -27,9 +27,9 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className=" lg:w-full bg-blue-400 p-3 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0 z-10">
+    <nav className="flex-grow w-full bg-blue-400 p-3 flex items-center justify-end gap-x-6 fixed top-0 right-0 left-0 z-10">
       <button
-        className="p-2 mb-4 bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer transition self-end"
+        className="p-2 mb-4 bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer"
         onClick={toggleSidebar}
       >
         <FaBars />
