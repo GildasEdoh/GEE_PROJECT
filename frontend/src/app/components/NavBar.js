@@ -122,7 +122,7 @@ const Navbar = ({ toggleSidebar }) => {
           className="fixed top-17 right-3 w-[400px] bg-white shadow-md rounded-sm p-6 z-100"
         >
           <button
-            className="text-red-500 font-bold text-lg absolute top-2 right-3"
+            className="text-red-500 cursor-pointer font-bold text-lg absolute top-2 right-3"
             onClick={() => setIsProfileOpen(false)}
           >
             ✖
@@ -150,7 +150,7 @@ const Navbar = ({ toggleSidebar }) => {
           {/* Bouton Gérer le compte */}
           <button
             onClick={handleRedirect}
-            className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="mt-4 w-full bg-blue-600 cursor-pointer text-white py-2 rounded-md hover:bg-blue-700 transition"
           >
             Gérer mon compte
           </button>
