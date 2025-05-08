@@ -29,7 +29,6 @@ const Navbar = ({ toggleSidebar }) => {
   return (
     <nav className="w-full bg-blue-400 p-3 flex items-center justify-between fixed top-0 right-0 left-0 z-50">
       <div className="flex justify-between items-center gap-38">
-        <h1 className={`text-2xl font-bold text-center`}>GEE - UL</h1>
         <button
           className="p-2 bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer"
           onClick={toggleSidebar}
@@ -41,7 +40,7 @@ const Navbar = ({ toggleSidebar }) => {
       <div className="flex items-center justify-between gap-8">
         {/* Barre de recherche */}
         {showSearch && (
-          <div className="hidden md:block relative flex-grow w-full">
+          <div className="hidden lg:block relative flex-grow w-full">
             <input
               type="text"
               placeholder="Rechercher..."
@@ -56,7 +55,7 @@ const Navbar = ({ toggleSidebar }) => {
           {/* Icone de messagerie */}
           <div>
             <button
-              className="w-full flex items-center space-x-3 p-2 rounded-lg cursor-pointer"
+              className="w-full hidden md:block  flex items-center space-x-3 p-2 rounded-lg cursor-pointer"
               onClick={() => setSelectedMenu("acceuil")}
             >
               <FaSms />
@@ -65,7 +64,7 @@ const Navbar = ({ toggleSidebar }) => {
 
           {/* Sélecteur de session */}
           <div className="flex items-center space-x-2">
-            <span className="text-white font-bold text-sm">Session</span>
+            <span className="text-white text-sm">Session</span>
             <select
               value={session}
               onChange={(e) => {
@@ -80,7 +79,7 @@ const Navbar = ({ toggleSidebar }) => {
 
           {/* Sélecteur d'année */}
           <div className="flex items-center space-x-2">
-            <span className="text-white font-bold text-sm">Année</span>
+            <span className="text-white text-sm">Année</span>
             <select
               value={year}
               onChange={(e) => setYear(e.target.value)}

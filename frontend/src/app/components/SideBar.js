@@ -22,13 +22,13 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
 
   return (
     <aside
-      className={`bg-blue-500 text-white h-screen p-4 mt-13 z-10 overflow-y-auto`}
+      className={`bg-blue-500 hidden md:block text-white h-screen p-4 mt-13 z-10 overflow-y-auto`}
     >
-      <ul className="flex flex-col items-start justify-between gap-">
+      <ul className="flex flex-col items-start justify-between gap-10">
         <div className="flex flex-col items-start justify-around gap-3">
           <li>
             <button
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600"
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setSelectedMenu("Accueil")}
             >
               <span className="text-lg">
@@ -41,7 +41,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
           {/* Étudiants */}
           <li>
             <button
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setSelectedMenu("Étudiants")}
             >
               <FaUsers />
@@ -52,7 +52,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
           {/* Matières */}
           <li>
             <button
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setSelectedMenu("Matières")}
             >
               <FaBook />
@@ -63,7 +63,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
           {/* Évaluations avec sous-menus */}
           <li>
             <button
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition"
+              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setIsEvaluationsOpen(!isEvaluationsOpen)}
             >
               <div className="flex items-center space-x-3">
@@ -77,7 +77,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
               <ul className="ml-6 space-y-2">
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu("Notes")}
                   >
                     <FaEdit />
@@ -86,7 +86,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
                 </li>
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu("Admis")}
                   >
                     <FaUsers />
@@ -95,7 +95,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
                 </li>
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu("Echoues")}
                   >
                     <FaUsers />
@@ -109,7 +109,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
           {/* Edition avec sous-menus */}
           <li>
             <button
-              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition"
+              className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setIsEditionOpen(!isEditionOpen)}
             >
               <div className="flex items-center space-x-3">
@@ -123,7 +123,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
               <ul className="ml-6 space-y-2">
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu()}
                   >
                     <FaUsers />
@@ -132,7 +132,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
                 </li>
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu()}
                   >
                     <FaFile />
@@ -141,7 +141,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
                 </li>
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu()}
                   >
                     <FaFileAlt />
@@ -150,7 +150,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
                 </li>
                 <li>
                   <button
-                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition"
+                    className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
                     onClick={() => setSelectedMenu()}
                   >
                     <FaBook />
@@ -164,7 +164,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
           {/* Statistiques */}
           <li>
             <button
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setSelectedMenu("Statistiques")}
             >
               <FaChartBar />
@@ -175,7 +175,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
           {/* Paramètres */}
           <li>
             <button
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition"
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
               onClick={() => setSelectedMenu("Paramètres")}
             >
               <FaTools />
@@ -183,7 +183,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
             </button>
           </li>
         </div>
-        <button className="p-3 bg-red-500 flex items-center justify-center cursor-pointer space-x-2 rounded-lg hover:bg-red-600 transition">
+        <button className="p-3 bg-red-500 flex items-center justify-center cursor-pointer space-x-2 rounded-lg hover:bg-red-600 transition-all duration-300 ease-out">
           <FaSignOutAlt />
           {isSidebarOpen && <span>Se déconnecter</span>}
         </button>

@@ -285,7 +285,7 @@ const Matieres = () => {
     return (
       <div className="flex-grow">
         <div className="sm:flex sm:flex-col sm:items-center xl:flex">
-          <div className="p-6 bg-transparent w-full h-full sm:flex sm:flex-col xl:flex-row gap-6">
+          <div className="p-6 bg-transparent w-full h-full flex flex-col xl:flex-row gap-6">
             {/* Tableau des matières */}
             <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
               <div className=" bg-white sticky top-0 z-2 flex items-center justify-between  mb-5 p-3">
@@ -440,7 +440,7 @@ const Matieres = () => {
               </div>
             </div>
             {/* FORMULAIRE D'AJOUT */}
-            <div className="bg-white md:w-full lg:w-full shadow-md rounded-lg p-6 w-1/3 h-1/3">
+            <div className="bg-white w-full shadow-md rounded-lg p-6 w-1/3 h-1/3">
               <h2 className="text-lg font-bold mb-4">Créer une matière</h2>
               <label className="block mb-2 text-sm font-semibold">
                 Libellé
@@ -478,7 +478,7 @@ const Matieres = () => {
                 </option>
               </select>
               <button
-                className="w-full bg-blue-500 text-white text-sm font-bold lg:p-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-600"
+                className="w-full p-2 cursor-pointer bg-blue-500 text-white text-sm font-bold lg:p-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-600"
                 onClick={handleAdd}
               >
                 Ajouter
@@ -497,12 +497,12 @@ const Matieres = () => {
               {majMessage}
             </div>
           )}
-          <div className="lg:flex-row lg:items-center lg:gap-4 lg:mt-6 lg:w-full md:flex md:flex-col md:gap-2">
-            <button className="px-2 py-2 md:w-72 lg:w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 lg:mt-6 lg:w-full md:flex md:gap-2 sm:flex sm:gap-2">
+            <button className="px-2 py-2 md:w-72 lg:w-full w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
               Imprimer la liste
             </button>
 
-            <label className="md:flex md:items-center md:justify-center md:gap-2 md:w-72 lg:flex-row lg:w-full px-2 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
+            <label className="flex flex-row items-center justify-center gap-2 md:w-72  lg:w-full sm:w-full px-2 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
               <FiUpload className="text-xl" />
               <span className="text-sm font-medium">
                 Importer un fichier Excel
@@ -517,7 +517,7 @@ const Matieres = () => {
 
             <button
               onClick={() => exportMatieresToExcel(matieres)}
-              className="px-2 py-2 md:w-72 lg:w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer"
+              className="px-2 py-2 w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer"
             >
               Exporter au format excel
             </button>
