@@ -183,7 +183,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
         </li>
       </ul>
       <div className="fixed bottom-0">
-        <button className="py-1 px-4 bg-red-500 flex items-center justify-center cursor-pointer space-x-1 rounded-lg hover:bg-red-600 transition-all duration-300 ease-out">
+        <button className="py-1 px-2 bg-red-500 flex items-center justify-center cursor-pointer space-x-1 rounded-lg hover:bg-red-600 transition-all duration-300 ease-out">
           <FaSignOutAlt />
           {isSidebarOpen && <span>Se déconnecter</span>}
         </button>

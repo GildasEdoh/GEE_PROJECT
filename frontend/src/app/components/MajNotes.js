@@ -238,72 +238,74 @@ const MajNotes = () => {
   };
 
   return (
-    <div className="ml-65 mt-15 p-6 bg-transparent flex flex-col gap-6 w-2/3 h-2/3">
-      {!showEtudiants && (
-        <>
-          <div className="w-full">
-            <h2 className="text-lg font-bold text-center m-2">
-              Liste des matières
-            </h2>
-            <div className="overflow-auto rounded-lg shadow-md mt-4">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="px-4 py-2 text-sm text-center">NUMERO</th>
-                    <th className="px-4 py-2 text-sm text-center">LIBELLE</th>
-                    <th className="px-4 py-2 text-sm text-center">
-                      ABRÉVIATION
-                    </th>
-                    <th className="px-4 py-2 text-sm text-center">
-                      OPTIONNELLE
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matieres.map((matiere, index) => (
-                    <tr
-                      key={matiere.id}
-                      className={`cursor-pointer ${
-                        selectedIndex === index
-                          ? "bg-blue-300"
-                          : index % 2 === 0
-                          ? "bg-white"
-                          : "bg-gray-100"
-                      }`}
-                      onClick={() => handleRowClick(index, matiere.id)}
-                    >
-                      <td className="px-4 py-2 text-center">{`MAT${matiere.id}`}</td>
-                      <td className="px-4 py-2 text-center">
-                        {matiere.libelle}
-                      </td>
-                      <td className="px-4 py-2 text-center">
-                        {matiere.abreviation}
-                      </td>
-                      <td className="px-4 py-2 text-center">
-                        {matiere.optionnelle === 1 ? "Oui" : "Non"}
-                      </td>
+    <div className="p-6 bg-transparent">
+      <div className="flex flex-col gap-6">
+        {!showEtudiants && (
+          <>
+            <div className="w-full">
+              <h2 className="text-lg xl:text-xl font-bold text-center m-2">
+                Liste des matières
+              </h2>
+              <div className="h-[400px] overflow-y-auto pl-4 pr-4 pb-3 flex flex-col w-full">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2 text-sm text-center">NUMERO</th>
+                      <th className="px-4 py-2 text-sm text-center">LIBELLE</th>
+                      <th className="px-4 py-2 text-sm text-center">
+                        ABRÉVIATION
+                      </th>
+                      <th className="px-4 py-2 text-sm text-center">
+                        OPTIONNELLE
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {matieres.map((matiere, index) => (
+                      <tr
+                        key={matiere.id}
+                        className={`cursor-pointer ${
+                          selectedIndex === index
+                            ? "bg-blue-300"
+                            : index % 2 === 0
+                            ? "bg-white"
+                            : "bg-gray-100"
+                        }`}
+                        onClick={() => handleRowClick(index, matiere.id)}
+                      >
+                        <td className="px-4 py-2 text-center">{`MAT${matiere.id}`}</td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.libelle}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.abreviation}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.optionnelle === 1 ? "Oui" : "Non"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
-          <button
-            className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
-              selectedIndex === null
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-500 hover:bg-green-700"
-            }`}
-            onClick={handleValidation}
-            disabled={selectedIndex === null}
-          >
-            Valider
-          </button>
-        </>
-      )}
+            <button
+              className={`px-2 py-2 w-full cursor-pointer text-white font-bold rounded self-center ${
+                selectedIndex === null
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-500 hover:bg-green-700"
+              }`}
+              onClick={handleValidation}
+              disabled={selectedIndex === null}
+            >
+              Valider
+            </button>
+          </>
+        )}
 
-      {showEtudiants && afficheEtudiants()}
+        {showEtudiants && afficheEtudiants()}
+      </div>
     </div>
   );
 };
