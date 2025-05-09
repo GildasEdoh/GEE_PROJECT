@@ -149,7 +149,7 @@ const Navbar = ({ toggleSidebar }) => {
           {/* Bouton Gérer le compte */}
           <button
             onClick={handleRedirect}
-            className="mt-4 w-full bg-blue-600 cursor-pointer text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-blue-600 cursor-pointer text-white py-2 rounded-md hover:bg-blue-700 transition"
           >
             Gérer mon compte
           </button>
