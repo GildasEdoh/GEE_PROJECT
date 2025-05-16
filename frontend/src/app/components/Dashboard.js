@@ -1,7 +1,3 @@
-/**
- * Change the dashboard component according to the selection
- */
-
 "use client";
 import Matieres from "./Matieres";
 import Etudiants from "./Etudiants";
