@@ -66,7 +66,7 @@ const Statistique = () => {
     };
 
     return (
-        <div className="p-6">
+        <div className="ml-64 mt-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 space-y-6 bg-gray-100">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
                 <div className="flex space-x-4">

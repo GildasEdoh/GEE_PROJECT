@@ -94,7 +94,7 @@ class EtudiantController extends Controller
     }
     
     // Lire les étudiants par matière
-    public function getAllEtudiantsBySubject($idMatiere)
+   /*  public function getAllEtudiantsBySubject($idMatiere)
     {
         $anneeEnCours = "2024-2025"; 
 
@@ -117,6 +117,44 @@ class EtudiantController extends Controller
         )
         ->get();
         return response()->json($etudiants);
+    } */
+    public function getAllEtudiantsBySubject($idMatiere)
+    {
+        $idEtablissement = 1;
+        $idFiliere = 1;
+        $idParcours = 1;
+        $idAnneeEtude = 1;
+        $idAnneeUniv = 2;
+        $idTypeEvaluation = 1;
+
+        $etudiants = DB::table('etudiants as e')
+            ->join('inscriptions as i', 'i.fk_etudiant', '=', 'e.numero_carte')
+            ->join('parcours_annees_etude as pae', 'i.fk_parcours_annee_etude', '=', 'pae.id')
+            ->join('parcours as p', 'pae.fk_parcours', '=', 'p.id')
+            ->join('filieres as f', 'p.fk_filiere', '=', 'f.id')
+            ->join('etablissements as etab', 'f.fk_etablissement', '=', 'etab.id')
+            ->join('annees_etude as ae', 'pae.fk_annee_etude', '=', 'ae.id')
+            ->join('annees_universitaire as au', 'i.fk_annee_univ', '=', 'au.id')
+            ->join('matieres as m', 'm.id', '=', DB::raw($idMatiere))
+            
+            ->join('evaluations_matieres as em', 'em.fk_matiere', '=', 'm.id')
+            ->whereNotNull('em.fk_evaluation')
+            
+            ->join('evaluations_matieres_types as emt', 'emt.fk_evaluation_matiere', '=', 'em.id')
+            ->join('types_evaluation as te', 'emt.fk_type_evaluation', '=', 'te.id')
+            ->where('etab.id', $idEtablissement)
+            ->where('f.id', $idFiliere)
+            ->where('p.id', $idParcours)
+            ->where('ae.id', $idAnneeEtude)
+            ->where('au.id', $idAnneeUniv)
+            ->select('e.numero_carte', 'e.nom', 'e.prenom', 'e.sexe')
+            ->distinct()
+            ->orderBy('e.numero_carte')
+            ->get();
+        
+    
+        return response()->json($etudiants);
     }
+    
 
 }

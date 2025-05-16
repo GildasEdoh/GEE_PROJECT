@@ -132,13 +132,24 @@ const MajNotes = () => {
                   <th className="px-4 py-2 text-sm text-center">NOM</th>
                   <th className="px-4 py-2 text-sm text-center">PRÉNOMS</th>
                   <th className="px-4 py-2 text-sm text-center">SEXE</th>
-                  <th className="px-4 py-2 text-sm text-center">Devoir</th>
+                  {/* <th className="px-4 py-2 text-sm text-center">Devoir</th>
                   <th className="px-4 py-2 text-sm text-center">Examen</th>
                   <th className="px-4 py-2 text-sm text-center">Moyenne</th>
+                  <th className="px-4 py-2 text-sm text-center">Actions</th> */}
+                  {evaluation === "Devoir" && (
+                    <th className="px-4 py-2 text-sm text-center">Devoir</th>
+                  )}
+                  {evaluation === "Examen" && (
+                    <>
+                      <th className="px-4 py-2 text-sm text-center">Devoir</th>
+                      <th className="px-4 py-2 text-sm text-center">Examen</th>
+                      <th className="px-4 py-2 text-sm text-center">Moyenne</th>
+                    </>
+                  )}
                   <th className="px-4 py-2 text-sm text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              {/* <tbody>
                 {etudiants.map((etudiant, index) => (
                   <tr
                     key={`${etudiant.numero_carte}-${index}`}
@@ -207,6 +218,102 @@ const MajNotes = () => {
                         etudiant.moyenne
                       )}
                     </td>
+
+                    <td className="px-4 py-2 text-center">
+                      {editIndex === index ? (
+                        <div className="flex justify-center gap-2">
+                          <MdCheck
+                            className="text-green-600 cursor-pointer"
+                            onClick={() => handleSave(index)}
+                          />
+                          <MdClose
+                            className="text-red-600 cursor-pointer"
+                            onClick={handleCancel}
+                          />
+                        </div>
+                      ) : (
+                        <MdEdit
+                          className="text-blue-500 cursor-pointer mx-auto"
+                          onClick={() => handleEdit(index, etudiant)}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody> */}
+              <tbody>
+                {etudiants.map((etudiant, index) => (
+                  <tr
+                    key={`${etudiant.numero_carte}-${index}`}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                  >
+                    <td className="px-4 py-2 text-center">
+                      {etudiant.numero_carte}
+                    </td>
+                    <td className="px-4 py-2 text-center">{etudiant.nom}</td>
+                    <td className="px-4 py-2 text-center">{etudiant.prenom}</td>
+                    <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
+
+                    {/* Colonne Devoir */}
+                    <td className="px-4 py-2 text-center">
+                      {editIndex === index ? (
+                        <input
+                          type="number"
+                          value={editedData.devoir || ""}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              devoir: e.target.value,
+                            })
+                          }
+                          disabled={evaluation !== "Devoir"}
+                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
+                        />
+                      ) : (
+                        etudiant.devoir
+                      )}
+                    </td>
+
+                    {/* Colonnes Examen et Moyenne si Examen sélectionné */}
+                    {evaluation === "Examen" && (
+                      <>
+                        <td className="px-4 py-2 text-center">
+                          {editIndex === index ? (
+                            <input
+                              type="number"
+                              value={editedData.examen || ""}
+                              onChange={(e) =>
+                                setEditedData({
+                                  ...editedData,
+                                  examen: e.target.value,
+                                })
+                              }
+                              className="w-16 text-center border rounded bg-gray-100"
+                            />
+                          ) : (
+                            etudiant.examen
+                          )}
+                        </td>
+
+                        <td className="px-4 py-2 text-center">
+                          {editIndex === index ? (
+                            <input
+                              type="number"
+                              value={editedData.moyenne || ""}
+                              onChange={(e) =>
+                                setEditedData({
+                                  ...editedData,
+                                  moyenne: e.target.value,
+                                })
+                              }
+                              className="w-16 text-center border rounded bg-gray-100"
+                            />
+                          ) : (
+                            etudiant.moyenne
+                          )}
+                        </td>
+                      </>
+                    )}
 
                     <td className="px-4 py-2 text-center">
                       {editIndex === index ? (
