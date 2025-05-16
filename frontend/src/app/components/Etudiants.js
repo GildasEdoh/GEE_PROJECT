@@ -633,11 +633,47 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           <input
+                            value={editedData.date_naissance}
+                            onChange={(e) =>
+                              setEditedData({
+                                ...editedData,
+                                date_naissance: e.target.value,
+                              })
+                            }
+                            className="border p-1 w-full"
+                          />
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <input
+                            value={editedData.lieu_naissance}
+                            onChange={(e) =>
+                              setEditedData({
+                                ...editedData,
+                                lieu_naissance: e.target.value,
+                              })
+                            }
+                            className="border p-1 w-full"
+                          />
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <input
                             value={editedData.sexe}
                             onChange={(e) =>
                               setEditedData({
                                 ...editedData,
                                 sexe: e.target.value,
+                              })
+                            }
+                            className="border p-1 w-full"
+                          />
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <input
+                            value={editedData.telephone}
+                            onChange={(e) =>
+                              setEditedData({
+                                ...editedData,
+                                telephone: e.target.value,
                               })
                             }
                             className="border p-1 w-full"
@@ -686,14 +722,16 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           {" "}
-                          {etudiant.dateNaissance}{" "}
+                          {etudiant.date_naissance}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           {" "}
-                          {etudiant.lieuNaissance}{" "}
+                          {etudiant.lieu_naissance}{" "}
                         </td>
+                        <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
                         <td className="px-4 py-2 text-center">
-                          {etudiant.sexe}
+                          {" "}
+                          {etudiant.telephone}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           <div className="flex gap-2 justify-center">

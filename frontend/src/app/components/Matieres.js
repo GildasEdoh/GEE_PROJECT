@@ -547,40 +547,6 @@ const Matieres = () => {
             </button>
           </div>
         </div>
-        {/* Boutons d'action */}
-        {majMessage && (
-          <div
-            className={`p-4 my-4 rounded shadow text-center ${
-              majIsSucces
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {majMessage}
-          </div>
-        )}
-        <div className="ml-15  gap-4 mt-6">
-          <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer">
-            Imprimer la liste
-          </button>
-
-          <label className="inline-block px-4 py-2 ml-5 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
-            Importer fichier Excel
-            <input
-              type="file"
-              accept=".xlsx, .xls"
-              onChange={handleImportExcel}
-              className="hidden"
-            />
-          </label>
-
-          <button
-            onClick={() => exportMatieresToExcel(matieres)}
-            className="px-4 py-2 ml-5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 cursor-pointer"
-          >
-            Exporter au format excel
-          </button>
-        </div>
       </div>
     );
   }
