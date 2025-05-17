@@ -1,13 +1,13 @@
 "use client";
-import Matieres from "./Matieres";
-import Etudiants from "./Etudiants"
-import Accueil from "./Accueil"
-import MajNotes from "./MajNotes"
-import Statistique from "./Statistique";
-import ListeInscrits from "./edition/ListeInscrits";
-import NotesMatieres from "./edition/NotesMatieres";
-import PVIndividuels from "./edition/PVIndividuels";
-import Releves from "./edition/Releves";
+import Matieres from "../screens/Matieres";
+import Etudiants from "../screens/Etudiants"
+import Accueil from "../screens/Accueil"
+import MajNotes from "../screens/MajNotes"
+import Statistique from "../screens/Statistique";
+import ListeInscrits from "../screens/edition/ListeInscrits";
+import NotesMatieres from "../screens/edition/NotesMatieres";
+import PVIndividuels from "../screens/edition/PVIndividuels";
+import Releves from "../screens/edition/Releves";
 
 export default function Dashboard({ selectedMenu }) {
   const renderContent = () => {

@@ -49,124 +49,49 @@ const Compte = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow-md rounded-2xl">
-      <h2 className="text-xl font-semibold mb-6 text-center">
-        Gérer mon compte
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Mot de passe actuel */}
-        <div className="relative">
-          <label className="block text-sm font-medium mb-1">
-            Mot de passe actuel
-          </label>
-          <input
-            type={showCurrent ? "text" : "password"}
-            name="currentPassword"
-            value={form.currentPassword}
-            onChange={handleChange}
-            required
-            className={`w-full border px-3 py-2 rounded-md ${
-              passwordError ? "border-red-500" : ""
-            }`}
-          />
-          <span
-            onClick={() => setShowCurrent(!showCurrent)}
-            className="absolute right-10 top-9 cursor-pointer text-gray-500"
-          >
-            {showCurrent ? "🙈" : "👁️"}
-          </span>
-          <span
-            onClick={verifyCurrentPassword}
-            className="absolute right-3 top-9 cursor-pointer text-green-600 font-bold"
-            title="Vérifier le mot de passe"
-          >
-            ✔️
-          </span>
-          {passwordError && (
-            <p className="text-red-500 text-sm mt-1">Mot de passe incorrect</p>
-          )}
-        </div>
+    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+      <div className="flex flex-col items-center text-center">
+        <img
+          src="/path/to/profile.jpg"
+          alt="Admin"
+          className="w-32 h-32 rounded-full border-4 border-blue-500 shadow-md"
+        />
+        <h2 className="text-2xl font-bold mt-4">Jean Dupont</h2>
+        <p className="text-gray-600">Administrateur Système</p>
+        <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow">
+          Modifier le profil
+        </button>
+      </div>
 
-        {/* Nom d'utilisateur */}
-        <div>
-          <label className="block text-sm font-medium mb-1">User Name</label>
-          <input
-            type="text"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            disabled={!isPasswordValid}
-            className="w-full border rounded-md px-3 py-2 disabled:opacity-50"
-          />
+      <div className="mt-10">
+        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Informations personnelles</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+          <div>
+            <span className="font-semibold">Email:</span> admin@example.com
+          </div>
+          <div>
+            <span className="font-semibold">Téléphone:</span> +228 90 00 00 00
+          </div>
+          <div>
+            <span className="font-semibold">Rôle:</span> Super Administrateur
+          </div>
+          <div>
+            <span className="font-semibold">Dernière connexion:</span> 16 mai 2025 à 14:32
+          </div>
         </div>
+      </div>
 
-        {/* Nouveau mot de passe */}
-        <div className="relative">
-          <label className="block text-sm font-medium mb-1">
-            Nouveau mot de passe
-          </label>
-          <input
-            type={showNew ? "text" : "password"}
-            name="newPassword"
-            value={form.newPassword}
-            onChange={handleChange}
-            disabled={!isPasswordValid}
-            className="w-full border rounded-md px-3 py-2 disabled:opacity-50"
-          />
-          <span
-            onClick={() => setShowNew(!showNew)}
-            className="absolute right-3 top-9 cursor-pointer text-gray-500"
-          >
-            {showNew ? "🙈" : "👁️"}
-          </span>
-        </div>
-
-        {/* Confirmation du mot de passe */}
-        <div className="relative">
-          <label className="block text-sm font-medium mb-1">
-            Confirmer le mot de passe
-          </label>
-          <input
-            type={showConfirm ? "text" : "password"}
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            disabled={!isPasswordValid}
-            className={`w-full border rounded-md px-3 py-2 disabled:opacity-50 ${
-              confirmError ? "border-red-500" : ""
-            }`}
-          />
-          <span
-            onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute right-3 top-9 cursor-pointer text-gray-500"
-          >
-            {showConfirm ? "🙈" : "👁️"}
-          </span>
-          {confirmError && (
-            <p className="text-red-500 text-sm mt-1">
-              Les mots de passe ne correspondent pas
-            </p>
-          )}
-        </div>
-
-        {/* Boutons */}
-        <div className="flex justify-between mt-6">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-          >
-            Valider
-          </button>
-        </div>
-      </form>
+      <div className="mt-10">
+        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Activité récente</h3>
+        <ul className="text-gray-600 list-disc list-inside">
+          <li>Ajouté un nouvel étudiant</li>
+          <li>Modifié les résultats de l’évaluation</li>
+          <li>Consulté le tableau des statistiques</li>
+        </ul>
+      </div>
     </div>
+  </div>
   );
 };
 

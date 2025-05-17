@@ -1,6 +1,6 @@
 "use client";
 
-import { FaUser, FaSearch, FaBell, FaSms, FaBars } from "react-icons/fa";
+import { FaUser, FaSearch, FaBell, FaSms, FaBars, FaMoon, FaSun  } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -99,6 +99,14 @@ const Navbar = ({ toggleSidebar }) => {
               <FaBell />
             </button>
           </div>
+          {/* Icone de theme */}
+          <div>
+            <button
+              className="w-full flex items-center space-x-3 p-2 rounded-lg cursor-pointer"
+            >
+              <FaSun  className="text-yellow-400 text-2xl"/>
+            </button>
+          </div>
           {/* Icône Profil */}
           <div
             className="text-white cursor-pointer hover:text-blue-200 bg-blue-600 p-3 rounded-full"
@@ -110,51 +118,6 @@ const Navbar = ({ toggleSidebar }) => {
           </div>
         </div>
       </div>
-
-      {/* Fenêtre latérale */}
-      {isProfileOpen && (
-        <motion.div
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          transition={{ duration: 0.3 }}
-          className="fixed top-17 right-3 w-[400px] bg-white shadow-md rounded-sm p-6 z-100"
-        >
-          <button
-            className="text-red-500 cursor-pointer font-bold text-lg absolute top-2 right-3"
-            onClick={() => setIsProfileOpen(false)}
-          >
-            ✖
-          </button>
-
-          {/* Avatar */}
-          <Avatar className="w-15 h-15 border-2 border-gray-300 mx-auto">
-            <AvatarImage src={user.avatar} alt="Profil" />
-            <AvatarFallback>
-              {user.firstName[0]}
-              {user.lastName[0]}
-            </AvatarFallback>
-          </Avatar>
-
-          {/* Nom complet */}
-          <h2 className="lg:text-lg md:text-md text-sm font-semibold mt-4 text-center">
-            {user.firstName} {user.lastName}
-          </h2>
-
-          {/* Statut */}
-          <span className="bg-blue-200 text-blue-800 px-1 py-2 mt-2 rounded-md text-sm block text-center">
-            {user.status}
-          </span>
-
-          {/* Bouton Gérer le compte */}
-          <button
-            onClick={handleRedirect}
-            className="w-full bg-blue-600 cursor-pointer text-white py-2 rounded-md hover:bg-blue-700 transition"
-          >
-            Gérer mon compte
-          </button>
-        </motion.div>
-      )}
     </nav>
   );
 };

@@ -12,7 +12,7 @@ const ListeInscrits = () => {
     ];
 
     return (
-        <div className="p-6 w-300 pl-70 pt-15">
+        <div className="flex flex-col p-4 bg-gray-100">
             <h1 className="text-2xl font-bold mb-6">Liste des étudiants inscrits</h1>
 
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-260">
