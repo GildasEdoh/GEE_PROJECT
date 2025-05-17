@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
+import AnneesEtudeService from "@/services/AnneesEtudeService";
 import * as XLSX from "xlsx";
 import {exportEtudiantsToExcel, handleImportEtudiantsExcel, handleImportExcelToJson} from '../components/BottomButtons'
 /**
@@ -19,6 +20,7 @@ const Etudiants = () => {
   const [typeParcours, setTypeParcours] = useState("Licence");
   const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
   const [etudiants, setEtudiants] = useState([]);
+  const [anneesEtude, setAnneesEtude] = useState([]);
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -73,10 +75,26 @@ const Etudiants = () => {
   useEffect(() => {
     EtudiantService.getAllEtudiant()
       .then((response) => {
-        console.log("🚀 Reponse brute de l'API :", response[0]);
-        console.log(Array.isArray(response));
+        // console.log("🚀 Reponse brute de l'API :", response[0]);
+        // console.log(Array.isArray(response));
         setEtudiants(response);
         setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur :", error);
+        setIsLoading(false);
+        setError(true);
+      });
+  }, []);
+
+    // Get the list of students
+  useEffect(() => {
+    AnneesEtudeService.getAllAnneesEtude()
+      .then((response) => {
+        console.log("🚀 ---- AnneesEtude --- :", response[0]);
+        console.log(Array.isArray(response));
+        setIsLoading(false);
+        setAnneesEtude(response)
       })
       .catch((error) => {
         console.error("Erreur :", error);

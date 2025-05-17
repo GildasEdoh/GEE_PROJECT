@@ -109,17 +109,6 @@ const Statistique = () => {
     <div className="flex flex-col p-4 bg-gray-100">
       <div className="flex justify-between items-center p-2 mb-8">
         <h1 className="text-2xl font-bold text-gray-800">Statistiques</h1>
-        <div className="flex space-x-4">
-          <select className="border rounded-lg px-4 py-2 bg-white">
-            <option>2023-2024</option>
-            <option>2022-2023</option>
-            <option>2021-2022</option>
-          </select>
-          <select className="border rounded-lg px-4 py-2 bg-white">
-            <option>Session Normale</option>
-            <option>Session Rattrapage</option>
-          </select>
-        </div>
       </div>
 
       {/* Cartes statistiques */}

@@ -12,17 +12,15 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TypeDetailsController;
+use App\Http\Controllers\AnneesEtudeController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | Routes Web
 |--------------------------------------------------------------------------
 */
-
-// Route principale
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
 
 Route::get('/test-db-connection', function () {
     try {
@@ -33,14 +31,12 @@ Route::get('/test-db-connection', function () {
     }
 });
 
-use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
 | Routes Web
 |--------------------------------------------------------------------------
 */
-
 
 // Route principale
 Route::get('/', function () {
@@ -153,6 +149,20 @@ Route::prefix('typedetails')->group(function () {
 });
 
 // ====================================
+// 🏆 Gestion des annees_etudes
+// ====================================
+Route::prefix('anneesEtude')->group(function () {
+    Route::get('/', [AnneesEtudeController::class, 'index'])->name('annees_etude.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
+// 🏆 Gestion des Filieres
+// ====================================
+Route::prefix('filieres')->group(function () {
+    Route::get('/', [FiliereController::class, 'index'])->name('filieres.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
 // ⚙️ Routes Authentification (Middleware)
 // ====================================
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -162,7 +172,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/login', [AuthController::class, 'store']);
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');
