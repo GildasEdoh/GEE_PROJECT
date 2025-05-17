@@ -3299,6 +3299,9 @@
 #72 {main}
 "} 
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> main
 [2025-04-17 18:02:53] local.ERROR: SQLSTATE[HY000] [2002] Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée (Connection: mysql, SQL: select * from `matieres`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 2002): SQLSTATE[HY000] [2002] Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée (Connection: mysql, SQL: select * from `matieres`) at D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:823)
 [stacktrace]
 #0 D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(777): Illuminate\\Database\\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
@@ -4039,6 +4042,8 @@
 #74 D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('D:\\\\cours_troisi...')
 #75 {main}
 "} 
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 [2025-04-18 08:51:31] local.ERROR: Maximum execution time of 30 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 30 seconds exceeded at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\composer\\ClassLoader.php:429)
 [stacktrace]
@@ -5854,6 +5859,7 @@
 #74 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('...')
 #75 {main}
 =======
+>>>>>>> main
 [2025-04-18 08:39:21] local.ERROR: Call to undefined method App\Http\Controllers\EtudiantController::getAllEtudiantBySubject() {"exception":"[object] (Error(code: 0): Call to undefined method App\\Http\\Controllers\\EtudiantController::getAllEtudiantBySubject() at D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php:47)
 [stacktrace]
 #0 D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\EtudiantController), 'getAllEtudiantB...')
@@ -6145,6 +6151,8 @@
 #53 D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\public\\index.php(20): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #54 D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('D:\\\\cours_troisi...')
 #55 {main}
+<<<<<<< HEAD
+=======
 >>>>>>> 55779f7b0317538fe4f0916e761179294ca7eea3
 "} 
 [2025-05-02 19:20:29] local.ERROR: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gee_test_final.evaluation_matiere' doesn't exist (Connection: mysql, SQL: select distinct `et`.`numero_carte`, `et`.`nom`, `et`.`prenom`, `et`.`sexe`, `m`.`libelle` as `matiere`, `i`.`annee` from `notes` as `n` inner join `etudiants` as `et` on `n`.`fk_etudiant` = `et`.`numero_carte` inner join `inscriptions` as `i` on `i`.`fk_etudiant` = `et`.`numero_carte` inner join `evaluations` as `e` on `n`.`fk_evaluation` = `e`.`id` inner join `evaluation_matiere` as `em` on `e`.`id` = `em`.`fk_evaluation` inner join `matieres` as `m` on `em`.`fk_matiere` = `m`.`id` where `m`.`id` = 2 and `i`.`annee` = 2024-2025) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'gee_test_final.evaluation_matiere' doesn't exist (Connection: mysql, SQL: select distinct `et`.`numero_carte`, `et`.`nom`, `et`.`prenom`, `et`.`sexe`, `m`.`libelle` as `matiere`, `i`.`annee` from `notes` as `n` inner join `etudiants` as `et` on `n`.`fk_etudiant` = `et`.`numero_carte` inner join `inscriptions` as `i` on `i`.`fk_etudiant` = `et`.`numero_carte` inner join `evaluations` as `e` on `n`.`fk_evaluation` = `e`.`id` inner join `evaluation_matiere` as `em` on `e`.`id` = `em`.`fk_evaluation` inner join `matieres` as `m` on `em`.`fk_matiere` = `m`.`id` where `m`.`id` = 2 and `i`.`annee` = 2024-2025) at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:823)
@@ -6313,6 +6321,7 @@
 #25 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
 #26 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
 #27 {main}
+>>>>>>> main
 "} 
 <<<<<<< HEAD
 [2025-05-02 20:07:26] local.ERROR: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) (Connection: mysql, SQL: select * from `matieres`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 1045): SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) (Connection: mysql, SQL: select * from `matieres`) at D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:823)
@@ -12583,4 +12592,54 @@
 #71 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('...')
 #72 {main}
 >>>>>>> dashboard/rahim
+"} 
+[2025-05-17 08:07:48] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:223)
+[stacktrace]
+#0 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(139): Illuminate\\Log\\LogManager->resolve()
+#1 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(126): Illuminate\\Log\\LogManager->get()
+#2 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(695): Illuminate\\Log\\LogManager->driver()
+#3 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(380): Illuminate\\Log\\LogManager->error()
+#4 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(343): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable()
+#5 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(621): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#6 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(200): Illuminate\\Foundation\\Console\\Kernel->reportException()
+#7 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#8 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#9 {main}
+"} 
+[2025-05-17 08:07:48] laravel.ERROR: syntax error, unexpected token "<<", expecting "]" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"<<\", expecting \"]\" at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\config\\cors.php:15)
+[stacktrace]
+#0 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->{closure:Illuminate\\Foundation\\Bootstrap\\LoadConfiguration::loadConfigurationFile():96}()
+#1 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(77): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFile()
+#2 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(38): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles()
+#3 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(342): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap()
+#4 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(474): Illuminate\\Foundation\\Application->bootstrapWith()
+#5 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#6 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#7 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#8 {main}
+"} 
+[2025-05-17 08:09:53] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:223)
+[stacktrace]
+#0 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(139): Illuminate\\Log\\LogManager->resolve()
+#1 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(126): Illuminate\\Log\\LogManager->get()
+#2 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(695): Illuminate\\Log\\LogManager->driver()
+#3 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(380): Illuminate\\Log\\LogManager->error()
+#4 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(343): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable()
+#5 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(621): Illuminate\\Foundation\\Exceptions\\Handler->report()
+#6 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(200): Illuminate\\Foundation\\Console\\Kernel->reportException()
+#7 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#8 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#9 {main}
+"} 
+[2025-05-17 08:09:53] laravel.ERROR: syntax error, unexpected token "<<", expecting "]" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"<<\", expecting \"]\" at C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\config\\cors.php:15)
+[stacktrace]
+#0 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->{closure:Illuminate\\Foundation\\Bootstrap\\LoadConfiguration::loadConfigurationFile():96}()
+#1 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(77): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFile()
+#2 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(38): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles()
+#3 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(342): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap()
+#4 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(474): Illuminate\\Foundation\\Application->bootstrapWith()
+#5 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(196): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#6 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#7 C:\\Users\\HP\\Documents\\doc\\cours_3eme_annee\\semestre5\\projet tutore\\code\\GEE_PROJECT\\backend\\artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#8 {main}
 "} 

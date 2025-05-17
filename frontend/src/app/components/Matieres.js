@@ -20,8 +20,6 @@ const Matieres = () => {
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
-  const [typeParcours, setTypeParcours] = useState("Licence");
 
   const handleEditClick = (index, matiere) => {
     setEditIndex(index);
@@ -67,7 +65,7 @@ const Matieres = () => {
       .then((response) => {
         console.log(" Suppression ..");
         setMajMessage(
-          `Suppression de la matiere ${matiereDeleted.libelle} effectuee avec succes !`
+          `Suppression de la matiere ${matiereDeleted.libelle} effectuée avec succes !`
         );
         setMajIsSucces(true);
       })
@@ -84,6 +82,7 @@ const Matieres = () => {
       libelle,
       abreviation,
       optionnelle,
+      coefficient, // Valeur par défaut
     };
     newMatiere.optionnelle = newMatiere.optionnelle == "Oui" ? "1" : "0";
     console.log("optionnelle : " + newMatiere.optionnelle);
@@ -290,236 +289,181 @@ const Matieres = () => {
   } else {
     // Return the content of the page
     return (
-      <div className="flex-grow">
-        <div className="sm:flex sm:flex-col sm:items-center xl:flex">
-          <div className="p-6 bg-transparent w-full h-full flex flex-col xl:flex-row gap-6">
-            {/* Tableau des matières */}
-            <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
-              <div className=" bg-white sticky top-0 z-2 flex items-center justify-between  mb-5 p-3">
-                <h2 className="md:text-lg lg:text-xl text-md font-bold text-center">
-                  Liste des matières
-                </h2>
-
-                <div className="flex items-center gap-2">
-                  <div>
-                    <select
-                      value={typeParcours}
-                      onChange={(e) => setTypeParcours(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">Licence</option>
-                      <option value="echoues">Master</option>
-                    </select>
-                  </div>
-                  <div>
-                    <select
-                      value={typeFiliere}
-                      onChange={(e) => setTypeFiliere(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">Genie Logiciel</option>
-                      <option value="echoues">Genie Civil</option>
-                      <option value="admis">Systèmes et Réseaux</option>
-                      <option value="echoues">Informatique et Systèmes</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="h-[350px] overflow-y-auto pl-4 pr-4 pb-3 flex flex-col w-full">
-                <table className="text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
-                        CODE
-                      </th>
-                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
-                        LIBELLE
-                      </th>
-                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
-                        ABRÉVIATION
-                      </th>
-                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
-                        OPTIONNELLE
-                      </th>
-                      <th className="lg:px-4 lg:py-2 sm:px-2 sm:py-1 text-gray-700 text-sm text-center">
-                        ACTIONS
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {matieres.map((matiere, index) => (
-                      <tr
-                        key={matiere.id}
-                        className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
-                      >
-                        {editIndex === index ? (
-                          <>
-                            <td className="text-sm px-2 py-1 text-center">
-                              {`MAT${matieres.length + 1}${matiere.id}`}
-                            </td>
-                            <td className="text-sm px-2 py-1 text-center">
-                              <input
-                                type="text"
-                                className="w-full p-1 border rounded"
-                                value={editData.libelle}
-                                onChange={(e) =>
-                                  handleInputChange(e, "libelle")
-                                }
-                              />
-                            </td>
-                            <td className="text-sm px-2 py-1 text-center">
-                              <input
-                                type="text"
-                                className="w-full p-1 border rounded"
-                                value={editData.abreviation}
-                                onChange={(e) =>
-                                  handleInputChange(e, "abreviation")
-                                }
-                              />
-                            </td>
-                            <td className="text-sm px-2 py-1 lg:px-4 lg:py-2 text-center">
-                              <select
-                                className="w-full p-1 border rounded"
-                                value={editData.optionnelle}
-                                onChange={(e) =>
-                                  handleInputChange(e, "optionnelle")
-                                }
-                              >
-                                <option value="Oui">Oui</option>
-                                <option value="Non">Non</option>
-                              </select>
-                            </td>
-                            <td className="px-4 py-2 text-center">
-                              <div className="flex gap-2 justify-center">
-                                <button
-                                  className="text-green-500 hover:text-green-700"
-                                  onClick={() => handleSave(index)}
-                                >
-                                  <MdCheck size={18} />
-                                </button>
-                                <button
-                                  className="text-gray-500 hover:text-gray-700"
-                                  onClick={handleCancel}
-                                >
-                                  <MdClose size={18} />
-                                </button>
-                              </div>
-                            </td>
-                          </>
-                        ) : (
-                          <>
-                            <td className="text-sm px-2 py-1 lg:px-4 lg:py-2 text-center">
-                              {`MAT${matieres.length + 1}${matiere.id}`}
-                            </td>
-                            <td className="text-sm px-2 py-1 lg:px-4 lg:py-2 text-center">
-                              {matiere.libelle}
-                            </td>
-                            <td className="text-sm px-2 py-1 lg:px-4 lg:py-2 text-center">
-                              {matiere.abreviation}
-                            </td>
-                            <td className="text-sm px-2 py-1 lg:px-4 lg:py-2 text-center">
-                              {matiere.optionnelle == 1 ? "Oui" : "Non"}
-                            </td>
-                            <td className="px-4 py-2 text-center">
-                              <div className="flex gap-2 justify-center">
-                                <button
-                                  className="text-blue-500 hover:text-blue-700"
-                                  onClick={() =>
-                                    handleEditClick(index, matiere)
-                                  }
-                                >
-                                  <MdEdit size={18} />
-                                </button>
-                                <button
-                                  className="text-red-500 hover:text-red-700"
-                                  onClick={() => handleDelete(index)}
-                                >
-                                  <MdDelete size={18} />
-                                </button>
-                              </div>
-                            </td>
-                          </>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {/* FORMULAIRE D'AJOUT */}
-            <div className="bg-white w-full shadow-md rounded-lg p-6 w-1/3 h-1/3">
-              <h2 className="text-lg font-bold mb-4">Créer une matière</h2>
-              <label className="block mb-2 text-sm font-semibold">
-                Libellé
-              </label>
-              <input
-                type="text"
-                className="w-full p-1 border rounded mb-3"
-                placeholder="Ex: Mathématiques"
-                value={libelle}
-                onChange={(e) => setLibelle(e.target.value)}
-              />
-              <label className="block mb-2 text-sm font-semibold">
-                Abréviation
-              </label>
-              <input
-                type="text"
-                className="w-full p-1 border rounded mb-3"
-                placeholder="Ex: MATH"
-                value={abreviation}
-                onChange={(e) => setAbreviation(e.target.value)}
-              />
-              <label className="block mb-2 text-sm font-semibold">
-                Optionnelle
-              </label>
-              <select
-                className="w-full p-1 border rounded mb-3"
-                value={optionnelle}
-                onChange={(e) => setOptionnelle(e.target.value)}
-              >
-                <option className="text-base" value="Oui">
-                  Oui
-                </option>
-                <option className="text-base" value="Non">
-                  Non
-                </option>
-              </select>
-              <button
-                className="w-full p-2 cursor-pointer bg-blue-500 text-white text-sm font-bold lg:p-1 md:px-4 md:py-2 rounded-lg hover:bg-blue-600"
-                onClick={handleAdd}
-              >
-                Ajouter
-              </button>
-            </div>
+      <div className=" ml-55 mt-15 ">
+        <div className="p-6 bg-transparent w-full flex mt-4 gap-6">
+          {/* Tableau des matières */}
+          <div className="overflow-auto rounded-lg border border-gray-200 shadow-md w-3/4">
+            <h2 className="text-lg font-bold text-center m-2">
+              Liste des matières
+            </h2>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                    CODE
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                    LIBELLE
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                    ABRÉVIATION
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                    OPTIONNELLE
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                    COEFFICIENT
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                    ACTIONS
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {matieres.map((matiere, index) => (
+                  <tr
+                    key={matiere.id}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                  >
+                    {editIndex === index ? (
+                      <>
+                        <td className="px-4 py-2 text-center">
+                          {`MAT${matieres.length + 1}${matiere.id}`}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <input
+                            type="text"
+                            className="w-full p-1 border rounded"
+                            value={editData.libelle}
+                            onChange={(e) => handleInputChange(e, "libelle")}
+                          />
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <input
+                            type="text"
+                            className="w-full p-1 border rounded"
+                            value={editData.abreviation}
+                            onChange={(e) =>
+                              handleInputChange(e, "abreviation")
+                            }
+                          />
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <select
+                            className="w-full p-1 border rounded"
+                            value={editData.optionnelle}
+                            onChange={(e) =>
+                              handleInputChange(e, "optionnelle")
+                            }
+                          >
+                            <option value="Oui">Oui</option>
+                            <option value="Non">Non</option>
+                          </select>
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <input
+                            type="number"
+                            min="1"
+                            max="10"
+                            placeholder="1"
+                            className="w-full p-1 border rounded"
+                            value={editData.coefficient}
+                            onChange={(e) =>
+                              handleInputChange(e, "coefficient")
+                            }
+                          />
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <div className="flex gap-2 justify-center">
+                            <button
+                              className="text-green-500 hover:text-green-700"
+                              onClick={() => handleSave(index)}
+                            >
+                              <MdCheck size={18} />
+                            </button>
+                            <button
+                              className="text-gray-500 hover:text-gray-700"
+                              onClick={handleCancel}
+                            >
+                              <MdClose size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="px-4 py-2 text-center">
+                          {`MAT${matieres.length + 1}${matiere.id}`}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.libelle}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.abreviation}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.optionnelle == 1 ? "Oui" : "Non"}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.coefficient}
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <div className="flex gap-2 justify-center">
+                            <button
+                              className="text-blue-500 hover:text-blue-700"
+                              onClick={() => handleEditClick(index, matiere)}
+                            >
+                              <MdEdit size={18} />
+                            </button>
+                            <button
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <MdDelete size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          {/* Boutons d'action */}
-          {majMessage && (
-            <div
-              className={`p-4 my-4 rounded shadow text-center ${
-                majIsSucces
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }`}
+          {/* FORMULAIRE D'AJOUT */}
+          <div className="bg-white shadow-md rounded-lg p-6 w-1/4 h-1/3">
+            <h2 className="text-lg font-bold mb-4">Créer une matière</h2>
+            <label className="block mb-2 text-sm font-semibold">Libellé</label>
+            <input
+              type="text"
+              className="w-full p-1 border rounded mb-3"
+              placeholder="Ex: Mathématiques"
+              value={libelle}
+              onChange={(e) => setLibelle(e.target.value)}
+            />
+            <label className="block mb-2 text-sm font-semibold">
+              Abréviation
+            </label>
+            <input
+              type="text"
+              className="w-full p-1 border rounded mb-3"
+              placeholder="Ex: MATH"
+              value={abreviation}
+              onChange={(e) => setAbreviation(e.target.value)}
+            />
+            <label className="block mb-2 text-sm font-semibold">
+              Optionnelle
+            </label>
+            <select
+              className="w-full p-1 border rounded mb-3"
+              value={optionnelle}
+              onChange={(e) => setOptionnelle(e.target.value)}
             >
-              {majMessage}
-            </div>
-          )}
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 lg:mt-6 lg:w-full md:flex md:gap-2 sm:flex sm:gap-2">
-            <button className="px-2 py-2 md:w-72 lg:w-full w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
-              Imprimer la liste
-            </button>
-
-            <label className="flex flex-row items-center justify-center gap-2 md:w-72  lg:w-full sm:w-full px-2 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
-              <FiUpload className="text-xl" />
-              <span className="text-sm font-medium">
-                Importer un fichier Excel
-              </span>
-              <input
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={handleImportExcel}
-                className="hidden"
-              />
+              <option value="Oui">Oui</option>
+              <option value="Non">Non</option>
+            </select>
+            <label className="block mb-2 text-sm font-semibold">
+              coefficient
             </label>
 
             <input
@@ -540,12 +484,46 @@ const Matieres = () => {
             />
 
             <button
-              onClick={() => exportMatieresToExcel(matieres)}
-              className="px-2 py-2 w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer"
+              className="w-full mt-10 bg-blue-500 text-white p-1 rounded-lg hover:bg-blue-600"
+              onClick={handleAdd}
             >
               Ajouter
             </button>
           </div>
+        </div>
+        {/* Boutons d'action */}
+        {majMessage && (
+          <div
+            className={`p-4 my-4 rounded shadow text-center ${
+              majIsSucces
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {majMessage}
+          </div>
+        )}
+        <div className="ml-15  gap-4 mt-6">
+          <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer">
+            Imprimer la liste
+          </button>
+
+          <label className="inline-block px-4 py-2 ml-5 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
+            Importer fichier Excel
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleImportExcel}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={() => exportMatieresToExcel(matieres)}
+            className="px-4 py-2 ml-5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 cursor-pointer"
+          >
+            Exporter au format excel
+          </button>
         </div>
       </div>
     );
