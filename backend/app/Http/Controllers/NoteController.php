@@ -23,7 +23,7 @@ class NoteController extends Controller
     {
         $request->validate([
             'fk_etudiant' => 'required|exists:etudiants,id',
-            'fk_evaluation' => 'required|exists:evaluations,id',
+            'fk_evaluation_matiere_type' => 'required|exists:evaluations_matieres_types,id',
             'valeur' => 'required|numeric|min:0|max:20',
             'gele' => 'nullable|boolean',
         ]);

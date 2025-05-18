@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import EtudiantService from "@/services/EtudiantService";
 import MatiereService from "@/services/MatiereService";
+import NoteService from "@/services/NoteService";
+
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 
 const MajNotes = () => {
@@ -14,6 +16,9 @@ const MajNotes = () => {
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
   const [evaluation, setEvaluation] = useState("Devoir");
+  const [typeParcours, setTypeParcours] = useState("admis");
+  const [typeFiliere, setTypeFiliere] = useState("admis");
+  const [typeAnneEtude, setypeAnneEtude] = useState("admis");
 
   useEffect(() => {
     MatiereService.getAllMatiere()
@@ -48,7 +53,6 @@ const MajNotes = () => {
       .then((response) => {
         setEtudiants(response);
         setIsLoading(false);
-        console.log("response", response);
       })
       .catch((error) => {
         console.error("Erreur :", error);
@@ -57,12 +61,26 @@ const MajNotes = () => {
       });
   };
 
-  const handleEdit = (index, etudiant) => {
+  /* const handleEdit = (index, etudiant) => {
     setEditIndex(index);
     setEditedData({
-      devoir: etudiant.devoir,
-      examen: etudiant.examen,
-      moyenne: etudiant.moyenne,
+      devoir: etudiant.devoir ?? "",
+      examen: etudiant.examen ?? "",
+      moyenne: etudiant.moyenne ?? "",
+    });
+  }; */
+  const handleEdit = (index) => {
+    const etudiant = etudiants[index];
+    const id = etudiant.numero_carte;
+
+    // Tu as maintenant l'ID de l'étudiant !
+    console.log("ID de l'étudiant :", id);
+
+    setEditIndex(index);
+    setEditedData({
+      devoir: etudiant.devoir ?? "",
+      examen: etudiant.examen ?? "",
+      moyenne: etudiant.moyenne ?? "",
     });
   };
 
@@ -71,7 +89,7 @@ const MajNotes = () => {
     setEditedData({});
   };
 
-  const handleSave = (index) => {
+  /*  const handleSave = (index) => {
     const updatedEtudiants = [...etudiants];
     updatedEtudiants[index] = {
       ...updatedEtudiants[index],
@@ -80,6 +98,74 @@ const MajNotes = () => {
     setEtudiants(updatedEtudiants);
     setEditIndex(null);
     setEditedData({});
+  }; */
+
+  const handleSave = async (index) => {
+    try {
+      const updatedEtudiants = [...etudiants];
+      const etudiant = etudiants[index]; // donc ici encore tu as l'ID
+      const id = etudiant.numero_carte;
+
+      const devoir = parseFloat(editedData.devoir);
+      const examen = parseFloat(editedData.examen);
+      const moyenne = parseFloat(editedData.moyenne);
+
+      // Validation des champs requis
+      if (evaluation === "Devoir") {
+        if (isNaN(devoir) || devoir < 0 || devoir > 20) {
+          alert("Veuillez entrer une note de devoir valide entre 0 et 20.");
+          setdevoir("");
+          return;
+        }
+
+        await NoteService.addNote({
+          fk_etudiant: id,
+          fk_evaluation_matiere_type: 1,
+          devoir,
+          gele: 0,
+        });
+
+        updatedEtudiants[index] = { ...etudiant, devoir };
+      } else if (evaluation === "Examen") {
+        if (
+          isNaN(devoir) ||
+          devoir < 0 ||
+          devoir > 20 ||
+          isNaN(examen) ||
+          examen < 0 ||
+          examen > 20 ||
+          isNaN(moyenne) ||
+          moyenne < 0 ||
+          moyenne > 20
+        ) {
+          alert(
+            "Toutes les notes doivent être des nombres valides entre 0 et 20."
+          );
+          return;
+        }
+
+        await NoteService.addNote({
+          fk_etudiant: id,
+          fk_evaluation_matiere_type: 2,
+          examen,
+          gele: 0,
+        });
+
+        updatedEtudiants[index] = {
+          ...etudiant,
+          devoir,
+          examen,
+          moyenne,
+        };
+      }
+
+      setEtudiants(updatedEtudiants);
+      setEditIndex(null);
+      setEditedData({});
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement de la note :", error);
+      alert("Une erreur s'est produite.");
+    }
   };
 
   const afficheEtudiants = () => {
@@ -89,7 +175,7 @@ const MajNotes = () => {
           <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
         </div>
       );
-    } else if (!isLoading && error) {
+    } else if (error) {
       return (
         <div className="ml-64 mt-20 w-2/3">
           <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
@@ -108,7 +194,36 @@ const MajNotes = () => {
     } else {
       return (
         <div className="ml-20 mt-0 w-full">
-          <div className="flex items-center space-x-10 mt-2 ml-60">
+          <div className="flex items-center gap-4 ml-50">
+            <select
+              value={typeParcours}
+              onChange={(e) => setTypeParcours(e.target.value)}
+              className="p-2 border-none rounded-md shadow-sm text-sm"
+            >
+              <option value="admis">Licence</option>
+              <option value="echoues">Master</option>
+            </select>
+            <select
+              value={typeFiliere}
+              onChange={(e) => setTypeFiliere(e.target.value)}
+              className="p-2 border-none rounded-md shadow-sm text-sm"
+            >
+              <option value="admis">Genie Logiciel</option>
+              <option value="echoues">Genie Civil</option>
+              <option value="admis">Systèmes et Réseaux</option>
+              <option value="echoues">Informatique et Systèmes</option>
+            </select>
+            <select
+              value={typeAnneEtude}
+              onChange={(e) => setypeAnneEtude(e.target.value)}
+              className="p-2 border-none rounded-md shadow-sm text-sm"
+            >
+              <option value="admis">1ere année</option>
+              <option value="echoues">2e année</option>
+            </select>
+          </div>
+
+          <div className="flex items-center space-x-10 ml-60 mt-7">
             <span className="text-black font-bold text-sm">Evaluation</span>
             <select
               value={evaluation}
@@ -120,11 +235,7 @@ const MajNotes = () => {
             </select>
           </div>
 
-          <h1 className="text-2xl font-bold text-center mt-10">
-            Liste des Étudiants inscrits
-          </h1>
-
-          <div className="border p-4">
+          <div className="border p-4 mt-10">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-100">
@@ -132,10 +243,6 @@ const MajNotes = () => {
                   <th className="px-4 py-2 text-sm text-center">NOM</th>
                   <th className="px-4 py-2 text-sm text-center">PRÉNOMS</th>
                   <th className="px-4 py-2 text-sm text-center">SEXE</th>
-                  {/* <th className="px-4 py-2 text-sm text-center">Devoir</th>
-                  <th className="px-4 py-2 text-sm text-center">Examen</th>
-                  <th className="px-4 py-2 text-sm text-center">Moyenne</th>
-                  <th className="px-4 py-2 text-sm text-center">Actions</th> */}
                   {evaluation === "Devoir" && (
                     <th className="px-4 py-2 text-sm text-center">Devoir</th>
                   )}
@@ -149,98 +256,6 @@ const MajNotes = () => {
                   <th className="px-4 py-2 text-sm text-center">Actions</th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {etudiants.map((etudiant, index) => (
-                  <tr
-                    key={`${etudiant.numero_carte}-${index}`}
-                    className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
-                  >
-                    <td className="px-4 py-2 text-center">
-                      {etudiant.numero_carte}
-                    </td>
-                    <td className="px-4 py-2 text-center">{etudiant.nom}</td>
-                    <td className="px-4 py-2 text-center">{etudiant.prenom}</td>
-                    <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
-
-                    <td className="px-4 py-2 text-center">
-                      {editIndex === index ? (
-                        <input
-                          type="number"
-                          value={editedData.devoir || ""}
-                          onChange={(e) =>
-                            setEditedData({
-                              ...editedData,
-                              devoir: e.target.value,
-                            })
-                          }
-                          disabled={evaluation === "Examen"}
-                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
-                        />
-                      ) : (
-                        etudiant.devoir
-                      )}
-                    </td>
-
-                    <td className="px-4 py-2 text-center">
-                      {editIndex === index ? (
-                        <input
-                          type="number"
-                          value={editedData.examen || ""}
-                          onChange={(e) =>
-                            setEditedData({
-                              ...editedData,
-                              examen: e.target.value,
-                            })
-                          }
-                          disabled={evaluation === "Devoir"}
-                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
-                        />
-                      ) : (
-                        etudiant.examen
-                      )}
-                    </td>
-
-                    <td className="px-4 py-2 text-center">
-                      {editIndex === index ? (
-                        <input
-                          type="number"
-                          value={editedData.moyenne || ""}
-                          onChange={(e) =>
-                            setEditedData({
-                              ...editedData,
-                              moyenne: e.target.value,
-                            })
-                          }
-                          disabled={evaluation === "Devoir"}
-                          className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
-                        />
-                      ) : (
-                        etudiant.moyenne
-                      )}
-                    </td>
-
-                    <td className="px-4 py-2 text-center">
-                      {editIndex === index ? (
-                        <div className="flex justify-center gap-2">
-                          <MdCheck
-                            className="text-green-600 cursor-pointer"
-                            onClick={() => handleSave(index)}
-                          />
-                          <MdClose
-                            className="text-red-600 cursor-pointer"
-                            onClick={handleCancel}
-                          />
-                        </div>
-                      ) : (
-                        <MdEdit
-                          className="text-blue-500 cursor-pointer mx-auto"
-                          onClick={() => handleEdit(index, etudiant)}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody> */}
               <tbody>
                 {etudiants.map((etudiant, index) => (
                   <tr
@@ -253,19 +268,20 @@ const MajNotes = () => {
                     <td className="px-4 py-2 text-center">{etudiant.nom}</td>
                     <td className="px-4 py-2 text-center">{etudiant.prenom}</td>
                     <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
-
-                    {/* Colonne Devoir */}
                     <td className="px-4 py-2 text-center">
                       {editIndex === index ? (
                         <input
+                          id="devoir-input"
                           type="number"
                           value={editedData.devoir || ""}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            console.log("Valeur saisie :", e.target.value);
                             setEditedData({
                               ...editedData,
+
                               devoir: e.target.value,
-                            })
-                          }
+                            });
+                          }}
                           disabled={evaluation !== "Devoir"}
                           className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
@@ -273,13 +289,12 @@ const MajNotes = () => {
                         etudiant.devoir
                       )}
                     </td>
-
-                    {/* Colonnes Examen et Moyenne si Examen sélectionné */}
                     {evaluation === "Examen" && (
                       <>
                         <td className="px-4 py-2 text-center">
                           {editIndex === index ? (
                             <input
+                              id="examen-input"
                               type="number"
                               value={editedData.examen || ""}
                               onChange={(e) =>
@@ -294,7 +309,6 @@ const MajNotes = () => {
                             etudiant.examen
                           )}
                         </td>
-
                         <td className="px-4 py-2 text-center">
                           {editIndex === index ? (
                             <input
@@ -314,7 +328,6 @@ const MajNotes = () => {
                         </td>
                       </>
                     )}
-
                     <td className="px-4 py-2 text-center">
                       {editIndex === index ? (
                         <div className="flex justify-center gap-2">
@@ -349,7 +362,36 @@ const MajNotes = () => {
       {!showEtudiants && (
         <>
           <div className="w-full">
-            <h2 className="text-lg font-bold text-center m-2">
+            <div className="flex items-center gap-4 ml-50">
+              <select
+                value={typeParcours}
+                onChange={(e) => setTypeParcours(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Licence</option>
+                <option value="echoues">Master</option>
+              </select>
+              <select
+                value={typeFiliere}
+                onChange={(e) => setTypeFiliere(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Genie Logiciel</option>
+                <option value="echoues">Genie Civil</option>
+                <option value="admis">Systèmes et Réseaux</option>
+                <option value="echoues">Informatique et Systèmes</option>
+              </select>
+              <select
+                value={typeAnneEtude}
+                onChange={(e) => setypeAnneEtude(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">1ere année</option>
+                <option value="echoues">2e année</option>
+              </select>
+            </div>
+
+            <h2 className="text-lg font-bold text-center m-2 mt-5">
               Liste des matières
             </h2>
             <div className="overflow-auto rounded-lg shadow-md mt-4">
@@ -382,7 +424,7 @@ const MajNotes = () => {
                       }`}
                       onClick={() => handleRowClick(index, matiere.id)}
                     >
-                      <td className="px-4 py-2 text-center">{`MAT${matiere.id}`}</td>
+                      <td className="px-4 py-2 text-center">MAT{matiere.id}</td>
                       <td className="px-4 py-2 text-center">
                         {matiere.libelle}
                       </td>
@@ -415,7 +457,6 @@ const MajNotes = () => {
           </button>
         </>
       )}
-
       {showEtudiants && afficheEtudiants()}
     </div>
   );
