@@ -15,7 +15,8 @@ use App\Http\Controllers\TypeDetailsController;
 use App\Http\Controllers\AnneesEtudeController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\AnneeUnivController;
 /*
 |--------------------------------------------------------------------------
 | Routes Web
@@ -153,6 +154,14 @@ Route::prefix('typedetails')->group(function () {
 // ====================================
 Route::prefix('anneesEtude')->group(function () {
     Route::get('/', [AnneesEtudeController::class, 'index'])->name('annees_etude.index'); // Obtenir la liste des annees_etudes
+});
+
+
+// ====================================
+// 🏆 Gestion des annes_universitaires 
+// ====================================
+Route::prefix('anneesUnivs')->group(function () {
+    Route::get('/', [AnneeUnivController::class, 'index'])->name('annees_universitaire.index'); // Obtenir la liste des universitaires
 });
 
 // ====================================

@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect } from "react";
+import SessionService from "@/services/SessionService";
+import AnneeUnivService from "@/services/AnneeUnivService";
 
 const Navbar = ({ toggleSidebar }) => {
   const [year, setYear] = useState("2024-2025");
@@ -12,7 +15,50 @@ const Navbar = ({ toggleSidebar }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [setSelectedMenu] = useState("acceuil");
   const [showSearch, setShowSearch] = useState(true);
+  const [sessions, setSessions] = useState([]);
+  const [annees, setAnnees] = useState([]);
+
   const router = useRouter(); // pour rediriger
+
+  useEffect(() => {
+    const sessionData = localStorage.getItem("sessions");
+    const anneesData = localStorage.getItem("annees");
+
+    // Obtention des sessions
+    if (sessionData) {
+    setSessions(JSON.parse(sessionData))
+    } else {
+      SessionService.getAllSession()
+        .then((response) => {
+          // console.log("🚀 Reponse brute de l'API :", response[0]);
+          console.log(response);
+          setSessions(response);
+          localStorage.setItem("sessions", JSON.stringify(response));
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          // setError(true);
+        });
+    }
+
+    // Obtention des annees
+    if (anneesData) {
+      setAnnees(JSON.parse(anneesData))
+      } else {
+        AnneeUnivService.getAllAnneeUniv()
+          .then((response) => {
+            // console.log("🚀 Reponse brute de l'API :", response[0]);
+            console.log(response);
+            setAnnees(response);
+            localStorage.setItem("annees", JSON.stringify(response));
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            // setError(true);
+          });
+      }
+  }, []);
+
 
   const user = {
     avatar: "https://via.placeholder.com/100", // Remplace par l'URL de l'image de profil
@@ -72,8 +118,15 @@ const Navbar = ({ toggleSidebar }) => {
               }}
               className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm"
             >
-              <option>Normale</option>
-              <option>Rattrapage</option>
+            {sessions.length === 0 ? (
+              <option value="">--------------------</option>
+            ) : (
+              sessions.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.libelle}
+                </option>
+              ))
+            )}
             </select>
           </div>
 
@@ -85,9 +138,15 @@ const Navbar = ({ toggleSidebar }) => {
               onChange={(e) => setYear(e.target.value)}
               className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm"
             >
-              <option>2024-2025</option>
-              <option>2023-2024</option>
-              <option>2022-2023</option>
+              {annees.length == 0 ? (
+                <option value="">---------</option>
+              ) : (
+                annees.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.annee_univ}
+                  </option>
+                ))
+              )}
             </select>
           </div>
           {/* Icone de Notification */}

@@ -3,7 +3,10 @@ import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
+import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
+import { getGrades } from "../utils/parseAnnee";
+
 import {exportEtudiantsToExcel, handleImportEtudiantsExcel, handleImportExcelToJson} from '../components/BottomButtons'
 /**
  * Return the page which contains the table of students
@@ -21,6 +24,8 @@ const Etudiants = () => {
   const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
+  var grades = [];
+  const [filiere, setFiliere] = useState([]);
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -89,11 +94,19 @@ const Etudiants = () => {
 
     // Get the list of students
   useEffect(() => {
-    AnneesEtudeService.getAllAnneesEtude()
+    const anneeData = localStorage.getItem("anneesEtude");
+    const filiereData = localStorage.getItem("filieres");
+    // 
+    if (anneeData) {
+      console.log("🚀 ---- anneeData local --- :");
+      setAnneesEtude(JSON.parse(anneeData))
+    } else {
+      AnneesEtudeService.getAllAnneesEtude()
       .then((response) => {
         console.log("🚀 ---- AnneesEtude --- :", response[0]);
         console.log(Array.isArray(response));
         setIsLoading(false);
+        localStorage.setItem("anneesEtude", JSON.stringify(response));
         setAnneesEtude(response)
       })
       .catch((error) => {
@@ -101,7 +114,26 @@ const Etudiants = () => {
         setIsLoading(false);
         setError(true);
       });
+    }
+    // Filiere data
+    if (filiereData) {
+      console.log("🚀 ---- filiereData local --- :");
+      setFiliere(JSON.parse(filiereData))
+    } else {
+      FiliereService.getAllFiliere()
+      .then((response) => {
+        setIsLoading(false);
+        localStorage.setItem("filieres", JSON.stringify(response));
+        setFiliere(response)
+      })
+      .catch((error) => {
+        console.error("Erreur :", error);
+        setIsLoading(false);
+        setError(true);
+      });
+    }
   }, []);
+
 
   if (isLoading) {
     return (
@@ -110,6 +142,7 @@ const Etudiants = () => {
       </div>
     );
   } else if (!isLoading && error) {
+    
     return (
       <div className="ml-64 mt-20 w-2/3">
         <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
@@ -118,6 +151,8 @@ const Etudiants = () => {
       </div>
     );
   } else {
+    // console.log('----- annes---  ', grades);
+    {anneesEtude.length != 0 ? grades = getGrades(anneesEtude) : []}
     return (
       <div className="flex-grow">
         <div className="flex flex-col">
@@ -130,9 +165,16 @@ const Etudiants = () => {
                   value={typeParcours}
                   onChange={(e) => setTypeParcours(e.target.value)}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
-                >
-                  <option value="admis">Licence</option>
-                  <option value="echoues">Master</option>
+                >{grades.length == 0 ? (
+                  <option value="--">-----------</option>
+                  ) : (
+                    grades.map((g, index) => (
+                      <option key={index} value={g}>
+                        {g}
+                      </option>
+                    )) 
+                  )
+                }
                 </select>
               </div>
               <div>
@@ -141,10 +183,13 @@ const Etudiants = () => {
                   onChange={(e) => setTypeFiliere(e.target.value)}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  <option value="admis">Genie Logiciel</option>
-                  <option value="echoues">Genie Civil</option>
-                  <option value="admis">Systèmes et Réseaux</option>
-                  <option value="echoues">Informatique et Systèmes</option>
+                  {
+                      filiere.length == 0? (
+                        <option value="--">------------</option>
+                      ): (filiere.map((f) => (
+                        <option key={f.id} value={f.id}>{f.libelle}</option>))
+                      )
+                  }
                 </select>
               </div>
               <div>
