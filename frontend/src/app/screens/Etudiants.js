@@ -21,7 +21,7 @@ const Etudiants = () => {
   const [majIsSucces, setMajIsSucces] = useState(false);
   const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
   const [typeParcours, setTypeParcours] = useState("Licence");
-  const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
+  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
   var grades = [];
@@ -98,12 +98,12 @@ const Etudiants = () => {
     const filiereData = localStorage.getItem("filieres");
     // 
     if (anneeData) {
-      console.log("🚀 ---- anneeData local --- :");
+      // console.log("🚀 ---- anneeData local --- :");
       setAnneesEtude(JSON.parse(anneeData))
     } else {
       AnneesEtudeService.getAllAnneesEtude()
       .then((response) => {
-        console.log("🚀 ---- AnneesEtude --- :", response[0]);
+        // console.log("🚀 ---- AnneesEtude --- :", response[0]);
         console.log(Array.isArray(response));
         setIsLoading(false);
         localStorage.setItem("anneesEtude", JSON.stringify(response));
@@ -117,7 +117,7 @@ const Etudiants = () => {
     }
     // Filiere data
     if (filiereData) {
-      console.log("🚀 ---- filiereData local --- :");
+      // console.log("🚀 ---- filiereData local --- :");
       setFiliere(JSON.parse(filiereData))
     } else {
       FiliereService.getAllFiliere()
@@ -151,7 +151,7 @@ const Etudiants = () => {
       </div>
     );
   } else {
-    // console.log('----- annes---  ', grades);
+    
     {anneesEtude.length != 0 ? grades = getGrades(anneesEtude) : []}
     return (
       <div className="flex-grow">
@@ -163,7 +163,12 @@ const Etudiants = () => {
               <div>
                 <select
                   value={typeParcours}
-                  onChange={(e) => setTypeParcours(e.target.value)}
+                  onChange={(e) => { 
+                    setTypeParcours(e.target.value);
+                    console.log('----- parcours ---  ', e.target.value);
+                    localStorage.setItem("parcoursCourante", JSON.stringify(e.target.value));
+                    }
+                  }
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >{grades.length == 0 ? (
                   <option value="--">-----------</option>
@@ -180,7 +185,11 @@ const Etudiants = () => {
               <div>
                 <select
                   value={typeFiliere}
-                  onChange={(e) => setTypeFiliere(e.target.value)}
+                  onChange={(e) => {
+                    setTypeFiliere(e.target.value);
+                    console.log('----- filiere---  ', e.target.value);
+                    localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
+                  }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
                   {
@@ -195,11 +204,16 @@ const Etudiants = () => {
               <div>
                 <select
                   value={typeAnneEtude}
-                  onChange={(e) => setypeAnneEtude(e.target.value)}
+                  onChange={(e) => {
+                    setypeAnneEtude(e.target.value)
+                    console.log('----- type annee---  ', e.target.value);
+                    localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
+                  }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  <option value="admis">1ere année</option>
-                  <option value="echoues">2e année</option>
+                  <option value="1">1ere année</option>
+                  <option value="2">2eme année</option>
+                  <option value="3">3eme année</option>
                 </select>
               </div>
             </div>

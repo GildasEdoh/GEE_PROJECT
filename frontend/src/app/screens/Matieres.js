@@ -90,6 +90,7 @@ const Matieres = () => {
     setLibelle("");
     setAbreviation("");
     setOptionnelle("Non");
+    setCoeficient(1)
 
     MatiereService.addMatiere(newMatiere)
       .then((response) => {
