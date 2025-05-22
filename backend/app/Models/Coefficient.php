@@ -13,11 +13,6 @@ class Coefficient extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    protected $fillable = [
-        'session_id',
-        'matiere_id',
-        'coef',
-    ];
 
     public function session()
     {
