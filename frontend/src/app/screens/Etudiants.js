@@ -133,7 +133,8 @@ const Etudiants = () => {
       });
     }
   }, []);
-
+  console.log(' etudiant page anneeUnivCourante ----- : ', localStorage.getItem("anneeUnivCourante")) 
+  console.log(' etudiant page sessionCourante ------ : ', localStorage.getItem("sessionCourante")) 
 
   if (isLoading) {
     return (

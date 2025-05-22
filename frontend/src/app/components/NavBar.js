@@ -24,6 +24,7 @@ const Navbar = ({ toggleSidebar }) => {
     const sessionData = localStorage.getItem("sessions");
     const anneesData = localStorage.getItem("annees");
 
+
     // Obtention des sessions
     if (sessionData) {
     setSessions(JSON.parse(sessionData))
@@ -34,6 +35,8 @@ const Navbar = ({ toggleSidebar }) => {
           console.log(response);
           setSessions(response);
           localStorage.setItem("sessions", JSON.stringify(response));
+          localStorage.setItem("sessionCourante", JSON.stringify(session));
+          console.log(' sessionCourante : ', response[0].libelle) 
         })
         .catch((error) => {
           console.error("Erreur :", error);
@@ -51,6 +54,7 @@ const Navbar = ({ toggleSidebar }) => {
             console.log(response);
             setAnnees(response);
             localStorage.setItem("annees", JSON.stringify(response));
+            localStorage.setItem("anneeUnivCourante", JSON.stringify(year));
           })
           .catch((error) => {
             console.error("Erreur :", error);
@@ -115,6 +119,7 @@ const Navbar = ({ toggleSidebar }) => {
               value={session}
               onChange={(e) => {
                 setSession(e.target.value);
+                localStorage.setItem("sessionCourante", JSON.stringify(e.target.value));
               }}
               className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm"
             >
@@ -122,7 +127,7 @@ const Navbar = ({ toggleSidebar }) => {
               <option value="">--------------------</option>
             ) : (
               sessions.map((s) => (
-                <option key={s.id} value={s.id}>
+                <option key={s.id} value={s.libelle}>
                   {s.libelle}
                 </option>
               ))
@@ -135,14 +140,18 @@ const Navbar = ({ toggleSidebar }) => {
             <span className="text-white text-sm">Année</span>
             <select
               value={year}
-              onChange={(e) => setYear(e.target.value)}
+              onChange={(e) => {
+                setYear(e.target.value);
+                localStorage.setItem("anneeUnivCourante", JSON.stringify(e.target.value));
+              }
+              }
               className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm"
             >
               {annees.length == 0 ? (
                 <option value="">---------</option>
               ) : (
                 annees.map((a) => (
-                  <option key={a.id} value={a.id}>
+                  <option key={a.id} value={a.annee_univ}>
                     {a.annee_univ}
                   </option>
                 ))
