@@ -10,7 +10,7 @@ class EtudiantService {
   private static instance: EtudiantService;
 
   // Default constructor
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): EtudiantService {
     if (!EtudiantService.instance) {
@@ -31,7 +31,7 @@ class EtudiantService {
     return response.data;
   }
 
-  // Update a etudiant
+  //  Update a etudiant
   public async updateEtudiant(student: any): Promise<Object> {
     const response = await api.put(path + `/${student.numero_carte}`, student);
     return response.data;
@@ -47,6 +47,9 @@ class EtudiantService {
     const response = await api.get(path + `/matieres/${id_matiere}`);
     return response.data;
   }
+
+
+
 }
 
 export default EtudiantService.getInstance();
