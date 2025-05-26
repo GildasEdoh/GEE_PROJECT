@@ -5,7 +5,7 @@ import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
-import { getGrades } from "../utils/parseAnnee";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 
 import {exportEtudiantsToExcel, handleImportEtudiantsExcel, handleImportExcelToJson} from '../components/BottomButtons'
 /**
@@ -19,14 +19,18 @@ const Etudiants = () => {
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [idtypeFiliere, setIdTypeFiliere] = useState("1");
   const [typeParcours, setTypeParcours] = useState("Licence");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
+  const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
   var grades = [];
   const [filiere, setFiliere] = useState([]);
 
+
+  const getEtudiant = () => {
+    
+  }
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
     if (window.confirm("Voulez-vous vraiment supprimer cet étudiant ?")) {
@@ -90,7 +94,7 @@ const Etudiants = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, []);
+  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
 
     // Get the list of students
   useEffect(() => {
@@ -133,8 +137,40 @@ const Etudiants = () => {
       });
     }
   }, []);
-  console.log(' etudiant page anneeUnivCourante ----- : ', localStorage.getItem("anneeUnivCourante")) 
-  console.log(' etudiant page sessionCourante ------ : ', localStorage.getItem("sessionCourante")) 
+  // console.log(' etudiant page anneeUnivCourante ----- : ', localStorage.getItem("anneeUnivCourante")) 
+  // console.log(' etudiant page sessionCourante ------ : ', localStorage.getItem("sessionCourante")) 
+
+  const updateEtudiant = () => {
+    const anneeUniv = localStorage.getItem("anneeUnivCourante")
+    const sessionCourante = localStorage.getItem("sessionCourante")
+
+    const anneesUniv = JSON.parse(localStorage.getItem("annees"))
+    const sessions = JSON.parse(localStorage.getItem("sessions"))
+    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"))
+
+    const anneeCur = typeParcours + " " + typeAnneEtude
+    
+    console.log("anneeUniv = " + anneeUniv +
+        ", sessionCourante = " + sessionCourante +
+        ", anneeEtudeCourante = " + typeAnneEtude +
+        ", filiereCourante = " + idtypeFiliere +
+        ", anneeCur = " + anneeCur);
+    const anneeUnivCouranteIndex = getAnneeUnivIndex(anneeUniv, anneesUniv);
+    // const anneeEtudeCouranteIndex = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+    // const sessionCouranteId = getSessionIndex(sessionCourante, sessions);
+    const filireCouranteId = idtypeFiliere;
+    console.log(" ---------------------------- indexes --------------- --------- ")
+    console.log("anneeUnivCouranteIndex = " + anneesEtudes[0].niveau +
+      // ", anneeEtudeCouranteIndex = " + anneeEtudeCouranteIndex +
+      // ", sessionCouranteId = " + sessionCouranteId +
+      ", filireCouranteId = " + filireCouranteId);
+
+    setIsLoading(true)
+  }
+
+  useEffect(() => {
+    updateEtudiant();
+  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
 
   if (isLoading) {
     return (
@@ -166,14 +202,16 @@ const Etudiants = () => {
                   value={typeParcours}
                   onChange={(e) => { 
                     setTypeParcours(e.target.value);
-                    console.log('----- parcours ---  ', e.target.value);
-                    localStorage.setItem("parcoursCourante", JSON.stringify(e.target.value));
+                    // console.log('----- parcours ---  ', e.target.value);
+                    // localStorage.setItem("gradeCourant", JSON.stringify(e.target.value));
+                    updateEtudiant()
                     }
                   }
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >{grades.length == 0 ? (
                   <option value="--">-----------</option>
                   ) : (
+                    
                     grades.map((g, index) => (
                       <option key={index} value={g}>
                         {g}
@@ -185,11 +223,12 @@ const Etudiants = () => {
               </div>
               <div>
                 <select
-                  value={typeFiliere}
+                  value={idtypeFiliere}
                   onChange={(e) => {
-                    setTypeFiliere(e.target.value);
-                    console.log('----- filiere---  ', e.target.value);
-                    localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
+                    setIdTypeFiliere(e.target.value);
+                    // console.log('----- filiere---  ', e.target.value);
+                    // localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
+                    updateEtudiant()
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -207,8 +246,9 @@ const Etudiants = () => {
                   value={typeAnneEtude}
                   onChange={(e) => {
                     setypeAnneEtude(e.target.value)
-                    console.log('----- type annee---  ', e.target.value);
-                    localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
+                    // console.log('----- type annee---  ', e.target.value);
+                    // localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
+                    updateEtudiant()
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >

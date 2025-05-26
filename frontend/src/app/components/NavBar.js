@@ -11,7 +11,7 @@ import AnneeUnivService from "@/services/AnneeUnivService";
 
 const Navbar = ({ toggleSidebar }) => {
   const [year, setYear] = useState("2024-2025");
-  const [session, setSession] = useState("Normale");
+  const [session, setSession] = useState("Session Normale");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [setSelectedMenu] = useState("acceuil");
   const [showSearch, setShowSearch] = useState(true);
@@ -23,11 +23,10 @@ const Navbar = ({ toggleSidebar }) => {
   useEffect(() => {
     const sessionData = localStorage.getItem("sessions");
     const anneesData = localStorage.getItem("annees");
-
-
     // Obtention des sessions
     if (sessionData) {
     setSessions(JSON.parse(sessionData))
+    localStorage.setItem("sessionCourante", JSON.stringify(session));
     } else {
       SessionService.getAllSession()
         .then((response) => {
@@ -62,6 +61,10 @@ const Navbar = ({ toggleSidebar }) => {
           });
       }
   }, []);
+
+  const initparams = () => {
+    // const 
+  }
 
 
   const user = {
@@ -115,11 +118,13 @@ const Navbar = ({ toggleSidebar }) => {
           {/* Sélecteur de session */}
           <div className="flex items-center space-x-2">
             <span className="text-white text-sm">Session</span>
+            
             <select
               value={session}
               onChange={(e) => {
                 setSession(e.target.value);
                 localStorage.setItem("sessionCourante", JSON.stringify(e.target.value));
+                console.log('sessionCourante ', e.target.value);
               }}
               className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm"
             >
@@ -143,6 +148,7 @@ const Navbar = ({ toggleSidebar }) => {
               onChange={(e) => {
                 setYear(e.target.value);
                 localStorage.setItem("anneeUnivCourante", JSON.stringify(e.target.value));
+                console.log('anneeUnivCourante ', e.target.value);
               }
               }
               className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm"
