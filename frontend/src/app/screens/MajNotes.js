@@ -424,142 +424,106 @@ const MajNotes = () => {
     anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
   }
   return (
-    <div className="p-6 bg-transparent">
-      <div className="flex items-center gap-4 ml-50 mt-0">
-        <div>
-          <select
-            value={typeParcours}
-            onChange={(e) => {
-              setTypeParcours(e.target.value);
-              console.log("----- parcours ---  ", e.target.value);
-              localStorage.setItem(
-                "parcoursCourante",
-                JSON.stringify(e.target.value)
-              );
-            }}
-            className="p-2 border-none rounded-md shadow-sm text-sm"
-          >
-            {grades.length == 0 ? (
-              <option value="--">-----------</option>
-            ) : (
-              grades.map((g, index) => (
-                <option key={index} value={g}>
-                  {g}
-                </option>
-              ))
-            )}
-          </select>
-        </div>
-        <div>
-          <select
-            value={typeFiliere}
-            onChange={(e) => {
-              setTypeFiliere(e.target.value);
-              console.log("----- filiere---  ", e.target.value);
-              localStorage.setItem(
-                "filiereCourante",
-                JSON.stringify(e.target.value)
-              );
-            }}
-            className="p-2 border-none rounded-md shadow-sm text-sm"
-          >
-            {filiere.length == 0 ? (
-              <option value="--">------------</option>
-            ) : (
-              filiere.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.libelle}
-                </option>
-              ))
-            )}
-          </select>
-        </div>
-        <div>
-          <select
-            value={typeAnneEtude}
-            onChange={(e) => {
-              setypeAnneEtude(e.target.value);
-              console.log("----- type annee---  ", e.target.value);
-              localStorage.setItem(
-                "anneeEtudeCourante",
-                JSON.stringify(e.target.value)
-              );
-            }}
-            className="p-2 border-none rounded-md shadow-sm text-sm"
-          >
-            <option value="1">1ere année</option>
-            <option value="2">2eme année</option>
-            <option value="3">3eme année</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex flex-col gap-6">
-        {!showEtudiants && (
-          <>
-            <div className="w-full">
-              <h2 className="text-lg xl:text-xl font-bold text-center m-2">
-                Liste des matières
-              </h2>
-              <div className="h-[400px] overflow-y-auto pl-4 pr-4 pb-3 flex flex-col w-full">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="px-4 py-2 text-sm text-center">NUMERO</th>
-                      <th className="px-4 py-2 text-sm text-center">LIBELLE</th>
-                      <th className="px-4 py-2 text-sm text-center">
-                        ABRÉVIATION
-                      </th>
-                      <th className="px-4 py-2 text-sm text-center">
-                        OPTIONNELLE
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {matieres.map((matiere, index) => (
-                      <tr
-                        key={matiere.id}
-                        className={`cursor-pointer ${
-                          selectedIndex === index
-                            ? "bg-blue-300"
-                            : index % 2 === 0
-                            ? "bg-white"
-                            : "bg-gray-100"
-                        }`}
-                        onClick={() => handleRowClick(index, matiere.id)}
-                      >
-                        <td className="px-4 py-2 text-center">{`MAT${matiere.id}`}</td>
-                        <td className="px-4 py-2 text-center">
-                          {matiere.libelle}
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          {matiere.abreviation}
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          {matiere.optionnelle === 1 ? "Oui" : "Non"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+    <div className="ml-65 mt-15 p-6 bg-transparent flex flex-col gap-6 w-2/3 h-2/3">
+      {!showEtudiants && (
+        <>
+          <div className="w-full">
+            <div className="flex items-center gap-4 ml-50">
+              <select
+                value={typeParcours}
+                onChange={(e) => setTypeParcours(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Licence</option>
+                <option value="echoues">Master</option>
+              </select>
+              <select
+                value={typeFiliere}
+                onChange={(e) => setTypeFiliere(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Genie Logiciel</option>
+                <option value="echoues">Genie Civil</option>
+                <option value="admis">Systèmes et Réseaux</option>
+                <option value="echoues">Informatique et Systèmes</option>
+              </select>
+              <select
+                value={typeAnneEtude}
+                onChange={(e) => setypeAnneEtude(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">1ere année</option>
+                <option value="echoues">2e année</option>
+              </select>
             </div>
 
-            <button
-              className={`px-2 py-2 w-full cursor-pointer text-white font-bold rounded self-center ${
-                selectedIndex === null
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-green-500 hover:bg-green-700"
-              }`}
-              onClick={handleValidation}
-              disabled={selectedIndex === null}
-            >
-              Valider
-            </button>
-          </>
-        )}
+            <h2 className="text-lg font-bold text-center m-2 mt-5">
+              Liste des matières
+            </h2>
+            <div className="overflow-auto rounded-lg shadow-md mt-4">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="px-4 py-2 text-sm text-center">NUMERO</th>
+                    <th className="px-4 py-2 text-sm text-center">LIBELLE</th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      ABRÉVIATION
+                    </th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      OPTIONNELLE
+                    </th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      COEFFICIENT
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {matieres.map((matiere, index) => (
+                    <tr
+                      key={matiere.id}
+                      className={`cursor-pointer ${
+                        selectedIndex === index
+                          ? "bg-blue-300"
+                          : index % 2 === 0
+                          ? "bg-white"
+                          : "bg-gray-100"
+                      }`}
+                      onClick={() => handleRowClick(index, matiere.id)}
+                    >
+                      <td className="px-4 py-2 text-center">MAT{matiere.id}</td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.libelle}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.abreviation}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.optionnelle === 1 ? "Oui" : "Non"}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.coefficient}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-        {showEtudiants && afficheEtudiants()}
-      </div>
+          <button
+            className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
+              selectedIndex === null
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-500 hover:bg-green-700"
+            }`}
+            onClick={handleValidation}
+            disabled={selectedIndex === null}
+          >
+            Valider
+          </button>
+        </>
+      )}
+      {showEtudiants && afficheEtudiants()}
     </div>
   );
 };

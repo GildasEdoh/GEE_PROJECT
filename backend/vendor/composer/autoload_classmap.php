@@ -6,6 +6,13 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Actions\\ElaborateSummary' => $vendorDir . '/laravel/pint/app/Actions/ElaborateSummary.php',
+    'App\\Actions\\FixCode' => $vendorDir . '/laravel/pint/app/Actions/FixCode.php',
+    'App\\Commands\\DefaultCommand' => $vendorDir . '/laravel/pint/app/Commands/DefaultCommand.php',
+    'App\\Contracts\\PathsRepository' => $vendorDir . '/laravel/pint/app/Contracts/PathsRepository.php',
+    'App\\Exceptions\\HandleExceptions' => $vendorDir . '/laravel/pint/app/Exceptions/HandleExceptions.php',
+    'App\\Factories\\ConfigurationFactory' => $vendorDir . '/laravel/pint/app/Factories/ConfigurationFactory.php',
+    'App\\Factories\\ConfigurationResolverFactory' => $vendorDir . '/laravel/pint/app/Factories/ConfigurationResolverFactory.php',
     'App\\Http\\Controllers\\AnneeUnivController' => $baseDir . '/app/Http/Controllers/AnneeUnivController.php',
     'App\\Http\\Controllers\\AnneesEtudeController' => $baseDir . '/app/Http/Controllers/AnneesEtudeController.php',
     'App\\Http\\Controllers\\Auth\\AuthController' => $baseDir . '/app/Http/Controllers/Auth/AuthController.php',

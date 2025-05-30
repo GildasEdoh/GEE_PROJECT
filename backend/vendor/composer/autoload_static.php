@@ -609,6 +609,13 @@ class ComposerStaticInit2d10956196a336e8c2f576ae0f343429
     );
 
     public static $classMap = array (
+        'App\\Actions\\ElaborateSummary' => __DIR__ . '/..' . '/laravel/pint/app/Actions/ElaborateSummary.php',
+        'App\\Actions\\FixCode' => __DIR__ . '/..' . '/laravel/pint/app/Actions/FixCode.php',
+        'App\\Commands\\DefaultCommand' => __DIR__ . '/..' . '/laravel/pint/app/Commands/DefaultCommand.php',
+        'App\\Contracts\\PathsRepository' => __DIR__ . '/..' . '/laravel/pint/app/Contracts/PathsRepository.php',
+        'App\\Exceptions\\HandleExceptions' => __DIR__ . '/..' . '/laravel/pint/app/Exceptions/HandleExceptions.php',
+        'App\\Factories\\ConfigurationFactory' => __DIR__ . '/..' . '/laravel/pint/app/Factories/ConfigurationFactory.php',
+        'App\\Factories\\ConfigurationResolverFactory' => __DIR__ . '/..' . '/laravel/pint/app/Factories/ConfigurationResolverFactory.php',
         'App\\Http\\Controllers\\AnneeUnivController' => __DIR__ . '/../..' . '/app/Http/Controllers/AnneeUnivController.php',
         'App\\Http\\Controllers\\AnneesEtudeController' => __DIR__ . '/../..' . '/app/Http/Controllers/AnneesEtudeController.php',
         'App\\Http\\Controllers\\Auth\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthController.php',

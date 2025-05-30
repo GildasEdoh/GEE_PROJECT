@@ -20,14 +20,12 @@ export default function Dashboard({ selectedMenu }) {
         return <Etudiants />;
       case "Notes":
         return <MajNotes />;
-      case "Admis":
-        return <Admis />;
-      case "Echoues":
-        return <Echoues />;
       case "Statistiques":
         return <Statistique />;
       case "Liste des inscrits":
         return <ListeInscrits />;
+      case "Admis":
+        return <Etudiants />;
       case "Notes par Matières":
         return <NotesMatieres />;
       case "PV individuels":
