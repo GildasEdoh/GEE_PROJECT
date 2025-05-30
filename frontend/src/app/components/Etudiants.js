@@ -3,6 +3,7 @@ import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
 /**
  * Return the page which contains the table of students
  */
@@ -102,6 +103,65 @@ const Etudiants = () => {
       });
   }, []);
 
+  const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
+    if (!etudiants || etudiants.length === 0) {
+      alert("Aucune donnée d'étudiant à imprimer !");
+      return;
+    }
+
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    // Ajouter le titre
+    doc.setFontSize(16);
+    doc.text(titre, 105, 15, { align: "center" }); // Centré horizontalement (x=105mm pour A4)
+
+    // En-têtes du tableau
+    const headers = [
+      "N° Carte",
+      "Nom",
+      "Prénoms",
+      "Sexe",
+      "Date Naiss.",
+      "Lieu Naiss.",
+      "Téléphone",
+    ];
+
+    // Données formatées pour le tableau
+    const data = etudiants.map((etudiant) => [
+      etudiant.carte,
+      etudiant.nom,
+      etudiant.prenoms,
+      etudiant.sexe,
+      etudiant.dateNaissance,
+      etudiant.lieuNaissance,
+      etudiant.telephone,
+    ]);
+
+    // Générer le tableau (autoTable est un plugin de jsPDF)
+    doc.autoTable({
+      head: [headers],
+      body: data,
+      startY: 25, // Position verticale après le titre
+      margin: { top: 20 },
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        overflow: "linebreak",
+      },
+      headStyles: {
+        fillColor: "#2c3e50", // Couleur d'en-tête
+        textColor: "#ffffff",
+      },
+    });
+
+    // Sauvegarder le PDF
+    doc.save(`${titre}_${new Date().toLocaleDateString()}.pdf`);
+  };
+
   // fonction pour importer un fichier excel
   const handleImportEtudiantsExcel = (e) => {
     const file = e.target.files[0];
@@ -200,6 +260,116 @@ const Etudiants = () => {
   };
 
   // fonction pour importer le fichier excel et telecharger en .json
+  // const handleImportExcelToJson = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) {
+  //     alert("Veuillez sélectionner un fichier Excel.");
+  //     return;
+  //   }
+
+  //   const reader = new FileReader();
+  //   reader.onload = (evt) => {
+  //     const data = evt.target.result;
+
+  //     try {
+  //       const workbook = XLSX.read(data, { type: "binary" });
+  //       const sheetName = workbook.SheetNames[0];
+  //       const sheet = workbook.Sheets[sheetName];
+  //       const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+  //       // Colonnes attendues selon le fichier Excel fourni
+  //       const requiredColumns = [
+  //         "Carte",
+  //         "Nom",
+  //         "Prénoms",
+  //         "Né le",
+  //         "À",
+  //         "Sexe",
+  //       ];
+
+  //       const sheetColumns = Object.keys(jsonData[0] || {});
+  //       const isValidStructure = requiredColumns.every((col) =>
+  //         sheetColumns.includes(col)
+  //       );
+
+  //       if (!isValidStructure) {
+  //         alert(
+  //           `Le fichier Excel ne correspond pas à la structure attendue.\nIl doit contenir les colonnes suivantes : ${requiredColumns.join(
+  //             ", "
+  //           )}`
+  //         );
+  //         return;
+  //       }
+
+  //       const formattedData = jsonData
+  //         .map((row) => {
+  //           const {
+  //             Carte,
+  //             Nom,
+  //             Prénoms,
+  //             "Né le": dateNaissance,
+  //             À: lieuNaissance,
+  //             Sexe,
+  //           } = row;
+
+  //           if (
+  //             !Carte ||
+  //             !Nom ||
+  //             !Prénoms ||
+  //             !dateNaissance ||
+  //             !lieuNaissance ||
+  //             !Sexe
+  //           ) {
+  //             alert(
+  //               `Ligne incomplète détectée : ${JSON.stringify(row)}. Ignorée.`
+  //             );
+  //             return null;
+  //           }
+
+  //           const sexeNormalise = Sexe.toString().trim().toUpperCase();
+  //           if (!["M", "F"].includes(sexeNormalise)) {
+  //             alert(
+  //               `Sexe invalide (${Sexe}) pour l'étudiant : ${Nom} ${Prénoms}.`
+  //             );
+  //             return null;
+  //           }
+
+  //           return {
+  //             carte: Carte.toString().trim(),
+  //             nom: Nom.toString().trim(),
+  //             prenoms: Prénoms.toString().trim(),
+  //             dateNaissance: dateNaissance.toString().trim(),
+  //             lieuNaissance: lieuNaissance.toString().trim(),
+  //             sexe: sexeNormalise,
+  //           };
+  //         })
+  //         .filter((etudiant) => etudiant !== null);
+
+  //       console.log("Etudiants importés :", formattedData);
+
+  //       const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
+  //         type: "application/json",
+  //       });
+  //       const url = URL.createObjectURL(blob);
+
+  //       const link = document.createElement("a");
+  //       link.href = url;
+  //       link.download = "etudiants_importes.json";
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
+  //     } catch (error) {
+  //       alert("Erreur de lecture du fichier Excel.");
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   reader.onerror = () => {
+  //     alert("Erreur lors de l'ouverture du fichier.");
+  //   };
+
+  //   reader.readAsBinaryString(file);
+  // };
   const handleImportExcelToJson = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -215,15 +385,25 @@ const Etudiants = () => {
         const workbook = XLSX.read(data, { type: "binary" });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
 
         const requiredColumns = [
-          "numero_carte",
-          "nom",
-          "prenom",
-          "dateNaissance",
-          "lieuNaissance",
-          "sexe",
+          "N°",
+          "Ets",
+          "Parcours",
+          "Nb. insc.",
+          "Carte",
+          "Nom",
+          "Prénoms",
+          "Sexe",
+          "Né le",
+          "À",
+          "Nationalité",
+          "Tél",
+          "Avant",
+          "Courant",
+          "Total",
+          "%",
         ];
 
         const sheetColumns = Object.keys(jsonData[0] || {});
@@ -233,7 +413,7 @@ const Etudiants = () => {
 
         if (!isValidStructure) {
           alert(
-            "Le fichier Excel ne correspond pas à la structure attendue. Il doit contenir : numero_carte, nom, prenom, dateNaissance, lieuNaissance, sexe."
+            "Le fichier Excel ne correspond pas à la structure attendue. Il doit contenir toutes les colonnes comme dans le modèle."
           );
           return;
         }
@@ -241,18 +421,24 @@ const Etudiants = () => {
         const formattedData = jsonData
           .map((row) => {
             const {
-              numero_carte,
-              nom,
-              prenom,
-              dateNaissance,
-              lieuNaissance,
-              sexe,
+              Carte: carte,
+              Nom: nom,
+              Prénoms: prenoms,
+              Sexe: sexe,
+              "Né le": dateNaissance,
+              À: lieuNaissance,
+              Nationalité: nationalite,
+              Tél: telephone,
+              Avant: avant,
+              Courant: courant,
+              Total: total,
+              "%": pourcentage,
             } = row;
 
             if (
-              !numero_carte ||
+              !carte ||
               !nom ||
-              !prenom ||
+              !prenoms ||
               !dateNaissance ||
               !lieuNaissance ||
               !sexe
@@ -265,24 +451,30 @@ const Etudiants = () => {
 
             if (!["M", "F"].includes(sexe.toUpperCase())) {
               alert(
-                `Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenom}.`
+                `Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenoms}.`
               );
               return null;
             }
 
             return {
-              carte: numero_carte.toString(),
+              carte: carte.toString(),
               nom,
-              prenoms: prenom,
+              prenoms,
+              sexe: sexe.toUpperCase(),
               dateNaissance,
               lieuNaissance,
-              sexe: sexe.toUpperCase(),
+              nationalite,
+              telephone,
+              avant: parseInt(avant) || 0,
+              courant: parseInt(courant) || 0,
+              total: parseInt(total) || 0,
+              pourcentage: pourcentage?.toString() ?? "0,00",
             };
           })
           .filter((etudiant) => etudiant !== null);
 
-        console.log("etudiants : " + formattedData[0]);
-        // Générer un fichier JSON
+        console.log("etudiants : ", formattedData[0]);
+
         const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
           type: "application/json",
         });
@@ -307,8 +499,109 @@ const Etudiants = () => {
   };
 
   // fonction pour exporter les donnees en fichier excel
+  // const exportEtudiantsToExcel = (etudiants) => {
+  //   // Adapter les clés pour correspondre aux noms de colonnes attendus dans le fichier Excel
+  //   const formattedData = etudiants.map((etudiant) => ({
+  //     Carte: etudiant.carte,
+  //     Nom: etudiant.nom,
+  //     Prénoms: etudiant.prenoms,
+  //     "Né le": etudiant.dateNaissance,
+  //     À: etudiant.lieuNaissance,
+  //     Sexe: etudiant.sexe,
+  //   }));
+
+  //   const worksheet = XLSX.utils.json_to_sheet(formattedData);
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Etudiants");
+
+  //   const excelBuffer = XLSX.write(workbook, {
+  //     bookType: "xlsx",
+  //     type: "array",
+  //   });
+
+  //   const blob = new Blob([excelBuffer], {
+  //     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //   });
+
+  //   const link = document.createElement("a");
+  //   link.href = URL.createObjectURL(blob);
+
+  //   const now = new Date();
+  //   const timestamp = now
+  //     .toISOString()
+  //     .slice(0, 16)
+  //     .replace("T", "_")
+  //     .replace(":", "-");
+  //   link.download = `etudiants_${timestamp}.xlsx`;
+
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
   const exportEtudiantsToExcel = (etudiants) => {
-    const worksheet = XLSX.utils.json_to_sheet(etudiants);
+    if (!Array.isArray(etudiants) || etudiants.length === 0) {
+      alert("Aucune donnée à exporter.");
+      return;
+    }
+
+    const headers = [
+      "N°",
+      "Ets",
+      "Parcours",
+      "Nb. insc.",
+      "Carte",
+      "Nom",
+      "Prénoms",
+      "Sexe",
+      "Né le",
+      "À",
+      "Nationalité",
+      "Tél",
+      "Avant",
+      "Courant",
+      "Total",
+      "%",
+    ];
+
+    const worksheetData = [headers];
+
+    etudiants.forEach((etudiant, index) => {
+      const {
+        carte,
+        nom,
+        prenoms,
+        sexe,
+        dateNaissance,
+        lieuNaissance,
+        nationalite,
+        telephone,
+        avant,
+        courant,
+        total,
+        pourcentage,
+      } = etudiant;
+
+      worksheetData.push([
+        index + 1,
+        "FDD",
+        "SUP - Capacité Droit 1",
+        1,
+        carte ?? "",
+        nom ?? "",
+        prenoms ?? "",
+        sexe ?? "",
+        dateNaissance ?? "",
+        lieuNaissance ?? "",
+        nationalite ?? "",
+        telephone ?? "",
+        avant ?? 0,
+        courant ?? 0,
+        total ?? 0,
+        pourcentage ?? "0,00",
+      ]);
+    });
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Etudiants");
 
@@ -554,7 +847,10 @@ const Etudiants = () => {
           </div>
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
-            <button className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
+            <button
+              className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer"
+              onClick={() => generatePDF(formattedData, "Liste des Étudiants")}
+            >
               Imprimer la liste
             </button>
 
@@ -578,7 +874,6 @@ const Etudiants = () => {
               Exporter au format excel
             </button>
           </div>
-
         </div>
       </div>
     );
