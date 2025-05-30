@@ -7,6 +7,11 @@ import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
 import { getGrades } from "../utils/parseAnnee";
 
+import {
+  exportEtudiantsToExcel,
+  handleImportEtudiantsExcel,
+  handleImportExcelToJson,
+} from "../components/BottomButtons";
 /**
  * Return the page which contains the table of students
  */
@@ -132,6 +137,14 @@ const Echoues = () => {
         });
     }
   }, []);
+  console.log(
+    " etudiant page anneeUnivCourante ----- : ",
+    localStorage.getItem("anneeUnivCourante")
+  );
+  console.log(
+    " etudiant page sessionCourante ------ : ",
+    localStorage.getItem("sessionCourante")
+  );
 
   if (isLoading) {
     return (
@@ -155,7 +168,7 @@ const Echoues = () => {
       <div className="flex-grow">
         <div className="flex flex-col">
           <div className="bg-white flex items-center z-4 pt-3 pb-3  pr-4 justify-between">
-            <h1 className="text-2xl font-bold">Liste des Étudiants Echoués</h1>
+            <h1 className="text-2xl font-bold">Liste des Étudiants</h1>
 
             <div className="flex items-center gap-4">
               <div>
@@ -429,7 +442,7 @@ const Echoues = () => {
           </div>
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
-            <button className="px-2 py-2 w-full bg-green-500 text-white text-sm rounded-lg">
+            <button className="px-2 py-2 w-full bg-green-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
               Imprimer la liste
             </button>
 

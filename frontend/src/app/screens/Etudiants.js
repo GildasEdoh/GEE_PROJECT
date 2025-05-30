@@ -7,7 +7,11 @@ import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
 import { getGrades } from "../utils/parseAnnee";
 
-import {exportEtudiantsToExcel, handleImportEtudiantsExcel, handleImportExcelToJson} from '../components/BottomButtons'
+import {
+  exportEtudiantsToExcel,
+  handleImportEtudiantsExcel,
+  handleImportExcelToJson,
+} from "../components/BottomButtons";
 /**
  * Return the page which contains the table of students
  */
@@ -92,49 +96,55 @@ const Etudiants = () => {
       });
   }, []);
 
-    // Get the list of students
+  // Get the list of students
   useEffect(() => {
     const anneeData = localStorage.getItem("anneesEtude");
     const filiereData = localStorage.getItem("filieres");
-    // 
+    //
     if (anneeData) {
       // console.log("🚀 ---- anneeData local --- :");
-      setAnneesEtude(JSON.parse(anneeData))
+      setAnneesEtude(JSON.parse(anneeData));
     } else {
       AnneesEtudeService.getAllAnneesEtude()
-      .then((response) => {
-        // console.log("🚀 ---- AnneesEtude --- :", response[0]);
-        console.log(Array.isArray(response));
-        setIsLoading(false);
-        localStorage.setItem("anneesEtude", JSON.stringify(response));
-        setAnneesEtude(response)
-      })
-      .catch((error) => {
-        console.error("Erreur :", error);
-        setIsLoading(false);
-        setError(true);
-      });
+        .then((response) => {
+          // console.log("🚀 ---- AnneesEtude --- :", response[0]);
+          console.log(Array.isArray(response));
+          setIsLoading(false);
+          localStorage.setItem("anneesEtude", JSON.stringify(response));
+          setAnneesEtude(response);
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          setIsLoading(false);
+          setError(true);
+        });
     }
     // Filiere data
     if (filiereData) {
       // console.log("🚀 ---- filiereData local --- :");
-      setFiliere(JSON.parse(filiereData))
+      setFiliere(JSON.parse(filiereData));
     } else {
       FiliereService.getAllFiliere()
-      .then((response) => {
-        setIsLoading(false);
-        localStorage.setItem("filieres", JSON.stringify(response));
-        setFiliere(response)
-      })
-      .catch((error) => {
-        console.error("Erreur :", error);
-        setIsLoading(false);
-        setError(true);
-      });
+        .then((response) => {
+          setIsLoading(false);
+          localStorage.setItem("filieres", JSON.stringify(response));
+          setFiliere(response);
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          setIsLoading(false);
+          setError(true);
+        });
     }
   }, []);
-  console.log(' etudiant page anneeUnivCourante ----- : ', localStorage.getItem("anneeUnivCourante")) 
-  console.log(' etudiant page sessionCourante ------ : ', localStorage.getItem("sessionCourante")) 
+  console.log(
+    " etudiant page anneeUnivCourante ----- : ",
+    localStorage.getItem("anneeUnivCourante")
+  );
+  console.log(
+    " etudiant page sessionCourante ------ : ",
+    localStorage.getItem("sessionCourante")
+  );
 
   if (isLoading) {
     return (
@@ -143,7 +153,6 @@ const Etudiants = () => {
       </div>
     );
   } else if (!isLoading && error) {
-    
     return (
       <div className="ml-64 mt-20 w-2/3">
         <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
@@ -152,8 +161,9 @@ const Etudiants = () => {
       </div>
     );
   } else {
-    
-    {anneesEtude.length != 0 ? grades = getGrades(anneesEtude) : []}
+    {
+      anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
+    }
     return (
       <div className="flex-grow">
         <div className="flex flex-col">
@@ -164,23 +174,25 @@ const Etudiants = () => {
               <div>
                 <select
                   value={typeParcours}
-                  onChange={(e) => { 
+                  onChange={(e) => {
                     setTypeParcours(e.target.value);
-                    console.log('----- parcours ---  ', e.target.value);
-                    localStorage.setItem("parcoursCourante", JSON.stringify(e.target.value));
-                    }
-                  }
+                    console.log("----- parcours ---  ", e.target.value);
+                    localStorage.setItem(
+                      "parcoursCourante",
+                      JSON.stringify(e.target.value)
+                    );
+                  }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
-                >{grades.length == 0 ? (
-                  <option value="--">-----------</option>
+                >
+                  {grades.length == 0 ? (
+                    <option value="--">-----------</option>
                   ) : (
                     grades.map((g, index) => (
                       <option key={index} value={g}>
                         {g}
                       </option>
-                    )) 
-                  )
-                }
+                    ))
+                  )}
                 </select>
               </div>
               <div>
@@ -188,27 +200,35 @@ const Etudiants = () => {
                   value={typeFiliere}
                   onChange={(e) => {
                     setTypeFiliere(e.target.value);
-                    console.log('----- filiere---  ', e.target.value);
-                    localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
+                    console.log("----- filiere---  ", e.target.value);
+                    localStorage.setItem(
+                      "filiereCourante",
+                      JSON.stringify(e.target.value)
+                    );
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  {
-                      filiere.length == 0? (
-                        <option value="--">------------</option>
-                      ): (filiere.map((f) => (
-                        <option key={f.id} value={f.id}>{f.libelle}</option>))
-                      )
-                  }
+                  {filiere.length == 0 ? (
+                    <option value="--">------------</option>
+                  ) : (
+                    filiere.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.libelle}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
               <div>
                 <select
                   value={typeAnneEtude}
                   onChange={(e) => {
-                    setypeAnneEtude(e.target.value)
-                    console.log('----- type annee---  ', e.target.value);
-                    localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
+                    setypeAnneEtude(e.target.value);
+                    console.log("----- type annee---  ", e.target.value);
+                    localStorage.setItem(
+                      "anneeEtudeCourante",
+                      JSON.stringify(e.target.value)
+                    );
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -220,7 +240,7 @@ const Etudiants = () => {
             </div>
           </div>
           <div className="h-[400px] overflow-y-auto mt-8">
-          <table className="w-full border-collapse border rounded-xl shadow-md">
+            <table className="w-full border-collapse border rounded-xl shadow-md">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
@@ -379,7 +399,9 @@ const Etudiants = () => {
                           {" "}
                           {etudiant.lieu_naissance}{" "}
                         </td>
-                        <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
+                        <td className="px-4 py-2 text-center">
+                          {etudiant.sexe}
+                        </td>
                         <td className="px-4 py-2 text-center">
                           {" "}
                           {etudiant.telephone}{" "}
@@ -444,7 +466,6 @@ const Etudiants = () => {
               Exporter au format excel
             </button>
           </div>
-
         </div>
       </div>
     );

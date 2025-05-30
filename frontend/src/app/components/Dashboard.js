@@ -25,7 +25,9 @@ export default function Dashboard({ selectedMenu }) {
       case "Liste des inscrits":
         return <ListeInscrits />;
       case "Admis":
-        return <Etudiants />;
+        return <Admis />;
+      case "Echoues":
+        return <Echoues />;
       case "Notes par Matières":
         return <NotesMatieres />;
       case "PV individuels":
