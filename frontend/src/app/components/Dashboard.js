@@ -8,6 +8,8 @@ import ListeInscrits from "../screens/edition/ListeInscrits";
 import NotesMatieres from "../screens/edition/NotesMatieres";
 import PVIndividuels from "../screens/edition/PVIndividuels";
 import Releves from "../screens/edition/Releves";
+import Admis from "../screens/Admis";
+import Echoues from "../screens/Echoues";
 
 export default function Dashboard({ selectedMenu }) {
   const renderContent = () => {
@@ -16,8 +18,12 @@ export default function Dashboard({ selectedMenu }) {
         return <Matieres />;
       case "Étudiants":
         return <Etudiants />;
-      case "Mise à jour Notes":
+      case "Notes":
         return <MajNotes />;
+      case "Admis":
+        return <Admis />;
+      case "Echoues":
+        return <Echoues />;
       case "Statistiques":
         return <Statistique />;
       case "Liste des inscrits":

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import EtudiantService from "@/services/EtudiantService";
 import MatiereService from "@/services/MatiereService";
 import NoteService from "@/services/NoteService";
+import { getGrades } from "../utils/parseAnnee";
+import AnneesEtudeService from "@/services/AnneesEtudeService";
+import FiliereService from "@/services/FiliereService";
 
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 
@@ -16,9 +19,12 @@ const MajNotes = () => {
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
   const [evaluation, setEvaluation] = useState("Devoir");
-  const [typeParcours, setTypeParcours] = useState("admis");
-  const [typeFiliere, setTypeFiliere] = useState("admis");
-  const [typeAnneEtude, setypeAnneEtude] = useState("admis");
+  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
+  const [anneesEtude, setAnneesEtude] = useState([]);
+  const [filiere, setFiliere] = useState([]);
+  var grades = [];
 
   useEffect(() => {
     MatiereService.getAllMatiere()
@@ -31,6 +37,46 @@ const MajNotes = () => {
         setIsLoading(false);
         setError(true);
       });
+  }, []);
+  useEffect(() => {
+    const anneeData = localStorage.getItem("anneesEtude");
+    const filiereData = localStorage.getItem("filieres");
+    //
+    if (anneeData) {
+      // console.log("🚀 ---- anneeData local --- :");
+      setAnneesEtude(JSON.parse(anneeData));
+    } else {
+      AnneesEtudeService.getAllAnneesEtude()
+        .then((response) => {
+          // console.log("🚀 ---- AnneesEtude --- :", response[0]);
+          console.log(Array.isArray(response));
+          setIsLoading(false);
+          localStorage.setItem("anneesEtude", JSON.stringify(response));
+          setAnneesEtude(response);
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          setIsLoading(false);
+          setError(true);
+        });
+    }
+    // Filiere data
+    if (filiereData) {
+      // console.log("🚀 ---- filiereData local --- :");
+      setFiliere(JSON.parse(filiereData));
+    } else {
+      FiliereService.getAllFiliere()
+        .then((response) => {
+          setIsLoading(false);
+          localStorage.setItem("filieres", JSON.stringify(response));
+          setFiliere(response);
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          setIsLoading(false);
+          setError(true);
+        });
+    }
   }, []);
 
   const handleRowClick = (index, codeMat) => {
@@ -221,6 +267,24 @@ const MajNotes = () => {
               <option value="admis">1ere année</option>
               <option value="echoues">2e année</option>
             </select>
+            <div>
+              <select
+                value={typeAnneEtude}
+                onChange={(e) => {
+                  setypeAnneEtude(e.target.value);
+                  console.log("----- type annee---  ", e.target.value);
+                  localStorage.setItem(
+                    "anneeEtudeCourante",
+                    JSON.stringify(e.target.value)
+                  );
+                }}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="1">1ere année</option>
+                <option value="2">2eme année</option>
+                <option value="3">3eme année</option>
+              </select>
+            </div>
           </div>
 
           <div className="flex items-center space-x-10 ml-60 mt-7">
@@ -356,9 +420,79 @@ const MajNotes = () => {
       );
     }
   };
-
+  {
+    anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
+  }
   return (
     <div className="p-6 bg-transparent">
+      <div className="flex items-center gap-4 ml-50 mt-0">
+        <div>
+          <select
+            value={typeParcours}
+            onChange={(e) => {
+              setTypeParcours(e.target.value);
+              console.log("----- parcours ---  ", e.target.value);
+              localStorage.setItem(
+                "parcoursCourante",
+                JSON.stringify(e.target.value)
+              );
+            }}
+            className="p-2 border-none rounded-md shadow-sm text-sm"
+          >
+            {grades.length == 0 ? (
+              <option value="--">-----------</option>
+            ) : (
+              grades.map((g, index) => (
+                <option key={index} value={g}>
+                  {g}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
+        <div>
+          <select
+            value={typeFiliere}
+            onChange={(e) => {
+              setTypeFiliere(e.target.value);
+              console.log("----- filiere---  ", e.target.value);
+              localStorage.setItem(
+                "filiereCourante",
+                JSON.stringify(e.target.value)
+              );
+            }}
+            className="p-2 border-none rounded-md shadow-sm text-sm"
+          >
+            {filiere.length == 0 ? (
+              <option value="--">------------</option>
+            ) : (
+              filiere.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.libelle}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
+        <div>
+          <select
+            value={typeAnneEtude}
+            onChange={(e) => {
+              setypeAnneEtude(e.target.value);
+              console.log("----- type annee---  ", e.target.value);
+              localStorage.setItem(
+                "anneeEtudeCourante",
+                JSON.stringify(e.target.value)
+              );
+            }}
+            className="p-2 border-none rounded-md shadow-sm text-sm"
+          >
+            <option value="1">1ere année</option>
+            <option value="2">2eme année</option>
+            <option value="3">3eme année</option>
+          </select>
+        </div>
+      </div>
       <div className="flex flex-col gap-6">
         {!showEtudiants && (
           <>
