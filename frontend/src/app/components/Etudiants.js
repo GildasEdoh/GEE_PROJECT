@@ -4,6 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
+import "jspdf-autotable";
 /**
  * Return the page which contains the table of students
  */
@@ -104,62 +105,83 @@ const Etudiants = () => {
   }, []);
 
   const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
-    if (!etudiants || etudiants.length === 0) {
-      alert("Aucune donnée d'étudiant à imprimer !");
+    if (!etudiants?.length) {
+      alert("Aucun étudiant à imprimer !");
       return;
     }
 
-    const doc = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+    const doc = new jsPDF({ orientation: "landscape" }); // Mode paysage pour plus d'espace
 
-    // Ajouter le titre
+    // Titre
     doc.setFontSize(16);
-    doc.text(titre, 105, 15, { align: "center" }); // Centré horizontalement (x=105mm pour A4)
+    doc.text(titre, 148, 15, { align: "center" }); // Centré en paysage (A4 landscape: 297mm)
 
-    // En-têtes du tableau
+    // En-têtes du tableau (correspondant à vos colonnes Excel)
     const headers = [
-      "N° Carte",
+      "N°",
+      "Ets",
+      "Parcours",
+      "Nb. insc.",
+      "Carte",
       "Nom",
       "Prénoms",
       "Sexe",
-      "Date Naiss.",
-      "Lieu Naiss.",
-      "Téléphone",
+      "Né le",
+      "À",
+      "Nationalité",
+      "Tél",
+      "Avant",
+      "Courant",
+      "Total",
+      "%",
     ];
 
-    // Données formatées pour le tableau
+    // Données formatées
     const data = etudiants.map((etudiant) => [
-      etudiant.carte,
-      etudiant.nom,
-      etudiant.prenoms,
-      etudiant.sexe,
-      etudiant.dateNaissance,
-      etudiant.lieuNaissance,
-      etudiant.telephone,
+      etudiant["N°"] || "",
+      etudiant["Ets"] || "",
+      etudiant["Parcours"] || "",
+      etudiant["Nb. insc."] || "",
+      etudiant["Carte"] || "",
+      etudiant["Nom"] || "",
+      etudiant["Prénoms"] || "",
+      etudiant["Sexe"] || "",
+      etudiant["Né le"] || "",
+      etudiant["À"] || "",
+      etudiant["Nationalité"] || "",
+      etudiant["Tél"] || "",
+      etudiant["Avant"] || "",
+      etudiant["Courant"] || "",
+      etudiant["Total"] || "",
+      etudiant["%"] || "",
     ]);
 
-    // Générer le tableau (autoTable est un plugin de jsPDF)
+    // Générer le tableau (largeur ajustée en paysage)
     doc.autoTable({
       head: [headers],
       body: data,
-      startY: 25, // Position verticale après le titre
-      margin: { top: 20 },
+      startY: 25,
+      margin: { left: 10, right: 10 },
       styles: {
-        fontSize: 10,
-        cellPadding: 3,
+        fontSize: 8, // Taille réduite pour tout afficher
+        cellPadding: 2,
         overflow: "linebreak",
       },
       headStyles: {
-        fillColor: "#2c3e50", // Couleur d'en-tête
+        fillColor: "#2c3e50",
         textColor: "#ffffff",
+      },
+      columnStyles: {
+        0: { cellWidth: 10 }, // N°
+        4: { cellWidth: 15 }, // Carte
+        5: { cellWidth: 20 }, // Nom
+        6: { cellWidth: 20 }, // Prénoms
+        // Ajustez selon vos besoins
       },
     });
 
-    // Sauvegarder le PDF
-    doc.save(`${titre}_${new Date().toLocaleDateString()}.pdf`);
+    // Télécharger
+    doc.save(`${titre}.pdf`);
   };
 
   // fonction pour importer un fichier excel
