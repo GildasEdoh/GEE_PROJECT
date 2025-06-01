@@ -22,9 +22,9 @@ class AuthService {
     };
     
     // 2️⃣ Fonction pour se connecter
-    public async loginUser(email: string, password: string) {
+    public async loginUser(username: string, password: string) {
       await this.getCsrfToken(); // ⚠️ Nécessaire pour Sanctum
-      return api.post("/login", { email, password });
+      return api.post("/login", { username, password });
     };
     
     // 3️⃣ Vérifier l'utilisateur connecté

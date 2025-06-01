@@ -360,7 +360,7 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           <input
-                            value={editedData.telephone}
+                            value={editedData.Tel_1}
                             onChange={(e) =>
                               setEditedData({
                                 ...editedData,
@@ -422,7 +422,7 @@ const Etudiants = () => {
                         <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
                         <td className="px-4 py-2 text-center">
                           {" "}
-                          {etudiant.telephone}{" "}
+                          {etudiant.Tel_1}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           <div className="flex gap-2 justify-center">

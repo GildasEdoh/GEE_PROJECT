@@ -181,6 +181,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/login', [AuthController::class, 'store']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
