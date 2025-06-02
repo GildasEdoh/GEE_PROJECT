@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import MatiereService from "@/services/MatiereService";
-import * as XLSX from "xlsx";
+import {importMatiereToExcel, exportMatieresToExcel} from "./utils/ExcelUtils"
 
 /**
  * This page provides the list of matieres and allow all crud operations on this list
@@ -120,154 +120,7 @@ const Matieres = () => {
       });
   }, []);
 
-  // fonction pour importer et traiter le fichier excel
-  const handleImportExcel = (e) => {
-    const file = e.target.files[0];
-    if (!file) {
-      alert("Veuillez sélectionner un fichier Excel.");
-      return;
-    }
 
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const data = evt.target.result;
-      try {
-        const workbook = XLSX.read(data, { type: "binary" });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-        // Vérification de la présence des colonnes attendues
-        const requiredColumns = ["libelle", "abreviation", "optionnelle"];
-        const sheetColumns = Object.keys(jsonData[0] || {});
-
-        // Vérifier si toutes les colonnes nécessaires existent dans le fichier
-        const isValidStructure = requiredColumns.every((col) =>
-          sheetColumns.includes(col)
-        );
-        if (!isValidStructure) {
-          alert(
-            "Le fichier Excel ne correspond pas à la structure attendue. Assurez-vous qu'il contient les colonnes 'libelle', 'abreviation' et 'optionnelle'."
-          );
-          return;
-        }
-
-        // Valider et formater les données
-        const formattedData = jsonData
-          .map((row) => {
-            if (!row.libelle || !row.abreviation || !row.optionnelle) {
-              alert("Certaines données sont manquantes dans le fichier Excel.");
-              return null;
-            }
-            const optionnelleValue = row.optionnelle === "Oui" ? "Oui" : "Non";
-            return {
-              libelle: row.libelle,
-              abreviation: row.abreviation,
-              optionnelle: optionnelleValue,
-            };
-          })
-          .filter((item) => item !== null); // On filtre les entrées nulles
-
-        // Mettre à jour l'état avec les données importées
-        setMatieres((prevMatieres) => [...prevMatieres, ...formattedData]);
-      } catch (error) {
-        alert(
-          "Erreur de lecture du fichier Excel. Assurez-vous qu'il soit valide."
-        );
-      }
-    };
-    reader.onerror = () => {
-      alert("Erreur lors de l'ouverture du fichier.");
-    };
-    reader.readAsBinaryString(file);
-  };
-
-  // fonction pour importer le fichier excel et le mettre dans un fichier .json
-  const importExcelAndSaveAsJSON = (event) => {
-    const file = event.target.files[0];
-
-    if (!file) {
-      alert("Veuillez sélectionner un fichier Excel.");
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: "binary" });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-      // Validation des colonnes attendues
-      const expectedHeaders = ["libelle", "abreviation", "optionnelle"];
-      const headersMatch = expectedHeaders.every(
-        (header) => header in jsonData[0]
-      );
-
-      if (!headersMatch) {
-        alert(
-          "Le format du fichier est invalide. Veuillez respecter les colonnes : libelle, abreviation, optionnelle."
-        );
-        return;
-      }
-
-      const formattedData = jsonData.map((item, index) => ({
-        id: Date.now() + index,
-        libelle: item.libelle,
-        abreviation: item.abreviation,
-        optionnelle: item.optionnelle === 1 || item.optionnelle === "1" ? 1 : 0,
-      }));
-
-      // Création du fichier JSON
-      const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-
-      // Création d'un lien pour forcer le téléchargement
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "matieres_importees.json";
-      a.click();
-
-      // Libère l’URL une fois le fichier téléchargé
-      URL.revokeObjectURL(url);
-    };
-
-    reader.readAsBinaryString(file);
-  };
-
-  // fonction pour exporter les donnees en fichier excel
-  const exportMatieresToExcel = (matieres) => {
-    const worksheet = XLSX.utils.json_to_sheet(matieres);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Matieres");
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-
-    const now = new Date();
-    const timestamp = now
-      .toISOString()
-      .slice(0, 16)
-      .replace("T", "_")
-      .replace(":", "-");
-    link.download = `matieres_${timestamp}.xlsx`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -527,7 +380,7 @@ const Matieres = () => {
               <input
                 type="file"
                 accept=".xlsx, .xls"
-                onChange={handleImportExcel}
+                onChange={importMatiereToExcel}
                 className="hidden"
               />
             </label>

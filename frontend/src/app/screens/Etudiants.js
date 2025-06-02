@@ -7,10 +7,15 @@ import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
 import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 
-import {exportEtudiantsToExcel, handleImportEtudiantsExcel, handleImportExcelToJson} from '../components/BottomButtons'
+// import {exportEtudiantsToExcel, handleImportEtudiantsExcel, handleImportExcelToJson} from '../components/BottomButtons'
 /**
  * Return the page which contains the table of students
  */
+import {
+  generatePDF,
+  importEtudiantToExcel,
+  exportEtudiantsToExcel,
+} from "../utils/ExcelUtils.js";
 
 const Etudiants = () => {
   const [editIndex, setEditIndex] = useState(null);
@@ -458,7 +463,10 @@ const Etudiants = () => {
           </div>
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
-            <button className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
+            <button
+              className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer"
+              onClick={() => generatePDF(etudiants, "Liste des Étudiants")}
+            >
               Imprimer la liste
             </button>
 
@@ -470,7 +478,7 @@ const Etudiants = () => {
               <input
                 type="file"
                 accept=".xlsx, .xls"
-                onChange={handleImportExcelToJson}
+                onChange={importEtudiantToExcel}
                 className="hidden"
               />
             </label>
@@ -482,7 +490,6 @@ const Etudiants = () => {
               Exporter au format excel
             </button>
           </div>
-
         </div>
       </div>
     );
