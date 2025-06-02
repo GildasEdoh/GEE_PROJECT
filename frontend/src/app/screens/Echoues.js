@@ -168,7 +168,7 @@ const Echoues = () => {
       <div className="flex-grow">
         <div className="flex flex-col">
           <div className="bg-white flex items-center z-4 pt-3 pb-3  pr-4 justify-between">
-            <h1 className="text-2xl font-bold">Liste des Étudiants</h1>
+            <h1 className="text-2xl font-bold">Liste des Étudiants Echoués</h1>
 
             <div className="flex items-center gap-4">
               <div>

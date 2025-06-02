@@ -90,7 +90,7 @@ const Matieres = () => {
     setLibelle("");
     setAbreviation("");
     setOptionnelle("Non");
-    setCoeficient(1)
+    setCoeficient(1);
 
     MatiereService.addMatiere(newMatiere)
       .then((response) => {
@@ -139,7 +139,7 @@ const Matieres = () => {
     // Return the content of the page
     return (
       <div className="flex-grow">
-        <div className="sm:flex sm:flex-col sm:items-center xl:flex">
+        <div className="sm:flex sm:flex-col  ">
           <div className="p-6 bg-transparent w-full h-full flex flex-col xl:flex-row gap-6">
             {/* Tableau des matières */}
             <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
@@ -175,138 +175,142 @@ const Matieres = () => {
               </div>
               <div className="h-[350px] overflow-y-auto pl-4 pr-4 pb-3 flex flex-col w-full">
                 <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      CODE
-                    </th>
-                    <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      LIBELLE
-                    </th>
-                    <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      ABRÉVIATION
-                    </th>
-                    <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      OPTIONNELLE
-                    </th>
-                    <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      COEFFICIENT
-                    </th>
-                    <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                      ACTIONS
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matieres.map((matiere, index) => (
-                    <tr
-                      key={matiere.id}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
-                    >
-                      {editIndex === index ? (
-                        <>
-                          <td className="px-4 py-2 text-center">
-                            {`MAT${matieres.length + 1}${matiere.id}`}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <input
-                              type="text"
-                              className="w-full p-1 border rounded"
-                              value={editData.libelle}
-                              onChange={(e) => handleInputChange(e, "libelle")}
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <input
-                              type="text"
-                              className="w-full p-1 border rounded"
-                              value={editData.abreviation}
-                              onChange={(e) =>
-                                handleInputChange(e, "abreviation")
-                              }
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <select
-                              className="w-full p-1 border rounded"
-                              value={editData.optionnelle}
-                              onChange={(e) =>
-                                handleInputChange(e, "optionnelle")
-                              }
-                            >
-                              <option value="Oui">Oui</option>
-                              <option value="Non">Non</option>
-                            </select>
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <input
-                              type="number"
-                              min="1"
-                              max="10"
-                              placeholder="1"
-                              className="w-full p-1 border rounded"
-                              value={editData.coefficient}
-                              onChange={(e) =>
-                                handleInputChange(e, "coefficient")
-                              }
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <div className="flex gap-2 justify-center">
-                              <button
-                                className="text-green-500 hover:text-green-700"
-                                onClick={() => handleSave(index)}
-                              >
-                                <MdCheck size={18} />
-                              </button>
-                              <button
-                                className="text-gray-500 hover:text-gray-700"
-                                onClick={handleCancel}
-                              >
-                                <MdClose size={18} />
-                              </button>
-                            </div>
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td className="px-4 py-2 text-center">
-                            {`MAT${matieres.length + 1}${matiere.id}`}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.libelle}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.abreviation}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.optionnelle == 1 ? "Oui" : "Non"}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.coefficient}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <div className="flex gap-2 justify-center">
-                              <button
-                                className="text-blue-500 hover:text-blue-700"
-                                onClick={() => handleEditClick(index, matiere)}
-                              >
-                                <MdEdit size={18} />
-                              </button>
-                              <button
-                                className="text-red-500 hover:text-red-700"
-                                onClick={() => handleDelete(index)}
-                              >
-                                <MdDelete size={18} />
-                              </button>
-                            </div>
-                          </td>
-                        </>
-                      )}
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                        CODE
+                      </th>
+                      <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                        LIBELLE
+                      </th>
+                      <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                        ABRÉVIATION
+                      </th>
+                      <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                        OPTIONNELLE
+                      </th>
+                      <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                        COEFFICIENT
+                      </th>
+                      <th className="px-4 py-2 text-gray-700 text-sm text-center">
+                        ACTIONS
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {matieres.map((matiere, index) => (
+                      <tr
+                        key={matiere.id}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                      >
+                        {editIndex === index ? (
+                          <>
+                            <td className="px-4 py-2 text-center">
+                              {`MAT${matieres.length + 1}${matiere.id}`}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <input
+                                type="text"
+                                className="w-full p-1 border rounded"
+                                value={editData.libelle}
+                                onChange={(e) =>
+                                  handleInputChange(e, "libelle")
+                                }
+                              />
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <input
+                                type="text"
+                                className="w-full p-1 border rounded"
+                                value={editData.abreviation}
+                                onChange={(e) =>
+                                  handleInputChange(e, "abreviation")
+                                }
+                              />
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <select
+                                className="w-full p-1 border rounded"
+                                value={editData.optionnelle}
+                                onChange={(e) =>
+                                  handleInputChange(e, "optionnelle")
+                                }
+                              >
+                                <option value="Oui">Oui</option>
+                                <option value="Non">Non</option>
+                              </select>
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <input
+                                type="number"
+                                min="1"
+                                max="10"
+                                placeholder="1"
+                                className="w-full p-1 border rounded"
+                                value={editData.coefficient}
+                                onChange={(e) =>
+                                  handleInputChange(e, "coefficient")
+                                }
+                              />
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <div className="flex gap-2 justify-center">
+                                <button
+                                  className="text-green-500 hover:text-green-700"
+                                  onClick={() => handleSave(index)}
+                                >
+                                  <MdCheck size={18} />
+                                </button>
+                                <button
+                                  className="text-gray-500 hover:text-gray-700"
+                                  onClick={handleCancel}
+                                >
+                                  <MdClose size={18} />
+                                </button>
+                              </div>
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-4 py-2 text-center">
+                              {`MAT${matieres.length + 1}${matiere.id}`}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              {matiere.libelle}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              {matiere.abreviation}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              {matiere.optionnelle == 1 ? "Oui" : "Non"}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              {matiere.coefficient}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <div className="flex gap-2 justify-center">
+                                <button
+                                  className="text-blue-500 hover:text-blue-700"
+                                  onClick={() =>
+                                    handleEditClick(index, matiere)
+                                  }
+                                >
+                                  <MdEdit size={18} />
+                                </button>
+                                <button
+                                  className="text-red-500 hover:text-red-700"
+                                  onClick={() => handleDelete(index)}
+                                >
+                                  <MdDelete size={18} />
+                                </button>
+                              </div>
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
             {/* FORMULAIRE D'AJOUT */}

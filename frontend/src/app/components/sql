@@ -1,0 +1,7 @@
+SELECT id FROM `annees_universitaire` WHERE annee_univ="2024-2025"; //année univ
+SELECT id FROM `sessions` WHERE libelle="session normale";//session
+SELECT id FROM `evaluations` WHERE libelle="Examen Final Harmattan";        // eva
+SELECT id FROM `types_evaluation` WHERE libelle="Controle Continu";//type eval
+
+
+SELECT etm.id FROM evaluations_matieres_types AS etm JOIN evaluations_matieres AS em ON etm.fk_evaluation_matiere = em.id JOIN evaluations AS e ON em.fk_evaluation = e.id JOIN sessions AS s ON em.fk_session = s.id JOIN annees_universitaire AS au ON em.fk_annee_univ = au.id JOIN types_evaluation AS te ON etm.fk_type_evaluation = te.id WHERE e.libelle = 'Examen Final Harmattan' AND s.libelle = 'session normale' AND em.fk_matiere = 1 AND au.annee_univ = '2024-2025' AND te.libelle = 'Controle Continu';
