@@ -420,11 +420,8 @@ const MajNotes = () => {
       );
     }
   };
-  {
-    anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
-  }
   return (
-    <div className="ml-65 mt-15 p-6 bg-transparent flex flex-col gap-6 w-2/3 h-2/3">
+    <div className="p-6 bg-transparent flex flex-col gap-6">
       {!showEtudiants && (
         <>
           <div className="w-full">

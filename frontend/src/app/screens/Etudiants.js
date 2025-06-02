@@ -5,25 +5,12 @@ import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
-<<<<<<< HEAD
 import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 import {
   generatePDF,
   importEtudiantToExcel,
   exportEtudiantsToExcel,
 } from "../utils/ExcelUtils.js";
-=======
-import { getGrades } from "../utils/parseAnnee";
-
-import {
-  exportEtudiantsToExcel,
-  handleImportEtudiantsExcel,
-  handleImportExcelToJson,
-} from "../components/BottomButtons";
-/**
- * Return the page which contains the table of students
- */
->>>>>>> lena
 
 const Etudiants = () => {
   const [editIndex, setEditIndex] = useState(null);
@@ -153,7 +140,6 @@ const Etudiants = () => {
         });
     }
   }, []);
-<<<<<<< HEAD
 
   const updateEtudiant = () => {
     // Reconstitution du parcours
@@ -178,16 +164,6 @@ const Etudiants = () => {
         ", anneeCurId = " + anneeCurId);
     setIsLoading(true);
   }
-=======
-  console.log(
-    " etudiant page anneeUnivCourante ----- : ",
-    localStorage.getItem("anneeUnivCourante")
-  );
-  console.log(
-    " etudiant page sessionCourante ------ : ",
-    localStorage.getItem("sessionCourante")
-  );
->>>>>>> lena
 
   if (isLoading) {
     return (
@@ -219,20 +195,11 @@ const Etudiants = () => {
                   value={typeParcours}
                   onChange={(e) => {
                     setTypeParcours(e.target.value);
-<<<<<<< HEAD
                     // console.log('----- parcours ---  ', e.target.value);
                     // localStorage.setItem("gradeCourant", JSON.stringify(e.target.value));
                     updateEtudiant()
                     }
                   }
-=======
-                    console.log("----- parcours ---  ", e.target.value);
-                    localStorage.setItem(
-                      "parcoursCourante",
-                      JSON.stringify(e.target.value)
-                    );
-                  }}
->>>>>>> lena
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
                   {grades.length == 0 ? (
@@ -251,19 +218,10 @@ const Etudiants = () => {
                 <select
                   value={idtypeFiliere}
                   onChange={(e) => {
-<<<<<<< HEAD
                     setIdTypeFiliere(e.target.value);
                     // console.log('----- filiere---  ', e.target.value);
                     // localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
                     updateEtudiant()
-=======
-                    setTypeFiliere(e.target.value);
-                    console.log("----- filiere---  ", e.target.value);
-                    localStorage.setItem(
-                      "filiereCourante",
-                      JSON.stringify(e.target.value)
-                    );
->>>>>>> lena
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -282,19 +240,10 @@ const Etudiants = () => {
                 <select
                   value={typeAnneEtude}
                   onChange={(e) => {
-<<<<<<< HEAD
                     setypeAnneEtude(e.target.value)
                     // console.log('----- type annee---  ', e.target.value);
                     // localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
                     updateEtudiant()
-=======
-                    setypeAnneEtude(e.target.value);
-                    console.log("----- type annee---  ", e.target.value);
-                    localStorage.setItem(
-                      "anneeEtudeCourante",
-                      JSON.stringify(e.target.value)
-                    );
->>>>>>> lena
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
