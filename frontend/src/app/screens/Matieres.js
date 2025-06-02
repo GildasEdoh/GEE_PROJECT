@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import MatiereService from "@/services/MatiereService";
-import {importMatiereToExcel, exportMatieresToExcel} from "./utils/ExcelUtils"
+import {importMatiereToExcel, exportMatieresToExcel} from "../utils/ExcelUtils"
 
 /**
  * This page provides the list of matieres and allow all crud operations on this list
