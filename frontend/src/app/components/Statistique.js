@@ -349,9 +349,6 @@ return (
         <div className="bg-white rounded-xl shadow-md p-6 mb-8">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Performance par matière</h2>
-                <button className="text-blue-600 hover:text-blue-800 text-sm cursor-pointer">
-                    Exporter les données
-                </button>
             </div>
             <div className="h-134">
                 <Bar data={chartData} options={options} />
