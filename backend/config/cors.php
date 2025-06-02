@@ -12,11 +12,7 @@ return [
     |
     */
 
-<<<<<<< HEAD
     'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'register', 'logout', 'dashboard', 'etudiants', '*'],  // Routes API et Sanctum
-=======
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'register', 'logout', 'dashboard', 'etudiants', '*', 'matieres'],  // Routes API et Sanctum
->>>>>>> 2035294265b568124cb1283e7b2c5a79b91105d0
 
     'allowed_methods' => ['*'],  // Autoriser toutes les méthodes HTTP
 
