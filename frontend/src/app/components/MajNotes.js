@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import EtudiantService from "@/services/EtudiantService";
 import MatiereService from "@/services/MatiereService";
 import NoteService from "@/services/NoteService";
-import { getGrades } from "../utils/parseAnnee";
-import AnneesEtudeService from "@/services/AnneesEtudeService";
-import FiliereService from "@/services/FiliereService";
 
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 
@@ -19,14 +16,10 @@ const MajNotes = () => {
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
   const [evaluation, setEvaluation] = useState("Devoir");
-  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
-  const [typeParcours, setTypeParcours] = useState("Licence");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
-  const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filiere, setFiliere] = useState([]);
-  var grades = [];
+  const [typeParcours, setTypeParcours] = useState("admis");
+  const [typeFiliere, setTypeFiliere] = useState("admis");
+  const [typeAnneEtude, setypeAnneEtude] = useState("admis");
 
-  // Recuperation des matières
   useEffect(() => {
     MatiereService.getAllMatiere()
       .then((response) => {
@@ -38,48 +31,6 @@ const MajNotes = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, []);
-
-  //Recuperation des années d'étude et des filières
-  useEffect(() => {
-    const anneeData = localStorage.getItem("anneesEtude");
-    const filiereData = localStorage.getItem("filieres");
-
-    if (anneeData) {
-      // console.log("🚀 ---- anneeData local --- :");
-      setAnneesEtude(JSON.parse(anneeData));
-    } else {
-      AnneesEtudeService.getAllAnneesEtude()
-        .then((response) => {
-          // console.log("🚀 ---- AnneesEtude --- :", response[0]);
-          console.log(Array.isArray(response));
-          setIsLoading(false);
-          localStorage.setItem("anneesEtude", JSON.stringify(response));
-          setAnneesEtude(response);
-        })
-        .catch((error) => {
-          console.error("Erreur :", error);
-          setIsLoading(false);
-          setError(true);
-        });
-    }
-    // Filiere data
-    if (filiereData) {
-      // console.log("🚀 ---- filiereData local --- :");
-      setFiliere(JSON.parse(filiereData));
-    } else {
-      FiliereService.getAllFiliere()
-        .then((response) => {
-          setIsLoading(false);
-          localStorage.setItem("filieres", JSON.stringify(response));
-          setFiliere(response);
-        })
-        .catch((error) => {
-          console.error("Erreur :", error);
-          setIsLoading(false);
-          setError(true);
-        });
-    }
   }, []);
 
   const handleRowClick = (index, codeMat) => {
@@ -160,7 +111,7 @@ const MajNotes = () => {
       const moyenne = parseFloat(editedData.moyenne);
 
       // Validation des champs requis
-      if (evaluation === "Devoir") {
+      if (control === "Devoir") {
         if (isNaN(devoir) || devoir < 0 || devoir > 20) {
           alert("Veuillez entrer une note de devoir valide entre 0 et 20.");
           setdevoir("");
@@ -175,7 +126,7 @@ const MajNotes = () => {
         });
 
         updatedEtudiants[index] = { ...etudiant, devoir };
-      } else if (evaluation === "Examen") {
+      } else if (control === "Examen") {
         if (
           isNaN(devoir) ||
           devoir < 0 ||
@@ -242,8 +193,8 @@ const MajNotes = () => {
       );
     } else {
       return (
-        <div className="ml-5 mt-0 w-full">
-          <div className="flex items-center gap-4 ml-20">
+        <div className="ml-20 mt-0 w-full">
+          <div className="flex items-center gap-4 ml-50">
             <select
               value={typeParcours}
               onChange={(e) => setTypeParcours(e.target.value)}
@@ -262,39 +213,36 @@ const MajNotes = () => {
               <option value="admis">Systèmes et Réseaux</option>
               <option value="echoues">Informatique et Systèmes</option>
             </select>
-
-            <div>
-              <select
-                value={typeAnneEtude}
-                onChange={(e) => {
-                  setypeAnneEtude(e.target.value);
-                  console.log("----- type annee---  ", e.target.value);
-                  localStorage.setItem(
-                    "anneeEtudeCourante",
-                    JSON.stringify(e.target.value)
-                  );
-                }}
-                className="p-2 border-none rounded-md shadow-sm text-sm"
-              >
-                <option value="1">1ere année</option>
-                <option value="2">2eme année</option>
-                <option value="3">3eme année</option>
-              </select>
-              <span className="text-black font-bold text-sm ml-5">
-                Evaluation
-              </span>
-              <select
-                value={evaluation}
-                onChange={(e) => setEvaluation(e.target.value)}
-                className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-3"
-              >
-                <option>Devoir</option>
-                <option>Examen</option>
-              </select>
-            </div>
+            <select
+              value={typeAnneEtude}
+              onChange={(e) => setypeAnneEtude(e.target.value)}
+              className="p-2 border-none rounded-md shadow-sm text-sm"
+            >
+              <option value="admis">1ere année</option>
+              <option value="echoues">2e année</option>
+            </select>
           </div>
 
-          {/* <div className="flex items-center space-x-10 ml-60 mt-7"></div> */}
+          <div className="flex items-center space-x-10 ml-6 mt-7">
+            <span className="text-black font-bold text-sm">Evaluation</span>
+            <select
+              value={evaluation}
+              onChange={(e) => setEvaluation(e.target.value)}
+              className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white"
+            >
+              <option>Examen Final Harmattan</option>
+              <option>Examen Final Mousson</option>
+            </select>
+            <span className="text-black font-bold text-sm">Type control</span>
+            <select
+              value={control}
+              onChange={(e) => setEvaluation(e.target.value)}
+              className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white"
+            >
+              <option>Devoir</option>
+              <option>Examen</option>
+            </select>
+          </div>
 
           <div className="border p-4 mt-10">
             <table className="w-full text-left border-collapse">
@@ -417,139 +365,110 @@ const MajNotes = () => {
       );
     }
   };
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
-      </div>
-    );
-  } else if (!isLoading && error) {
-    return (
-      <div className="ml-64 mt-20 w-2/3">
-        <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
-          ⚠️Impossible de récupérer la liste. erreur serveur
-        </div>
-      </div>
-    );
-  } else {
-    {
-      anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
-    }
 
-    return (
-      <div className="flex-grow">
-        <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
-          {!showEtudiants && (
-            <>
-              <div className="w-full">
-                <div className="flex items-center gap-4 ">
-                  <h2 className="text-lg font-bold ml-5  mt-5">
-                    Liste des matières
-                  </h2>
-                  <div className="flex items-center gap-4 ml-70">
-                    <select
-                      value={typeParcours}
-                      onChange={(e) => setTypeParcours(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">Licence</option>
-                      <option value="echoues">Master</option>
-                    </select>
-                    <select
-                      value={typeFiliere}
-                      onChange={(e) => setTypeFiliere(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">Genie Logiciel</option>
-                      <option value="echoues">Genie Civil</option>
-                      <option value="admis">Systèmes et Réseaux</option>
-                      <option value="echoues">Informatique et Systèmes</option>
-                    </select>
-                    <select
-                      value={typeAnneEtude}
-                      onChange={(e) => setypeAnneEtude(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">1ere année</option>
-                      <option value="echoues">2e année</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="overflow-auto rounded-lg shadow-md mt-4">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="px-4 py-2 text-sm text-center">
-                          NUMERO
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          LIBELLE
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          ABRÉVIATION
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          OPTIONNELLE
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          COEFFICIENT
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {matieres.map((matiere, index) => (
-                        <tr
-                          key={matiere.id}
-                          className={`cursor-pointer ${
-                            selectedIndex === index
-                              ? "bg-blue-300"
-                              : index % 2 === 0
-                              ? "bg-white"
-                              : "bg-gray-100"
-                          }`}
-                          onClick={() => handleRowClick(index, matiere.id)}
-                        >
-                          <td className="px-4 py-2 text-center">
-                            MAT{matiere.id}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.libelle}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.abreviation}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.optionnelle === 1 ? "Oui" : "Non"}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.coefficient}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <button
-                className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
-                  selectedIndex === null
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-500 hover:bg-green-700"
-                }`}
-                onClick={handleValidation}
-                disabled={selectedIndex === null}
+  return (
+    <div className="ml-65 mt-15 p-6 bg-transparent flex flex-col gap-6 w-2/3 h-2/3">
+      {!showEtudiants && (
+        <>
+          <div className="w-full">
+            <div className="flex items-center gap-4 ml-50">
+              <select
+                value={typeParcours}
+                onChange={(e) => setTypeParcours(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
               >
-                Valider
-              </button>
-            </>
-          )}
-          {showEtudiants && afficheEtudiants()}
-        </div>
-      </div>
-    );
-  }
+                <option value="admis">Licence</option>
+                <option value="echoues">Master</option>
+              </select>
+              <select
+                value={typeFiliere}
+                onChange={(e) => setTypeFiliere(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">Genie Logiciel</option>
+                <option value="echoues">Genie Civil</option>
+                <option value="admis">Systèmes et Réseaux</option>
+                <option value="echoues">Informatique et Systèmes</option>
+              </select>
+              <select
+                value={typeAnneEtude}
+                onChange={(e) => setypeAnneEtude(e.target.value)}
+                className="p-2 border-none rounded-md shadow-sm text-sm"
+              >
+                <option value="admis">1ere année</option>
+                <option value="echoues">2e année</option>
+              </select>
+            </div>
+
+            <h2 className="text-lg font-bold text-center m-2 mt-5">
+              Liste des matières
+            </h2>
+            <div className="overflow-auto rounded-lg shadow-md mt-4">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="px-4 py-2 text-sm text-center">NUMERO</th>
+                    <th className="px-4 py-2 text-sm text-center">LIBELLE</th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      ABRÉVIATION
+                    </th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      OPTIONNELLE
+                    </th>
+                    <th className="px-4 py-2 text-sm text-center">
+                      COEFFICIENT
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {matieres.map((matiere, index) => (
+                    <tr
+                      key={matiere.id}
+                      className={`cursor-pointer ${
+                        selectedIndex === index
+                          ? "bg-blue-300"
+                          : index % 2 === 0
+                          ? "bg-white"
+                          : "bg-gray-100"
+                      }`}
+                      onClick={() => handleRowClick(index, matiere.id)}
+                    >
+                      <td className="px-4 py-2 text-center">MAT{matiere.id}</td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.libelle}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.abreviation}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.optionnelle === 1 ? "Oui" : "Non"}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {matiere.coefficient}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <button
+            className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
+              selectedIndex === null
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-500 hover:bg-green-700"
+            }`}
+            onClick={handleValidation}
+            disabled={selectedIndex === null}
+          >
+            Valider
+          </button>
+        </>
+      )}
+      {showEtudiants && afficheEtudiants()}
+    </div>
+  );
 };
 
 export default MajNotes;
