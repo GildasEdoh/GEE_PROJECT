@@ -6,7 +6,7 @@
 import Matieres from "./Matieres";
 import Etudiants from "./Etudiants"
 import Accueil from "./Accueil"
-import MajNotes from "./MajNotes"
+import Notes from "./Notes"
 export default function Dashboard({ selectedMenu }) {
   const renderContent = () => {
     switch (selectedMenu) {
@@ -14,8 +14,8 @@ export default function Dashboard({ selectedMenu }) {
         return <Matieres />;
       case "Étudiants":
         return <Etudiants/>
-      case "Mise à jour Notes":
-        return <MajNotes/>
+      case "Notes":
+        return <Notes/>
       default:
         return <Accueil/>
     }
