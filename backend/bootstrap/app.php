@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'stripe/*',
             'http://localhost:8000/etudiants',
+            'http://localhost:8000/etudiants/matieres/{id_matiere}',
             'http://localhost:8000/matieres',
             'http://localhost:8000/coefficients',
             'http://localhost:8000/coefficient',
@@ -27,8 +28,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'http://localhost:8000/notes',
             'http://localhost:8000/typedetails',
             'http://localhost:8000/typedetails',
-            // 'http://127.0.0.1:8000/login',
-
+            'http://127.0.0.1:8000/register',
+            'http://127.0.0.1:8000/login',
         ]);
 
         $middleware->web(append: [

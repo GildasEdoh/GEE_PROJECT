@@ -64,7 +64,7 @@ const Login = () => {
             console.log("Utilisateur connecté :", data);
             alert("connexion" + data)
             alert("Connexion reussie ")
-            router.push("/dashboard"); // Rediriger après connexion
+            router.replace("/"); // Rediriger après connexion
         } else {
             setErrorMessage("Email ou mot de passe incorrect.");
         }
@@ -100,11 +100,11 @@ const Login = () => {
                     <form onSubmit={handleSubmit} style={styles.form}>
                         <div style={styles.formGroup}>
                             <input
-                                type="email"
+                                type="text"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 style={styles.input}
-                                placeholder="Adresse email"
+                                placeholder="Username"
                                 required
                             />
                             {/* <input

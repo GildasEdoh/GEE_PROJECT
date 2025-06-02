@@ -14,11 +14,14 @@ class Etudiant extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'numero_carte',
         'nom',
         'prenom',
-        'dateNaissance',
-        'lieuNaissance',
-        'sexe'
+        'date_naissance',
+        'lieu_naissance',
+        'sexe',
+        'telephone',
+        'id_etablissement',
     ];
 
     public function inscriptions()
@@ -29,5 +32,11 @@ class Etudiant extends Model
     public function notes()
     {
         return $this->hasMany(Note::class, 'fk_etudiant');
+    }
+
+    // Relation avec l'établissement (s'il existe une table Etablissements)
+    public function etablissement()
+    {
+        return $this->belongsTo(Etablissement::class, 'id_etablissement');
     }
 }

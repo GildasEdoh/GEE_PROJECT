@@ -17,15 +17,6 @@ class Matiere extends Model
         'libelle',
         'abreviation',
         'optionnelle',
+        'coefficient'
     ];
-
-    public function coefficients()
-    {
-        return $this->hasMany(Coefficient::class, 'fk_matiere');
-    }
-
-    public function evaluations()
-    {
-        return $this->hasMany(Evaluation::class, 'fk_matiere');
-    }
 }

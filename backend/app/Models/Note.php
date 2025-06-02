@@ -16,13 +16,13 @@ class Note extends Model
     protected $fillable = [
         'valeur',
         'gele',
-        'fk_evaluation',
+        'fk_evaluation_matiere_type',
         'fk_etudiant',
     ];
 
     public function evaluation()
     {
-        return $this->belongsTo(Evaluation::class, 'fk_evaluation');
+        return $this->belongsTo(EvaluationMatiereType::class, 'fk_evaluation_matiere_type');
     }
 
     public function etudiant()

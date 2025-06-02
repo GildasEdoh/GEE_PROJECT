@@ -116,7 +116,7 @@ const Sign = () => {
                         </div>
                         <div style={styles.buttonGroup}>
                             <button type="button" style={styles.cancelButton}>Annuler</button>
-                            <Link href={"/SignIn/Page.js"}>
+                            <Link href={"/SignIn"}>
                                 <button type="submit" style={styles.submitButton}>S&apos;inscrire</button>
                             </Link>
                         </div>
