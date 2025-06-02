@@ -252,10 +252,10 @@ const options = {
 // Données statistiques simulées
 const statsData = {
     general: [
-        { title: "Répartitions des notes/Matière", value: "1,245", icon: <FiUsers className="text-blue-500" />, change: "+5.2%" },
-        { title: "Répartitions des étudiants/Mention", value: "48", icon: <FiBook className="text-green-500" />, change: "+2" },
-        { title: "Fréquences des récalés /Matière", value: "78%", icon: <FiAward className="text-yellow-500" />, change: "+3%" },
-        { title: "Fréquences des résultats /Matière", value: "22%", icon: <FiXCircle className="text-red-500" />, change: "-3%" },
+        { title: "Répartitions des notes/Matière", icon: <FiUsers className="text-blue-500" />},
+        { title: "Répartitions des étudiants/Mention", icon: <FiBook className="text-green-500" />},
+        { title: "Fréquences des récalés /Matière", icon: <FiAward className="text-yellow-500" />},
+        { title: "Fréquences des résultats /Matière", icon: <FiXCircle className="text-red-500" />},
     ],
     parMatiere: [
         { matiere: "Droit civil", reussite: "85%", moyenne: "14.5" },
@@ -340,12 +340,6 @@ return (
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm">{stat.title}</p>
-                        <div className="flex items-end">
-                            <p className="text-2xl font-bold mr-2">{stat.value}</p>
-                            <span className={`text-sm ${stat.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                                {stat.change}
-                            </span>
-                        </div>
                     </div>
                 </button>
             ))}
