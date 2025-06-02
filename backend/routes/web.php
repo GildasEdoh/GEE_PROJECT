@@ -70,7 +70,7 @@ Route::prefix('etudiants')->group(function () {
 
     // Route::post('/bulk', [EtudiantController::class, 'bulkStore'])->name('etudiants.bulk'); // Ajouter plusieurs etudiants
     // Route::delete('/', [EtudiantController::class, 'destroyAll'])->name('etudiants.destroyAll'); // Suprimer plusieurs etudiants
-    // Route::get('/matieres/{id_matiere}', [EtudiantController::class, 'getAllEtudiantsBySubject'])->name('etudiants.getAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
+    Route::get('/matieres/{id_matiere}', [EtudiantController::class, 'getAllEtudiantsBySubject'])->name('etudiants.getAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
 });
 
 
