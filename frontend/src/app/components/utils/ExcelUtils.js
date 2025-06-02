@@ -2,7 +2,6 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-
 // --------------------------------- ETUDIANTS --------------------------------
 
 // fonction pour imprimer un fichier pdf |== ETUDIANTS
@@ -401,6 +400,44 @@ export const importMatiereToExcel = (e) => {
     alert("Erreur lors de l'ouverture du fichier.");
   };
   reader.readAsBinaryString(file);
+};
+
+//fonction pour imprimer un fichier pdf |== MATIERES
+export const exportMatieresToPDF = (matieres, titre = "Liste des Matieres") => {
+  const doc = new jsPDF({ orientation: "landscape" });
+
+  doc.setFontSize(16);
+  doc.text(titre, 148, 15, { align: "center" });
+
+  // Définir les en-têtes
+  const headers = [["CODE", "LIBELLE", "ABRÉVIATION", "OPTIONNELLE"]];
+
+  // Mapper les données
+  const data = matieres.map((matiere) => [
+    matiere.code,
+    matiere.libelle,
+    matiere.abreviation,
+    matiere.optionnelle ? "Oui" : "Non",
+  ]);
+
+  // Générer le tableau
+  autoTable(doc, {
+    startY: 20,
+    head: headers,
+    body: data,
+    styles: {
+      fontSize: 10,
+      cellPadding: 4,
+    },
+    headStyles: {
+      fillColor: [22, 160, 133],
+      textColor: 255,
+      halign: "center",
+    },
+  });
+
+  // Sauvegarder le fichier
+  doc.save("matieres.pdf");
 };
 
 // fonction pour importer le fichier excel en .json

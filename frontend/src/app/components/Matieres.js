@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import MatiereService from "@/services/MatiereService";
-import {importMatiereToExcel, exportMatieresToExcel} from "./utils/ExcelUtils"
+import {
+  importMatiereToExcel,
+  exportMatieresToExcel,
+  exportMatieresToPDF,
+} from "./utils/ExcelUtils";
 
 /**
  * This page provides the list of matieres and allow all crud operations on this list
@@ -118,7 +122,6 @@ const Matieres = () => {
         setError(true);
       });
   }, []);
-
 
   if (isLoading) {
     return (
@@ -352,7 +355,10 @@ const Matieres = () => {
             </div>
           )}
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 lg:mt-6 lg:w-full md:flex md:gap-2 sm:flex sm:gap-2">
-            <button className="px-2 py-2 md:w-72 lg:w-full w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
+            <button
+              className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer"
+              onClick={() => exportMatieresToPDF(matieres, "Liste des Matieres")}
+            >
               Imprimer la liste
             </button>
 
