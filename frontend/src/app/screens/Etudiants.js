@@ -161,8 +161,6 @@ const Etudiants = () => {
     const filireCouranteId = idtypeFiliere;
     console.log(" ---------------------------- indexes --------------- --------- ")
     console.log("anneeUnivCouranteIndex = " + anneesEtudes[0].niveau +
-      // ", anneeEtudeCouranteIndex = " + anneeEtudeCouranteIndex +
-      // ", sessionCouranteId = " + sessionCouranteId +
       ", filireCouranteId = " + filireCouranteId);
 
     setIsLoading(true)
