@@ -18,6 +18,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\AnneeUnivController;
 use App\Http\Controllers\TypeEvaluationController;
+use App\Http\Controllers\EtablissementController;
 /*
 |--------------------------------------------------------------------------
 | Routes Web
@@ -172,6 +173,13 @@ Route::prefix('anneesUnivs')->group(function () {
 // ====================================
 Route::prefix('filieres')->group(function () {
     Route::get('/', [FiliereController::class, 'index'])->name('filieres.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
+// 🏆 Gestion des etablissements
+// ====================================
+Route::prefix('etablissements')->group(function () {
+    Route::get('/', [EtablissementController::class, 'index'])->name('etablissements.index'); // Obtenir la liste des annees_etudes
 });
 
 // ====================================

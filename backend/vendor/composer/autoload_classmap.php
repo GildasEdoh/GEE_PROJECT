@@ -31,6 +31,7 @@ return array(
     'App\\Http\\Controllers\\Settings\\PasswordController' => $baseDir . '/app/Http/Controllers/Settings/PasswordController.php',
     'App\\Http\\Controllers\\Settings\\ProfileController' => $baseDir . '/app/Http/Controllers/Settings/ProfileController.php',
     'App\\Http\\Controllers\\TypeDetailsController' => $baseDir . '/app/Http/Controllers/TypeDetailsController.php',
+    'App\\Http\\Controllers\\TypeEvaluationController' => $baseDir . '/app/Http/Controllers/TypeEvaluationController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\HandleAppearance' => $baseDir . '/app/Http/Middleware/HandleAppearance.php',
     'App\\Http\\Middleware\\HandleCors' => $baseDir . '/app/Http/Middleware/HandleCors.php',
