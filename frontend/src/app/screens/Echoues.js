@@ -5,33 +5,31 @@ import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
 import * as XLSX from "xlsx";
-import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
-import {
-  generatePDF,
-  importEtudiantToExcel,
-  exportEtudiantsToExcel,
-} from "../utils/ExcelUtils.js";
+import { getGrades } from "../utils/parseAnnee";
 
-const Etudiants = () => {
+import {
+  exportEtudiantsToExcel,
+  handleImportEtudiantsExcel,
+  handleImportExcelToJson,
+} from "../components/BottomButtons";
+/**
+ * Return the page which contains the table of students
+ */
+
+const Echoues = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [idtypeFiliere, setIdTypeFiliere] = useState("3");
-  const [typeParcours, setTypeParcours] = useState("CAPACITE");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1");
+  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filiere, setFiliere] = useState([]);
-  // Variables
   var grades = [];
-  var anneeUnivCouranteId = 1;
-  var filiereCouranteId = 3;
-  var sessionCouranteId = 1
-  var anneeCurId = 6
-  var etabCourantId = 1
+  const [filiere, setFiliere] = useState([]);
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -84,8 +82,7 @@ const Etudiants = () => {
 
   // Get the list of students
   useEffect(() => {
-    updateEtudiant();
-    EtudiantService.getEtudiantByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
+    EtudiantService.getAllEtudiant()
       .then((response) => {
         // console.log("🚀 Reponse brute de l'API :", response[0]);
         // console.log(Array.isArray(response));
@@ -97,7 +94,7 @@ const Etudiants = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
+  }, []);
 
   // Get the list of students
   useEffect(() => {
@@ -140,30 +137,14 @@ const Etudiants = () => {
         });
     }
   }, []);
-
-  const updateEtudiant = () => {
-    // Reconstitution du parcours
-    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
-    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"))
-
-    const anneesUniv = JSON.parse(localStorage.getItem("annees"))
-    const sessions = JSON.parse(localStorage.getItem("sessions"))
-    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"))
-
-    const anneeCur = typeParcours + " " + typeAnneEtude
-
-    anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
-    filiereCouranteId = idtypeFiliere;
-    sessionCouranteId = getSessionIndex(sessionCourante, sessions);
-    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
-
-    console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
-        ", sessionCouranteId = " + sessionCouranteId +
-        ", anneeEtudeCourante = " + typeAnneEtude +
-        ", filireCouranteId = " + filiereCouranteId +
-        ", anneeCurId = " + anneeCurId);
-    setIsLoading(true);
-  }
+  console.log(
+    " etudiant page anneeUnivCourante ----- : ",
+    localStorage.getItem("anneeUnivCourante")
+  );
+  console.log(
+    " etudiant page sessionCourante ------ : ",
+    localStorage.getItem("sessionCourante")
+  );
 
   if (isLoading) {
     return (
@@ -187,7 +168,7 @@ const Etudiants = () => {
       <div className="flex-grow">
         <div className="flex flex-col">
           <div className="bg-white flex items-center z-4 pt-3 pb-3  pr-4 justify-between">
-            <h1 className="text-2xl font-bold">Liste des Étudiants</h1>
+            <h1 className="text-2xl font-bold">Liste des Étudiants Echoués</h1>
 
             <div className="flex items-center gap-4">
               <div>
@@ -195,17 +176,17 @@ const Etudiants = () => {
                   value={typeParcours}
                   onChange={(e) => {
                     setTypeParcours(e.target.value);
-                    // console.log('----- parcours ---  ', e.target.value);
-                    // localStorage.setItem("gradeCourant", JSON.stringify(e.target.value));
-                    updateEtudiant()
-                    }
-                  }
+                    console.log("----- parcours ---  ", e.target.value);
+                    localStorage.setItem(
+                      "parcoursCourante",
+                      JSON.stringify(e.target.value)
+                    );
+                  }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
                   {grades.length == 0 ? (
                     <option value="--">-----------</option>
                   ) : (
-                    
                     grades.map((g, index) => (
                       <option key={index} value={g}>
                         {g}
@@ -216,12 +197,14 @@ const Etudiants = () => {
               </div>
               <div>
                 <select
-                  value={idtypeFiliere}
+                  value={typeFiliere}
                   onChange={(e) => {
-                    setIdTypeFiliere(e.target.value);
-                    // console.log('----- filiere---  ', e.target.value);
-                    // localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
-                    updateEtudiant()
+                    setTypeFiliere(e.target.value);
+                    console.log("----- filiere---  ", e.target.value);
+                    localStorage.setItem(
+                      "filiereCourante",
+                      JSON.stringify(e.target.value)
+                    );
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -240,15 +223,18 @@ const Etudiants = () => {
                 <select
                   value={typeAnneEtude}
                   onChange={(e) => {
-                    setypeAnneEtude(e.target.value)
-                    // console.log('----- type annee---  ', e.target.value);
-                    // localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
-                    updateEtudiant()
+                    setypeAnneEtude(e.target.value);
+                    console.log("----- type annee---  ", e.target.value);
+                    localStorage.setItem(
+                      "anneeEtudeCourante",
+                      JSON.stringify(e.target.value)
+                    );
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
                   <option value="1">1ere année</option>
                   <option value="2">2eme année</option>
+                  <option value="3">3eme année</option>
                 </select>
               </div>
             </div>
@@ -354,7 +340,7 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           <input
-                            value={editedData.Tel_1}
+                            value={editedData.telephone}
                             onChange={(e) =>
                               setEditedData({
                                 ...editedData,
@@ -418,7 +404,7 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           {" "}
-                          {etudiant.Tel_1}{" "}
+                          {etudiant.telephone}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           <div className="flex gap-2 justify-center">
@@ -456,25 +442,9 @@ const Etudiants = () => {
           </div>
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
-            <button
-              className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer"
-              onClick={() => generatePDF(etudiants, "Liste des Étudiants")}
-            >
+            <button className="px-2 py-2 w-full bg-green-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
               Imprimer la liste
             </button>
-
-            <label className="flex flex-row items-center justify-center gap-2  w-full px-2 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600">
-              <FiUpload className="text-xl" />
-              <span className="text-sm font-medium">
-                Importer un fichier Excel
-              </span>
-              <input
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={importEtudiantToExcel}
-                className="hidden"
-              />
-            </label>
 
             <button
               onClick={() => exportEtudiantsToExcel(etudiants)}
@@ -489,4 +459,4 @@ const Etudiants = () => {
   }
 };
 
-export default Etudiants;
+export default Echoues;

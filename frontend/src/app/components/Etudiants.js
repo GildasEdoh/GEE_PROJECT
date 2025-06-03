@@ -2,36 +2,41 @@ import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
-import AnneesEtudeService from "@/services/AnneesEtudeService";
-import FiliereService from "@/services/FiliereService";
-import * as XLSX from "xlsx";
-import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 import {
   generatePDF,
   importEtudiantToExcel,
   exportEtudiantsToExcel,
-} from "../utils/ExcelUtils.js";
+} from "../utils/ExcelUtils";
 
 const Etudiants = () => {
+  const [etudiants, setEtudiants] = useState([
+    {
+      numero_carte: "123456",
+      nom: "Koffi",
+      prenom: "Jean",
+      dateNaissance: "Lome",
+      lieuNaissance: "Logone",
+      sexe: "M",
+    },
+    {
+      numero_carte: "654321",
+      nom: "Doe",
+      prenom: "Alice",
+      dateNaissance: "Lome",
+      lieuNaissance: "Logone",
+      sexe: "F",
+    },
+  ]);
+
   const [editIndex, setEditIndex] = useState(null);
   const [editedData, setEditedData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [idtypeFiliere, setIdTypeFiliere] = useState("3");
-  const [typeParcours, setTypeParcours] = useState("CAPACITE");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1");
-  const [etudiants, setEtudiants] = useState([]);
-  const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filiere, setFiliere] = useState([]);
-  // Variables
-  var grades = [];
-  var anneeUnivCouranteId = 1;
-  var filiereCouranteId = 3;
-  var sessionCouranteId = 1
-  var anneeCurId = 6
-  var etabCourantId = 1
+  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [typeAnneEtude, setypeAnneEtude] = useState("Licence");
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -84,11 +89,10 @@ const Etudiants = () => {
 
   // Get the list of students
   useEffect(() => {
-    updateEtudiant();
-    EtudiantService.getEtudiantByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
+    EtudiantService.getAllEtudiant()
       .then((response) => {
-        // console.log("🚀 Reponse brute de l'API :", response[0]);
-        // console.log(Array.isArray(response));
+        console.log("🚀 Reponse brute de l'API :", response[0]);
+        console.log(Array.isArray(response));
         setEtudiants(response);
         setIsLoading(false);
       })
@@ -97,73 +101,7 @@ const Etudiants = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
-
-  // Get the list of students
-  useEffect(() => {
-    const anneeData = localStorage.getItem("anneesEtude");
-    const filiereData = localStorage.getItem("filieres");
-    //
-    if (anneeData) {
-      // console.log("🚀 ---- anneeData local --- :");
-      setAnneesEtude(JSON.parse(anneeData));
-    } else {
-      AnneesEtudeService.getAllAnneesEtude()
-        .then((response) => {
-          // console.log("🚀 ---- AnneesEtude --- :", response[0]);
-          console.log(Array.isArray(response));
-          setIsLoading(false);
-          localStorage.setItem("anneesEtude", JSON.stringify(response));
-          setAnneesEtude(response);
-        })
-        .catch((error) => {
-          console.error("Erreur :", error);
-          setIsLoading(false);
-          setError(true);
-        });
-    }
-    // Filiere data
-    if (filiereData) {
-      // console.log("🚀 ---- filiereData local --- :");
-      setFiliere(JSON.parse(filiereData));
-    } else {
-      FiliereService.getAllFiliere()
-        .then((response) => {
-          setIsLoading(false);
-          localStorage.setItem("filieres", JSON.stringify(response));
-          setFiliere(response);
-        })
-        .catch((error) => {
-          console.error("Erreur :", error);
-          setIsLoading(false);
-          setError(true);
-        });
-    }
   }, []);
-
-  const updateEtudiant = () => {
-    // Reconstitution du parcours
-    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
-    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"))
-
-    const anneesUniv = JSON.parse(localStorage.getItem("annees"))
-    const sessions = JSON.parse(localStorage.getItem("sessions"))
-    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"))
-
-    const anneeCur = typeParcours + " " + typeAnneEtude
-
-    anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
-    filiereCouranteId = idtypeFiliere;
-    sessionCouranteId = getSessionIndex(sessionCourante, sessions);
-    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
-
-    console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
-        ", sessionCouranteId = " + sessionCouranteId +
-        ", anneeEtudeCourante = " + typeAnneEtude +
-        ", filireCouranteId = " + filiereCouranteId +
-        ", anneeCurId = " + anneeCurId);
-    setIsLoading(true);
-  }
 
   if (isLoading) {
     return (
@@ -180,9 +118,6 @@ const Etudiants = () => {
       </div>
     );
   } else {
-    {
-      anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
-    }
     return (
       <div className="flex-grow">
         <div className="flex flex-col">
@@ -193,68 +128,40 @@ const Etudiants = () => {
               <div>
                 <select
                   value={typeParcours}
-                  onChange={(e) => {
-                    setTypeParcours(e.target.value);
-                    // console.log('----- parcours ---  ', e.target.value);
-                    // localStorage.setItem("gradeCourant", JSON.stringify(e.target.value));
-                    updateEtudiant()
-                    }
-                  }
+                  onChange={(e) => setTypeParcours(e.target.value)}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  {grades.length == 0 ? (
-                    <option value="--">-----------</option>
-                  ) : (
-                    
-                    grades.map((g, index) => (
-                      <option key={index} value={g}>
-                        {g}
-                      </option>
-                    ))
-                  )}
+                  <option value="admis">Licence</option>
+                  <option value="echoues">Master</option>
                 </select>
               </div>
               <div>
                 <select
-                  value={idtypeFiliere}
-                  onChange={(e) => {
-                    setIdTypeFiliere(e.target.value);
-                    // console.log('----- filiere---  ', e.target.value);
-                    // localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
-                    updateEtudiant()
-                  }}
+                  value={typeFiliere}
+                  onChange={(e) => setTypeFiliere(e.target.value)}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  {filiere.length == 0 ? (
-                    <option value="--">------------</option>
-                  ) : (
-                    filiere.map((f) => (
-                      <option key={f.id} value={f.id}>
-                        {f.libelle}
-                      </option>
-                    ))
-                  )}
+                  <option value="admis">Genie Logiciel</option>
+                  <option value="echoues">Genie Civil</option>
+                  <option value="admis">Systèmes et Réseaux</option>
+                  <option value="echoues">Informatique et Systèmes</option>
                 </select>
               </div>
               <div>
                 <select
                   value={typeAnneEtude}
-                  onChange={(e) => {
-                    setypeAnneEtude(e.target.value)
-                    // console.log('----- type annee---  ', e.target.value);
-                    // localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
-                    updateEtudiant()
-                  }}
+                  onChange={(e) => setypeAnneEtude(e.target.value)}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  <option value="1">1ere année</option>
-                  <option value="2">2eme année</option>
+                  <option value="admis">1ere année</option>
+                  <option value="echoues">2e année</option>
                 </select>
               </div>
             </div>
           </div>
+
           <div className="h-[400px] overflow-y-auto mt-8">
-            <table className="w-full border-collapse border rounded-xl shadow-md">
+            <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
@@ -273,13 +180,10 @@ const Etudiants = () => {
                     Lieu de Naissance
                   </th>
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                    Sexe
+                    SEXE
                   </th>
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                    Téléphone
-                  </th>
-                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                    Actions
+                    ACTIONS
                   </th>
                 </tr>
               </thead>
@@ -318,47 +222,11 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           <input
-                            value={editedData.date_naissance}
-                            onChange={(e) =>
-                              setEditedData({
-                                ...editedData,
-                                date_naissance: e.target.value,
-                              })
-                            }
-                            className="border p-1 w-full"
-                          />
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <input
-                            value={editedData.lieu_naissance}
-                            onChange={(e) =>
-                              setEditedData({
-                                ...editedData,
-                                lieu_naissance: e.target.value,
-                              })
-                            }
-                            className="border p-1 w-full"
-                          />
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <input
                             value={editedData.sexe}
                             onChange={(e) =>
                               setEditedData({
                                 ...editedData,
                                 sexe: e.target.value,
-                              })
-                            }
-                            className="border p-1 w-full"
-                          />
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <input
-                            value={editedData.Tel_1}
-                            onChange={(e) =>
-                              setEditedData({
-                                ...editedData,
-                                telephone: e.target.value,
                               })
                             }
                             className="border p-1 w-full"
@@ -407,18 +275,14 @@ const Etudiants = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           {" "}
-                          {etudiant.date_naissance}{" "}
+                          {etudiant.dateNaissance}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           {" "}
-                          {etudiant.lieu_naissance}{" "}
+                          {etudiant.lieuNaissance}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           {etudiant.sexe}
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          {" "}
-                          {etudiant.Tel_1}{" "}
                         </td>
                         <td className="px-4 py-2 text-center">
                           <div className="flex gap-2 justify-center">

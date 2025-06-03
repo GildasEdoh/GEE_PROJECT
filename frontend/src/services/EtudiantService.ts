@@ -5,6 +5,7 @@ import api from "./ApiService";
 
 // Base path for etudiants
 const path = "/etudiants";
+const filteredPath = path + "/filtrage"
 
 class EtudiantService {
   private static instance: EtudiantService;
@@ -44,7 +45,28 @@ class EtudiantService {
   }
   // Return the list of all etudiants by subject
   public async getAllEtudiantsBySubject(id_matiere: string): Promise<Object> {
-    const response = await api.get(path + `/matieres/${id_matiere}`);
+    const body = {
+      "id_etablissement": 1,
+      "id_filiere": 3,
+      "id_annee_etude": 6,
+      "id_annee_univ": 2,
+      "id_session": 1,
+      "id_evaluation": 1,
+      "id_matiere": id_matiere
+    }
+    const response = await api.post(path + `/matieres`, body);
+    return response.data;
+  }
+
+  public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Object> {
+    const body = {
+      "id_etablissement": idEtab,
+      "id_filiere": idFiliere,
+      "id_annee_etude": idAnneeEtu,
+      "id_annee_univ": idAnneUniv,
+      "id_session": idSession
+    }
+    const response = await api.post(filteredPath, body);
     return response.data;
   }
 }

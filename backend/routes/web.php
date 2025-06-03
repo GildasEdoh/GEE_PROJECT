@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\AnneeUnivController;
+use App\Http\Controllers\TypeEvaluationController;
+use App\Http\Controllers\EtablissementController;
 /*
 |--------------------------------------------------------------------------
 | Routes Web
@@ -66,9 +68,11 @@ Route::prefix('etudiants')->group(function () {
     Route::get('/{id}', [EtudiantController::class, 'show'])->name('etudiants.show');       // Afficher un étudiant
     Route::put('/{id}', [EtudiantController::class, 'update'])->name('etudiants.update');   // Mettre à jour
     Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy'); // Supprimer
+    Route::post('/filtrage', [EtudiantController::class, 'listeParCriteres']);
+
     // Route::post('/bulk', [EtudiantController::class, 'bulkStore'])->name('etudiants.bulk'); // Ajouter plusieurs etudiants
     // Route::delete('/', [EtudiantController::class, 'destroyAll'])->name('etudiants.destroyAll'); // Suprimer plusieurs etudiants
-    Route::get('/matieres/{id_matiere}', [EtudiantController::class, 'getAllEtudiantsBySubject'])->name('etudiants.getAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
+    Route::post('/matieres', [EtudiantController::class, 'obtainAllEtudiantsBySubject'])->name('etudiants.obtainAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
 });
 
 
@@ -172,6 +176,20 @@ Route::prefix('filieres')->group(function () {
 });
 
 // ====================================
+// 🏆 Gestion des etablissements
+// ====================================
+Route::prefix('etablissements')->group(function () {
+    Route::get('/', [EtablissementController::class, 'index'])->name('etablissements.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
+// 🏆 Gestion des typeEvaluations
+// ====================================
+Route::prefix('typeEvaluation')->group(function () {
+    Route::get('/', [TypeEvaluationController::class, 'index'])->name('types_evaluation.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
 // ⚙️ Routes Authentification (Middleware)
 // ====================================
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -181,6 +199,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/login', [AuthController::class, 'store']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
