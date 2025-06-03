@@ -19,16 +19,16 @@ const MajNotes = () => {
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
   const [evaluation, setEvaluation] = useState("Devoir");
-  const [typeFiliere, setTypeFiliere] = useState("1");
+  const [typeFiliere, setTypeFiliere] = useState("3");
   const [typeParcours, setTypeParcours] = useState("Licence");
   const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [anneesEtude, setAnneesEtude] = useState([]);
   const [filiere, setFiliere] = useState([]);
   var grades = [];
   var anneeUnivCouranteId = 1;
-  var filiereCouranteId = 1;
+  var filiereCouranteId = 3;
   var sessionCouranteId = 1
-  var anneeCurId = 1
+  var anneeCurId = 6
   var etabCourantId = 1
 
   // Recuperation des matières
@@ -496,7 +496,6 @@ const MajNotes = () => {
                       >
                         <option value="1">1ere année</option>
                         <option value="2">2eme année</option>
-                        <option value="3">3eme année</option>
                       </select>
                     </div>
                   </div>

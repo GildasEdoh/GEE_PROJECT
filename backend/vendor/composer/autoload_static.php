@@ -634,6 +634,7 @@ class ComposerStaticInit2d10956196a336e8c2f576ae0f343429
         'App\\Http\\Controllers\\Settings\\PasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Settings/PasswordController.php',
         'App\\Http\\Controllers\\Settings\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Settings/ProfileController.php',
         'App\\Http\\Controllers\\TypeDetailsController' => __DIR__ . '/../..' . '/app/Http/Controllers/TypeDetailsController.php',
+        'App\\Http\\Controllers\\TypeEvaluationController' => __DIR__ . '/../..' . '/app/Http/Controllers/TypeEvaluationController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\HandleAppearance' => __DIR__ . '/../..' . '/app/Http/Middleware/HandleAppearance.php',
         'App\\Http\\Middleware\\HandleCors' => __DIR__ . '/../..' . '/app/Http/Middleware/HandleCors.php',

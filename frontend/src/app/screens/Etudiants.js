@@ -19,8 +19,8 @@ const Etudiants = () => {
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [idtypeFiliere, setIdTypeFiliere] = useState("1");
-  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [idtypeFiliere, setIdTypeFiliere] = useState("3");
+  const [typeParcours, setTypeParcours] = useState("CAPACITE");
   const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
@@ -28,9 +28,9 @@ const Etudiants = () => {
   // Variables
   var grades = [];
   var anneeUnivCouranteId = 1;
-  var filiereCouranteId = 1;
+  var filiereCouranteId = 3;
   var sessionCouranteId = 1
-  var anneeCurId = 1
+  var anneeCurId = 6
   var etabCourantId = 1
 
   // Submission of the suppression
@@ -249,7 +249,6 @@ const Etudiants = () => {
                 >
                   <option value="1">1ere année</option>
                   <option value="2">2eme année</option>
-                  <option value="3">3eme année</option>
                 </select>
               </div>
             </div>
