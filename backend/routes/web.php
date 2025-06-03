@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\AnneeUnivController;
+use App\Http\Controllers\TypeEvaluationController;
 /*
 |--------------------------------------------------------------------------
 | Routes Web
@@ -70,7 +71,7 @@ Route::prefix('etudiants')->group(function () {
 
     // Route::post('/bulk', [EtudiantController::class, 'bulkStore'])->name('etudiants.bulk'); // Ajouter plusieurs etudiants
     // Route::delete('/', [EtudiantController::class, 'destroyAll'])->name('etudiants.destroyAll'); // Suprimer plusieurs etudiants
-    Route::get('/matieres/{id_matiere}', [EtudiantController::class, 'getAllEtudiantsBySubject'])->name('etudiants.getAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
+    Route::post('/matieres', [EtudiantController::class, 'obtainAllEtudiantsBySubject'])->name('etudiants.obtainAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
 });
 
 
@@ -171,6 +172,13 @@ Route::prefix('anneesUnivs')->group(function () {
 // ====================================
 Route::prefix('filieres')->group(function () {
     Route::get('/', [FiliereController::class, 'index'])->name('filieres.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
+// 🏆 Gestion des typeEvaluations
+// ====================================
+Route::prefix('typeEvaluation')->group(function () {
+    Route::get('/', [TypeEvaluationController::class, 'index'])->name('types_evaluation.index'); // Obtenir la liste des annees_etudes
 });
 
 // ====================================

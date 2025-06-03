@@ -243,50 +243,48 @@ const MajNotes = () => {
     } else {
       return (
         <div className="ml-5 mt-0 w-full">
-          <div className="flex items-center gap-4 ml-20">
+          <div className="flex items-center gap-4 ml-10">
+            <span className="text-black font-bold text-sm">
+                Matiere:
+            </span>
+            <select
+                value={etudiants[0].matiere}
+                className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
+              >
+                <option>{etudiants[0].matiere}</option>
+              </select>
+            
+            <span className="text-black font-bold text-sm ml-3">
+                Parcours: 
+            </span>
             <select
               value={typeParcours}
               onChange={(e) => setTypeParcours(e.target.value)}
               className="p-2 border-none rounded-md shadow-sm text-sm"
             >
-              <option value="admis">Licence</option>
-              <option value="echoues">Master</option>
-            </select>
-            <select
-              value={typeFiliere}
-              onChange={(e) => setTypeFiliere(e.target.value)}
-              className="p-2 border-none rounded-md shadow-sm text-sm"
-            >
-              <option value="admis">Genie Logiciel</option>
-              <option value="echoues">Genie Civil</option>
-              <option value="admis">Systèmes et Réseaux</option>
-              <option value="echoues">Informatique et Systèmes</option>
+              <option value="admis">CAPACITE Droit 1</option>
             </select>
 
-            <div>
-              <select
-                value={typeAnneEtude}
-                onChange={(e) => {
-                  setypeAnneEtude(e.target.value);
-                  console.log("----- type annee---  ", e.target.value);
-                  localStorage.setItem(
-                    "anneeEtudeCourante",
-                    JSON.stringify(e.target.value)
-                  );
-                }}
-                className="p-2 border-none rounded-md shadow-sm text-sm"
-              >
-                <option value="1">1ere année</option>
-                <option value="2">2eme année</option>
-                <option value="3">3eme année</option>
-              </select>
-              <span className="text-black font-bold text-sm ml-5">
+              <span className="text-black font-bold text-sm ml-3">
                 Evaluation
               </span>
               <select
                 value={evaluation}
                 onChange={(e) => setEvaluation(e.target.value)}
-                className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-3"
+                className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white "
+              >
+                <option>Exam Harmattan </option>
+                <option>Exam Mousson </option>
+              </select>
+
+            <div>
+              <span className="text-black font-bold text-sm ml-5">
+                Type d'evaluation: 
+              </span>
+              <select
+                value={evaluation}
+                onChange={(e) => setEvaluation(e.target.value)}
+                className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
               >
                 <option>Devoir</option>
                 <option>Examen</option>
@@ -334,7 +332,7 @@ const MajNotes = () => {
                         <input
                           id="devoir-input"
                           type="number"
-                          value={editedData.devoir || ""}
+                          value={etudiant.note_devoir}
                           onChange={(e) => {
                             console.log("Valeur saisie :", e.target.value);
                             setEditedData({
@@ -347,7 +345,7 @@ const MajNotes = () => {
                           className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
                         />
                       ) : (
-                        etudiant.devoir
+                        etudiant.note_devoir
                       )}
                     </td>
                     {evaluation === "Examen" && (
@@ -357,7 +355,7 @@ const MajNotes = () => {
                             <input
                               id="examen-input"
                               type="number"
-                              value={editedData.examen || ""}
+                              value={etudiant.note_examen}
                               onChange={(e) =>
                                 setEditedData({
                                   ...editedData,
@@ -367,14 +365,14 @@ const MajNotes = () => {
                               className="w-16 text-center border rounded bg-gray-100"
                             />
                           ) : (
-                            etudiant.examen
+                            etudiant.note_examen
                           )}
                         </td>
                         <td className="px-4 py-2 text-center">
                           {editIndex === index ? (
                             <input
                               type="number"
-                              value={editedData.moyenne || ""}
+                              value={etudiant.total_pondere}
                               onChange={(e) =>
                                 setEditedData({
                                   ...editedData,
@@ -384,7 +382,7 @@ const MajNotes = () => {
                               className="w-16 text-center border rounded bg-gray-100"
                             />
                           ) : (
-                            etudiant.moyenne
+                            etudiant.total_pondere
                           )}
                         </td>
                       </>

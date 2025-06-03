@@ -116,46 +116,32 @@ class EtudiantController extends Controller
 
         return response()->json($etudiants);
     }
+
     // Récupérer tous les étudiants par matière
-    public function getAllEtudiantsBySubject($idMatiere)
+    public function obtainAllEtudiantsBySubject(Request $request)
     {
-    $idEtablissement = 1;
-    $idFiliere = 3;
-    $idParcours = 5;
-    $idAnneeEtude = 6; // CAPACITE 1
-    $idAnneeUniv = 2;  // 2024-2025
+        $request->validate([
+            'id_etablissement' => 'required|integer',
+            'id_filiere' => 'required|integer',
+            'id_annee_etude' => 'required|integer',
+            'id_annee_univ' => 'required|integer',
+            'id_session' => 'required|integer',
+            'id_evaluation' => 'required|integer',
+            'id_matiere' => 'required|integer',
+        ]);
 
-    $etudiants = DB::table('etudiants as e')
-        ->join('inscriptions as i', 'i.fk_etudiant', '=', 'e.numero_carte')
-        ->join('parcours_annees_etude as pae', 'i.fk_parcours_annee_etude', '=', 'pae.id')
-        ->join('parcours as p', 'pae.fk_parcours', '=', 'p.id')
-        ->join('filieres as f', 'p.fk_filiere', '=', 'f.id')
-        ->join('etablissements as etab', 'f.fk_etablissement', '=', 'etab.id')
-        ->join('annees_etude as ae', 'pae.fk_annee_etude', '=', 'ae.id')
-        ->join('annees_universitaire as au', 'i.fk_annee_univ', '=', 'au.id')
-        ->join('parcours_annees_etude_matieres as paem', 'paem.fk_parcours_annee_etude', '=', 'pae.id')
-        ->join('matieres as m', function ($join) use ($idMatiere) {
-            $join->on('paem.fk_matiere', '=', 'm.id')
-                 ->where('m.id', '=', $idMatiere);
-        })
-        ->join('evaluations_matieres as em', function ($join) use ($idAnneeUniv) {
-            $join->on('em.fk_matiere', '=', 'm.id')
-                 ->where('em.fk_annee_univ', '=', $idAnneeUniv);
-        })
-        ->join('evaluations_matieres_types as emt', 'emt.fk_evaluation_matiere', '=', 'em.id')
-        ->join('types_evaluation as te', 'emt.fk_type_evaluation', '=', 'te.id')
-        ->whereNotNull('em.fk_evaluation')
-        ->where('etab.id', $idEtablissement)
-        ->where('f.id', $idFiliere)
-        ->where('p.id', $idParcours)
-        ->where('ae.id', $idAnneeEtude)
-        ->where('au.id', $idAnneeUniv)
-        ->select('e.numero_carte', 'e.nom', 'e.prenom', 'e.sexe')
-        ->distinct()
-        ->orderBy('e.numero_carte')
-        ->get();
+        $etudiants = DB::select('CALL get_stats_matiere_etudiants(?, ?, ?, ?, ?, ?, ?)', [
+            $request->id_etablissement,
+            $request->id_filiere,
+            $request->id_annee_etude,
+            $request->id_annee_univ,
+            $request->id_session, 
+            $request->id_evaluation, 
+            $request->id_matiere, 
+        ]);
 
-    return response()->json($etudiants);
-}
+
+        return response()->json($etudiants);
+    }
     // Liste des etudiants inscrits
 }

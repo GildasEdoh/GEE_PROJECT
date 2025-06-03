@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
 
     protected $except = [
+        '/etudiant/matieres',
         '/etudiant',
         '/etudiant/*',
         'http://localhost:3000/*', // Désactive CSRF pour toutes les routes API

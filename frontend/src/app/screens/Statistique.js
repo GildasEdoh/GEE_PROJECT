@@ -6,7 +6,9 @@ import { FiAward, FiBook, FiUsers, FiXCircle, FiChevronLeft } from 'react-icons/
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+
 const Statistique = () => {
+  // Données pour le graphique
     const [activeTable, setActiveTable] = useState(null);
 
     // Données pour les tableaux détaillés
@@ -84,7 +86,9 @@ const Statistique = () => {
                 }
             ],
             footer: [
-                { label: "Note", value: "Les moyennes sont arrondies vers le haut et les autres valeurs vers le bas" }
+                { label: "Note", value: "Les moyennes sont arrondies vers le haut et les autres valeurs vers le bas" 
+                    
+                }
             ]
         },
     
@@ -273,7 +277,7 @@ const statsData = {
 
 if (activeTable) {
     return (
-        <div className="ml-64 mt-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 bg-gray-100">
+        <div className="h-[calc(100vh-5rem)] overflow-y-auto p-6 bg-gray-100">
             <button
                 onClick={handleBackClick}
                 className="flex items-center mb-4 text-blue-600 hover:text-blue-800"
@@ -323,9 +327,8 @@ if (activeTable) {
         </div>
     );
 }
-
-return (
-    <div className="ml-64 mt-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 space-y-6 bg-gray-100">
+  return (
+    <div className="flex flex-col p-4 bg-gray-100">
         {/* Cartes statistiques */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {statsData.general.map((stat, index) => (
@@ -393,7 +396,7 @@ return (
             </table>
         </div>
     </div>
-);
+  );
 };
 
 export default Statistique;
