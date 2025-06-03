@@ -155,7 +155,7 @@ const Etudiants = () => {
     anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
     filiereCouranteId = idtypeFiliere;
     sessionCouranteId = getSessionIndex(sessionCourante, sessions);
-    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtude);
+    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
 
     console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
         ", sessionCouranteId = " + sessionCouranteId +

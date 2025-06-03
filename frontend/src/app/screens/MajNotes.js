@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import EtudiantService from "@/services/EtudiantService";
 import MatiereService from "@/services/MatiereService";
 import NoteService from "@/services/NoteService";
-import { getGrades } from "../utils/parseAnnee";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 
@@ -19,15 +19,21 @@ const MajNotes = () => {
   const [editedData, setEditedData] = useState({});
   const [showEtudiants, setShowEtudiants] = useState(false);
   const [evaluation, setEvaluation] = useState("Devoir");
-  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
+  const [typeFiliere, setTypeFiliere] = useState("1");
   const [typeParcours, setTypeParcours] = useState("Licence");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
+  const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [anneesEtude, setAnneesEtude] = useState([]);
   const [filiere, setFiliere] = useState([]);
   var grades = [];
+  var anneeUnivCouranteId = 1;
+  var filiereCouranteId = 1;
+  var sessionCouranteId = 1
+  var anneeCurId = 1
+  var etabCourantId = 1
 
   // Recuperation des matières
   useEffect(() => {
+    updateEtudiant();
     MatiereService.getAllMatiere()
       .then((response) => {
         setMatieres(response);
@@ -38,7 +44,7 @@ const MajNotes = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, []);
+  }, [typeParcours, typeAnneEtude, typeFiliere]);
 
   //Recuperation des années d'étude et des filières
   useEffect(() => {
@@ -110,14 +116,6 @@ const MajNotes = () => {
       });
   };
 
-  /* const handleEdit = (index, etudiant) => {
-    setEditIndex(index);
-    setEditedData({
-      devoir: etudiant.devoir ?? "",
-      examen: etudiant.examen ?? "",
-      moyenne: etudiant.moyenne ?? "",
-    });
-  }; */
   const handleEdit = (index) => {
     const etudiant = etudiants[index];
     const id = etudiant.numero_carte;
@@ -126,11 +124,11 @@ const MajNotes = () => {
     console.log("ID de l'étudiant :", id);
 
     setEditIndex(index);
-    setEditedData({
-      devoir: etudiant.devoir ?? "",
-      examen: etudiant.examen ?? "",
-      moyenne: etudiant.moyenne ?? "",
-    });
+  setEditedData({
+    note_devoir: etudiant.note_devoir ?? "",
+    note_examen: etudiant.note_examen ?? "",
+    total_pondere: etudiant.total_pondere ?? "",
+  });
   };
 
   const handleCancel = () => {
@@ -138,26 +136,15 @@ const MajNotes = () => {
     setEditedData({});
   };
 
-  /*  const handleSave = (index) => {
-    const updatedEtudiants = [...etudiants];
-    updatedEtudiants[index] = {
-      ...updatedEtudiants[index],
-      ...editedData,
-    };
-    setEtudiants(updatedEtudiants);
-    setEditIndex(null);
-    setEditedData({});
-  }; */
-
   const handleSave = async (index) => {
     try {
       const updatedEtudiants = [...etudiants];
       const etudiant = etudiants[index]; // donc ici encore tu as l'ID
       const id = etudiant.numero_carte;
 
-      const devoir = parseFloat(editedData.devoir);
-      const examen = parseFloat(editedData.examen);
-      const moyenne = parseFloat(editedData.moyenne);
+      const devoir = parseFloat(editedData.note_devoir);
+      const examen = parseFloat(editedData.note_examen);
+      const moyenne = parseFloat(editedData.total_pondere);
 
       // Validation des champs requis
       if (evaluation === "Devoir") {
@@ -167,14 +154,7 @@ const MajNotes = () => {
           return;
         }
 
-        await NoteService.addNote({
-          fk_etudiant: id,
-          fk_evaluation_matiere_type: 1,
-          devoir,
-          gele: 0,
-        });
-
-        updatedEtudiants[index] = { ...etudiant, devoir };
+        updatedEtudiants[index] = { ...etudiant, note_devoir: devoir };
       } else if (evaluation === "Examen") {
         if (
           isNaN(devoir) ||
@@ -193,18 +173,11 @@ const MajNotes = () => {
           return;
         }
 
-        await NoteService.addNote({
-          fk_etudiant: id,
-          fk_evaluation_matiere_type: 2,
-          examen,
-          gele: 0,
-        });
-
         updatedEtudiants[index] = {
           ...etudiant,
-          devoir,
-          examen,
-          moyenne,
+          note_devoir: devoir,
+          note_examen: examen,
+          total_pondere: moyenne,
         };
       }
 
@@ -216,6 +189,30 @@ const MajNotes = () => {
       alert("Une erreur s'est produite.");
     }
   };
+
+  const updateEtudiant = () => {
+    // Reconstitution du parcours
+    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"));
+    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"));
+
+    const anneesUniv = JSON.parse(localStorage.getItem("annees"));
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
+
+    const anneeCur = typeParcours + " " + typeAnneEtude;
+
+    anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
+    filiereCouranteId = typeFiliere;
+    sessionCouranteId = getSessionIndex(sessionCourante, sessions);
+    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+
+    console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
+        ", sessionCouranteId = " + sessionCouranteId +
+        ", anneeEtudeCourante = " + typeAnneEtude +
+        ", filireCouranteId = " + filiereCouranteId +
+        ", anneeCurId = " + anneeCurId);
+    setIsLoading(true);
+  }
 
   const afficheEtudiants = () => {
     if (isLoading) {
@@ -249,6 +246,7 @@ const MajNotes = () => {
             </span>
             <select
                 value={etudiants[0].matiere}
+                onChange={(e) => console.log("hello")}
                 className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
               >
                 <option>{etudiants[0].matiere}</option>
@@ -262,7 +260,7 @@ const MajNotes = () => {
               onChange={(e) => setTypeParcours(e.target.value)}
               className="p-2 border-none rounded-md shadow-sm text-sm"
             >
-              <option value="admis">CAPACITE Droit 1</option>
+              <option value="admis"> CAPACITE Droit {JSON.parse(typeAnneEtude)}  </option>
             </select>
 
               <span className="text-black font-bold text-sm ml-3">
@@ -332,13 +330,12 @@ const MajNotes = () => {
                         <input
                           id="devoir-input"
                           type="number"
-                          value={etudiant.note_devoir}
+                          value={editedData.note_devoir}
                           onChange={(e) => {
                             console.log("Valeur saisie :", e.target.value);
                             setEditedData({
                               ...editedData,
-
-                              devoir: e.target.value,
+                              note_devoir: e.target.value,
                             });
                           }}
                           disabled={evaluation !== "Devoir"}
@@ -355,11 +352,11 @@ const MajNotes = () => {
                             <input
                               id="examen-input"
                               type="number"
-                              value={etudiant.note_examen}
+                              value={editedData.note_examen}
                               onChange={(e) =>
                                 setEditedData({
                                   ...editedData,
-                                  examen: e.target.value,
+                                  note_examen: e.target.value,
                                 })
                               }
                               className="w-16 text-center border rounded bg-gray-100"
@@ -369,14 +366,15 @@ const MajNotes = () => {
                           )}
                         </td>
                         <td className="px-4 py-2 text-center">
-                          {editIndex === index ? (
+                          {editIndex === index ? ( 
+                            
                             <input
                               type="number"
-                              value={etudiant.total_pondere}
+                              value={editedData.total_pondere}
                               onChange={(e) =>
                                 setEditedData({
                                   ...editedData,
-                                  moyenne: e.target.value,
+                                  total_pondere: e.target.value,
                                 })
                               }
                               className="w-16 text-center border rounded bg-gray-100"
@@ -430,47 +428,77 @@ const MajNotes = () => {
       </div>
     );
   } else {
-    {
-      anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
-    }
-
     return (
       <div className="flex-grow">
+
         <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
           {!showEtudiants && (
             <>
+            {anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : []}
               <div className="w-full">
-                <div className="flex items-center gap-4 ">
-                  <h2 className="text-lg font-bold ml-5  mt-5">
+                <div className=" bg-white sticky top-0 z-2 flex items-center justify-between  mb-5 p-3">
+                  <h2 className="md:text-lg lg:text-xl text-md font-bold text-center">
                     Liste des matières
                   </h2>
-                  <div className="flex items-center gap-4 ml-70">
-                    <select
-                      value={typeParcours}
-                      onChange={(e) => setTypeParcours(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">Licence</option>
-                      <option value="echoues">Master</option>
-                    </select>
-                    <select
-                      value={typeFiliere}
-                      onChange={(e) => setTypeFiliere(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">Genie Logiciel</option>
-                      <option value="echoues">Genie Civil</option>
-                      <option value="admis">Systèmes et Réseaux</option>
-                      <option value="echoues">Informatique et Systèmes</option>
-                    </select>
-                    <select
-                      value={typeAnneEtude}
-                      onChange={(e) => setypeAnneEtude(e.target.value)}
-                      className="p-2 border-none rounded-md shadow-sm text-sm"
-                    >
-                      <option value="admis">1ere année</option>
-                      <option value="echoues">2e année</option>
-                    </select>
+
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <select
+                        value={typeParcours}
+                        onChange={(e) => {
+                          setTypeParcours(e.target.value);
+                          }
+                        }
+                        className="p-2 border-none rounded-md shadow-sm text-sm"
+                      >
+                        {grades.length == 0 ? (
+                          <option value="--">-----------</option>
+                        ) : (
+                          
+                          grades.map((g, index) => (
+                            <option key={index} value={g}>
+                              {g}
+                            </option>
+                          ))
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <select
+                        value={typeFiliere}
+                        onChange={(e) => {
+                          setTypeFiliere(e.target.value);
+                          // console.log('----- filiere---  ', e.target.value);
+                          localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
+                        }}
+                        className="p-2 border-none rounded-md shadow-sm text-sm"
+                      >
+                        {filiere.length == 0 ? (
+                          <option value="--">------------</option>
+                        ) : (
+                          filiere.map((f) => (
+                            <option key={f.id} value={f.libelle}>
+                              {f.libelle}
+                            </option>
+                          ))
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <select
+                        value={typeAnneEtude}
+                        onChange={(e) => {
+                          setypeAnneEtude(e.target.value)
+                          // console.log('----- type annee---  ', e.target.value);
+                          localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
+                        }}
+                        className="p-2 border-none rounded-md shadow-sm text-sm"
+                      >
+                        <option value="1">1ere année</option>
+                        <option value="2">2eme année</option>
+                        <option value="3">3eme année</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
