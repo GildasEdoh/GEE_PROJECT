@@ -2,7 +2,6 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-
 // --------------------------------- ETUDIANTS --------------------------------
 // fonction pour imprimer un fichier pdf |== ETUDIANTS
 export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
@@ -13,9 +12,9 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
 
   const doc = new jsPDF({ orientation: "landscape" }); // Mode paysage pour plus d'espace
 
-  // Titre
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
-  doc.text(titre, 148, 15, { align: "center" }); // Centré en paysage (A4 landscape: 297mm)
+  doc.text(titre, 148, 15, { align: "center" });
 
   // En-têtes du tableau (correspondant à vos colonnes Excel)
   const headers = [
@@ -31,10 +30,6 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
     "À",
     "Nationalité",
     "Tél",
-    "Credits Avant",
-    "Credits Courant",
-    "Total",
-    "%",
   ];
 
   // Données formatées
@@ -43,18 +38,14 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
     etudiant["Ets"] || "",
     etudiant["Parcours"] || "",
     etudiant["Nb. insc."] || "",
-    etudiant["Carte"] || "",
-    etudiant["Nom"] || "",
-    etudiant["Prénoms"] || "",
-    etudiant["Sexe"] || "",
-    etudiant["Né le"] || "",
-    etudiant["À"] || "",
-    etudiant["Nationalité"] || "",
-    etudiant["Tél"] || "",
-    etudiant["Credits Avant"] || "",
-    etudiant["Credits Courant"] || "",
-    etudiant["Total"] || "",
-    etudiant["%"] || "",
+    etudiant["numero_carte"] || "",
+    etudiant["nom"] || "",
+    etudiant["prenom"] || "",
+    etudiant["sexe"] || "",
+    etudiant["date_naissance"] || "",
+    etudiant["lieu_naissance"] || "",
+    etudiant["Nationalite"] || "",
+    etudiant["Tel_1"] || "",
   ]);
 
   // Générer le tableau (largeur ajustée en paysage)
@@ -64,7 +55,7 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
     startY: 25,
     margin: { left: 10, right: 10 },
     styles: {
-      fontSize: 8, // Taille réduite pour tout afficher
+      fontSize: 8,
       cellPadding: 2,
       overflow: "linebreak",
     },
@@ -77,7 +68,6 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
       4: { cellWidth: 15 }, // Carte
       5: { cellWidth: 20 }, // Nom
       6: { cellWidth: 20 }, // Prénoms
-      // Ajustez selon vos besoins
     },
   });
 
@@ -116,10 +106,6 @@ export const importEtudiantToExcel = (e) => {
         "À",
         "Nationalité",
         "Tél",
-        "Avant",
-        "Courant",
-        "Total",
-        "%",
       ];
 
       const sheetColumns = Object.keys(jsonData[0] || {});
@@ -137,26 +123,22 @@ export const importEtudiantToExcel = (e) => {
       const formattedData = jsonData
         .map((row) => {
           const {
-            Carte: carte,
+            Carte: numero_carte,
             Nom: nom,
-            Prénoms: prenoms,
+            Prénoms: prenom,
             Sexe: sexe,
-            "Né le": dateNaissance,
-            À: lieuNaissance,
-            Nationalité: nationalite,
-            Tél: telephone,
-            Avant: avant,
-            Courant: courant,
-            Total: total,
-            "%": pourcentage,
+            "Né le": date_naissance,
+            À: lieu_naissance,
+            Nationalité: Nationalite,
+            Tél: Tel_1,
           } = row;
 
           if (
-            !carte ||
+            !numero_carte ||
             !nom ||
-            !prenoms ||
-            !dateNaissance ||
-            !lieuNaissance ||
+            !prenom ||
+            !date_naissance ||
+            !lieu_naissance ||
             !sexe
           ) {
             alert(
@@ -173,18 +155,14 @@ export const importEtudiantToExcel = (e) => {
           }
 
           return {
-            carte: carte.toString(),
+            carte: numero_carte.toString(),
             nom,
-            prenoms,
+            prenom,
             sexe: sexe.toUpperCase(),
-            dateNaissance,
-            lieuNaissance,
-            nationalite,
-            telephone,
-            avant: parseInt(avant) || 0,
-            courant: parseInt(courant) || 0,
-            total: parseInt(total) || 0,
-            pourcentage: pourcentage?.toString() ?? "0,00",
+            date_naissance,
+            lieu_naissance,
+            Nationalite,
+            Tel_1,
           };
         })
         .filter((etudiant) => etudiant !== null);
@@ -234,28 +212,20 @@ export const exportEtudiantsToExcel = (etudiants) => {
     "À",
     "Nationalité",
     "Tél",
-    "Avant",
-    "Courant",
-    "Total",
-    "%",
   ];
 
   const worksheetData = [headers];
 
   etudiants.forEach((etudiant, index) => {
     const {
-      carte,
+      numero_carte,
       nom,
-      prenoms,
+      prenom,
       sexe,
-      dateNaissance,
-      lieuNaissance,
-      nationalite,
-      telephone,
-      avant,
-      courant,
-      total,
-      pourcentage,
+      date_naissance,
+      lieu_naissance,
+      Nationalite,
+      Tel_1,
     } = etudiant;
 
     worksheetData.push([
@@ -263,18 +233,14 @@ export const exportEtudiantsToExcel = (etudiants) => {
       "FDD",
       "SUP - Capacité Droit 1",
       1,
-      carte ?? "",
+      numero_carte ?? "",
       nom ?? "",
-      prenoms ?? "",
+      prenom ?? "",
       sexe ?? "",
-      dateNaissance ?? "",
-      lieuNaissance ?? "",
-      nationalite ?? "",
-      telephone ?? "",
-      avant ?? 0,
-      courant ?? 0,
-      total ?? 0,
-      pourcentage ?? "0,00",
+      date_naissance ?? "",
+      lieu_naissance ?? "",
+      Nationalite ?? "",
+      Tel_1 ?? "",
     ]);
   });
 
@@ -311,7 +277,34 @@ export const exportEtudiantsToExcel = (etudiants) => {
 
 // fonction pour exporter les donnees en fichier excel |== MATIERES
 export const exportMatieresToExcel = (matieres) => {
-  const worksheet = XLSX.utils.json_to_sheet(matieres);
+  if (!Array.isArray(matieres) || matieres.length === 0) {
+    alert("Aucune matière à exporter.");
+    return;
+  }
+
+  const headers = [
+    "N°",
+    "Libellé",
+    "Abréviation",
+    "Optionnelle",
+    "Coefficient",
+  ];
+
+  const worksheetData = [headers];
+
+  matieres.forEach((matiere, index) => {
+    const { libelle, abreviation, optionnelle, coefficient } = matiere;
+
+    worksheetData.push([
+      index + 1,
+      libelle ?? "",
+      abreviation ?? "",
+      optionnelle ? "Oui" : "Non", // Affichage plus lisible
+      coefficient ?? 0,
+    ]);
+  });
+
+  const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Matieres");
 
@@ -400,6 +393,59 @@ export const importMatiereToExcel = (e) => {
     alert("Erreur lors de l'ouverture du fichier.");
   };
   reader.readAsBinaryString(file);
+};
+
+//fonction pour imprimer un fichier pdf |== MATIERES
+export const exportMatieresToPDF = (matieres, titre = "Liste des Matières") => {
+  if (!Array.isArray(matieres) || matieres.length === 0) {
+    alert("Aucune matière à imprimer !");
+    return;
+  }
+
+  const doc = new jsPDF({ orientation: "landscape" });
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text(titre, 148, 15, { align: "center" });
+
+  // En-têtes du tableau
+  const headers = [
+    "N°",
+    "Libellé",
+    "Abréviation",
+    "Optionnelle",
+    "Coefficient",
+  ];
+
+  // Données formatées avec index
+  const data = matieres.map((matiere, index) => [
+    index + 1,
+    matiere.libelle ?? "",
+    matiere.abreviation ?? "",
+    matiere.optionnelle ? "Oui" : "Non",
+    matiere.coefficient ?? 0,
+  ]);
+
+  // Génération du tableau
+  autoTable(doc, {
+    head: [headers],
+    body: data,
+    startY: 25,
+    tableWidth: "auto",
+    styles: {
+      fontSize: 10,
+      cellPadding: 3,
+      overflow: "linebreak",
+      halign: "center", // Centre les cellules
+    },
+    headStyles: {
+      fillColor: "#2c3e50",
+      textColor: "#ffffff",
+      halign: "center",
+    },
+  });
+
+  doc.save(`${titre}.pdf`);
 };
 
 // fonction pour importer le fichier excel en .json
