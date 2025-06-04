@@ -20,6 +20,7 @@ return array(
     'App\\Http\\Controllers\\Auth\\VerifyEmailController' => $baseDir . '/app/Http/Controllers/Auth/VerifyEmailController.php',
     'App\\Http\\Controllers\\CoefficientController' => $baseDir . '/app/Http/Controllers/CoefficientController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\EtablissementController' => $baseDir . '/app/Http/Controllers/EtablissementController.php',
     'App\\Http\\Controllers\\EtudiantController' => $baseDir . '/app/Http/Controllers/EtudiantController.php',
     'App\\Http\\Controllers\\EvaluationController' => $baseDir . '/app/Http/Controllers/EvaluationController.php',
     'App\\Http\\Controllers\\FiliereController' => $baseDir . '/app/Http/Controllers/FiliereController.php',
