@@ -6,7 +6,7 @@ import {
   importMatiereToExcel,
   exportMatieresToExcel,
   exportMatieresToPDF,
-} from "./utils/ExcelUtils";
+} from "../utils/ExcelUtils";
 
 /**
  * This page provides the list of matieres and allow all crud operations on this list

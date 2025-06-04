@@ -91,7 +91,7 @@ export const importEtudiantToExcel = (e) => {
       const workbook = XLSX.read(data, { type: "binary" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
 
       const requiredColumns = [
         "N°",
@@ -128,9 +128,11 @@ export const importEtudiantToExcel = (e) => {
             Prénoms: prenom,
             Sexe: sexe,
             "Né le": date_naissance,
-            À: lieu_naissance,
+            "À": lieu_naissance,
             Nationalité: Nationalite,
             Tél: Tel_1,
+            Ets: etab,
+            Parcours: parcours
           } = row;
 
           if (
@@ -149,13 +151,13 @@ export const importEtudiantToExcel = (e) => {
 
           if (!["M", "F"].includes(sexe.toUpperCase())) {
             alert(
-              `Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenoms}.`
+              `Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenom}.`
             );
             return null;
           }
 
           return {
-            carte: numero_carte.toString(),
+            carte: numero_carte,
             nom,
             prenom,
             sexe: sexe.toUpperCase(),
@@ -163,23 +165,25 @@ export const importEtudiantToExcel = (e) => {
             lieu_naissance,
             Nationalite,
             Tel_1,
+            parcours,
+            etab
           };
         })
         .filter((etudiant) => etudiant !== null);
 
-      console.log("etudiants : ", formattedData[0]);
+      console.log("etudiants : ", formattedData);
 
-      const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
+      // const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
+      //   type: "application/json",
+      // });
+      // const url = URL.createObjectURL(blob);
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "etudiants_importes.json";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // const link = document.createElement("a");
+      // link.href = url;
+      // link.download = "etudiants_importes.json";
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
     } catch (error) {
       alert("Erreur de lecture du fichier Excel.");
     }
