@@ -58,17 +58,17 @@ import EtudiantService from "@/services/EtudiantService";
 export default function Home() {
   const [selectedMenu, setSelectedMenu] = useState("accueil");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const etudiants = [
-    {numero_carte: 10, nom: "String", prenom: "String", date_naissance: "01-05-2003",   lieu_naissance: "String",   sexe: "M", Tel_1: "String", id_etablissement: 1, Nationalite: "String", Tel_2: "String", ville: "String", quartier: "String", rue: "String", },
-    {numero_carte: 10, nom: "String", prenom: "String", date_naissance: "01-05-2003",   lieu_naissance: "String",   sexe: "M", Tel_1: "String", id_etablissement: 1, Nationalite: "String", Tel_2: "String", ville: "String", quartier: "String", rue: "String", },
-    {numero_carte: 10, nom: "String", prenom: "String", date_naissance: "01-05-2003",   lieu_naissance: "String",   sexe: "M", Tel_1: "String", id_etablissement: 1, Nationalite: "String", Tel_2: "String", ville: "String", quartier: "String", rue: "String", },
-  ]
-  EtudiantService.addAllEtudiant(etudiants).then((res) => {
-        console.log("insertion réussie !");
-        })
-        .catch((err) => {
-          console.log("echec !");
-        });
+  // const etudiants = [
+  //   {numero_carte: 10, nom: "String", prenom: "String", date_naissance: "01-05-2003",   lieu_naissance: "String",   sexe: "M", Tel_1: "String", id_etablissement: 1, Nationalite: "String", Tel_2: "String", ville: "String", quartier: "String", rue: "String", },
+  //   {numero_carte: 10, nom: "String", prenom: "String", date_naissance: "01-05-2003",   lieu_naissance: "String",   sexe: "M", Tel_1: "String", id_etablissement: 1, Nationalite: "String", Tel_2: "String", ville: "String", quartier: "String", rue: "String", },
+  //   {numero_carte: 10, nom: "String", prenom: "String", date_naissance: "01-05-2003",   lieu_naissance: "String",   sexe: "M", Tel_1: "String", id_etablissement: 1, Nationalite: "String", Tel_2: "String", ville: "String", quartier: "String", rue: "String", },
+  // ]
+  // EtudiantService.addAllEtudiant(etudiants).then((res) => {
+  //       console.log("insertion réussie !");
+  //       })
+  //       .catch((err) => {
+  //         console.log("echec !");
+  //       });
 
   return (
     <div className="flex">

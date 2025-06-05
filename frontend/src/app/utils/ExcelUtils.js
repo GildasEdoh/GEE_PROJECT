@@ -427,58 +427,30 @@ export const exportMatieresToPDF = (matieres, titre = "Liste des Matières") => 
   doc.save(`${titre}.pdf`);
 };
 
-// fonction pour importer le fichier excel en .json
-// export const importExcelAndSaveAsJSON = (event) => {
-//   const file = event.target.files[0];
+export const getParcoursAnneeEtudeId = async (parcours) => {
+    const parcoursLibelle = parcours.replace("SUP - ", "");
+    try {
+      const res = await InscriptionService.getParcoursIdBylibelle(parcoursLibelle);
+      return res; // Exemple : { id: 28 }
+    } catch (err) {
+      console.error("Erreur lors de la récupération du parcours pour :", parcoursLibelle);
+      return { id: 0 };
+    }
+  };
+  
+  export const buildInscriptionsList = async (etudiantsData, anneeUniv) => {
+    // On récupère tous les IDs de parcours en parallèle
+    const parcoursIds = await Promise.all(
+      etudiantsData.map((e) => getParcoursAnneeEtudeId(e.parcours))
+    );
 
-//   if (!file) {
-//     alert("Veuillez sélectionner un fichier Excel.");
-//     return;
-//   }
+    // On construit la liste des inscriptions avec les bons IDs
+    const inscriptionsList = etudiantsData.map((e, index) => ({
+      fk_annee_univ: anneeUniv,
+      fk_etudiant: parseInt(e.numero_carte.replace(',', '')),
+      fk_parcours_annee_etude: parcoursIds[index]?.id ?? 0, // au cas où l’id serait null
+    }));
 
-//   const reader = new FileReader();
-
-//   reader.onload = (e) => {
-//     const data = e.target.result;
-//     const workbook = XLSX.read(data, { type: "binary" });
-//     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-//     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-//     // Validation des colonnes attendues
-//     const expectedHeaders = ["libelle", "abreviation", "optionnelle"];
-//     const headersMatch = expectedHeaders.every(
-//       (header) => header in jsonData[0]
-//     );
-
-//     if (!headersMatch) {
-//       alert(
-//         "Le format du fichier est invalide. Veuillez respecter les colonnes : libelle, abreviation, optionnelle."
-//       );
-//       return;
-//     }
-
-//     const formattedData = jsonData.map((item, index) => ({
-//       id: Date.now() + index,
-//       libelle: item.libelle,
-//       abreviation: item.abreviation,
-//       optionnelle: item.optionnelle === 1 || item.optionnelle === "1" ? 1 : 0,
-//     }));
-
-//     // Création du fichier JSON
-//     const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
-//       type: "application/json",
-//     });
-//     const url = URL.createObjectURL(blob);
-
-//     // Création d'un lien pour forcer le téléchargement
-//     const a = document.createElement("a");
-//     a.href = url;
-//     a.download = "matieres_importees.json";
-//     a.click();
-
-//     // Libère l’URL une fois le fichier téléchargé
-//     URL.revokeObjectURL(url);
-//   };
-
-//   reader.readAsBinaryString(file);
-// };
+    console.log("inscriptionsList:", inscriptionsList);
+    return inscriptionsList;
+  };

@@ -6,6 +6,12 @@ export function getGrades(anneesEtude: AnneeEtude[]) {
 }
 
 export function getAnneeEtudeIndex(anneeCur: String, anneesEtudes: AnneeEtude[]) {
+    console.log("** function getAnneeUnivIndex **");
+    if (!anneesEtudes || !Array.isArray(anneesEtudes)) {
+        console.log("anneesEtudes est null ou non défini");
+        return -1;
+    }
+
     const result = anneesEtudes.find(item => item.niveau === anneeCur)
     if (result) {
         console.log("anneeEtudeIndex trouvé :", result.id);
@@ -15,12 +21,13 @@ export function getAnneeEtudeIndex(anneeCur: String, anneesEtudes: AnneeEtude[])
 }
 
 export function getAnneeUnivIndex(anneeUniv: string, anneesUniv: anneeUniv[]) {
-    console.log("** function **")
+    console.log("** function getAnneeUnivIndex **")
     const result = anneesUniv.find(item => item.annee_univ.trim() === anneeUniv.trim())
     if (result) {
         console.log("anneeUnivIndex trouvé :", result.id);
         return result.id;
     } 
+    console.log("erreur lors de la conversion annee en id")
     return -1;
 }   
 
@@ -30,5 +37,6 @@ export function getSessionIndex(session: string, sessions: Session[]) {
         console.log("sessionIndex trouvé :", result.id);
         return result.id
     }
+    console.log("erreur lors de la conversion session en id")
     return -1;
 }

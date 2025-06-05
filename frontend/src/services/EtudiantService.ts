@@ -58,7 +58,7 @@ class EtudiantService {
     return response.data;
   }
 
-  public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Object> {
+  public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Etudiant[]> {
     const body = {
       "id_etablissement": idEtab,
       "id_filiere": idFiliere,

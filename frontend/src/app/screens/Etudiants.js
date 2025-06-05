@@ -4,13 +4,8 @@ import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
-import * as XLSX from "xlsx";
 import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
-import {
-  generatePDF,
-  importEtudiantToExcel,
-  exportEtudiantsToExcel,
-} from "../utils/ExcelUtils.js";
+import { generatePDF, importEtudiantToExcel, exportEtudiantsToExcel, getParcoursAnneeEtudeId, buildInscriptionsList} from "../utils/ExcelUtils.js";
 import InscriptionService from "@/services/InscriptionService";
 
 const Etudiants = () => {
@@ -26,9 +21,10 @@ const Etudiants = () => {
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
   const [filiere, setFiliere] = useState([]);
+
   // Variables
   var grades = [];
-  var anneeUnivCouranteId = 1;
+  var anneeUnivCouranteId = 2;
   var filiereCouranteId = 3;
   var sessionCouranteId = 1
   var anneeCurId = 6
@@ -137,40 +133,20 @@ const Etudiants = () => {
     }
   };
 
-  const getParcoursAnneeEtudeId = async (parcours) => {
-    const parcoursLibelle = parcours.replace("SUP - ", "");
-    try {
-      const res = await InscriptionService.getParcoursIdBylibelle(parcoursLibelle);
-      return res; // Exemple : { id: 28 }
-    } catch (err) {
-      console.error("Erreur lors de la récupération du parcours pour :", parcoursLibelle);
-      return { id: 0 };
-    }
-  };
-  const buildInscriptionsList = async (etudiantsData, anneeUniv) => {
-    // On récupère tous les IDs de parcours en parallèle
-    const parcoursIds = await Promise.all(
-      etudiantsData.map((e) => getParcoursAnneeEtudeId(e.parcours))
-    );
-
-    // On construit la liste des inscriptions avec les bons IDs
-    const inscriptionsList = etudiantsData.map((e, index) => ({
-      fk_annee_univ: anneeUniv,
-      fk_etudiant: parseInt(e.numero_carte.replace(',', '')),
-      fk_parcours_annee_etude: parcoursIds[index]?.id ?? 0, // au cas où l’id serait null
-    }));
-
-    console.log("inscriptionsList:", inscriptionsList);
-    return inscriptionsList;
-  };
-
+  const getEtudiant = () => {
   // Get the list of students
-  useEffect(() => {
-    updateEtudiant();
+    console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
+      ", sessionCouranteId = " + sessionCouranteId +
+      ", anneeEtudeCourante = " + typeAnneEtude +
+      ", filireCouranteId = " + filiereCouranteId +
+      ", anneeCurId = " + anneeCurId);
+
     EtudiantService.getEtudiantByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
       .then((response) => {
-        // console.log("🚀 Reponse brute de l'API :", response[0]);
-        // console.log(Array.isArray(response));
+        console.log("🚀 Reponse brute de l'API :", response[0]);
+        if (response.length == 0) {
+          console.log("liste vide");
+        }
         setEtudiants(response);
         setIsLoading(false);
       })
@@ -179,8 +155,9 @@ const Etudiants = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
+  }
 
+  
   // Get the list of students
   useEffect(() => {
     const anneeData = localStorage.getItem("anneesEtude");
@@ -230,23 +207,25 @@ const Etudiants = () => {
 
     const anneesUniv = JSON.parse(localStorage.getItem("annees"))
     const sessions = JSON.parse(localStorage.getItem("sessions"))
-    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"))
+    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
 
-    const anneeCur = typeParcours + " " + typeAnneEtude
+    const anneeCur = typeParcours + " " + typeAnneEtude;
 
-    anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
-    filiereCouranteId = idtypeFiliere;
-    sessionCouranteId = getSessionIndex(sessionCourante, sessions);
-    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
-
-    console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
-        ", sessionCouranteId = " + sessionCouranteId +
-        ", anneeEtudeCourante = " + typeAnneEtude +
-        ", filireCouranteId = " + filiereCouranteId +
-        ", anneeCurId = " + anneeCurId);
+    if (anneeUniv && sessionCourante && anneesUniv && sessions && anneesEtudes) {
+          anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
+          filiereCouranteId = idtypeFiliere;
+          sessionCouranteId = getSessionIndex(sessionCourante, sessions);
+          anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+    }
     setIsLoading(true);
-  }
+    getEtudiant();
 
+  }
+    useEffect(() => {
+      updateEtudiant();
+    }, [typeParcours, typeAnneEtude, idtypeFiliere]);
+
+  // 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -279,7 +258,7 @@ const Etudiants = () => {
                     setTypeParcours(e.target.value);
                     // console.log('----- parcours ---  ', e.target.value);
                     // localStorage.setItem("gradeCourant", JSON.stringify(e.target.value));
-                    updateEtudiant()
+                    // updateEtudiant();
                     }
                   }
                   className="p-2 border-none rounded-md shadow-sm text-sm"
@@ -303,7 +282,7 @@ const Etudiants = () => {
                     setIdTypeFiliere(e.target.value);
                     // console.log('----- filiere---  ', e.target.value);
                     // localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
-                    updateEtudiant()
+                    // updateEtudiant();
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -322,10 +301,10 @@ const Etudiants = () => {
                 <select
                   value={typeAnneEtude}
                   onChange={(e) => {
-                    setypeAnneEtude(e.target.value)
+                    setypeAnneEtude(e.target.value);
                     // console.log('----- type annee---  ', e.target.value);
                     // localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
-                    updateEtudiant()
+                    // updateEtudiant();
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
