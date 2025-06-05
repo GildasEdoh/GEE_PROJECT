@@ -77,124 +77,99 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
 
 // fonction pour importer un fichier excel |== ETUDIANTS
 export const importEtudiantToExcel = (e) => {
-  const file = e.target.files[0];
-  if (!file) {
-    alert("Veuillez sélectionner un fichier Excel.");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    const data = evt.target.result;
-
-    try {
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
-
-      const requiredColumns = [
-        "N°",
-        "Ets",
-        "Parcours",
-        "Nb. insc.",
-        "Carte",
-        "Nom",
-        "Prénoms",
-        "Sexe",
-        "Né le",
-        "À",
-        "Nationalité",
-        "Tél",
-      ];
-
-      const sheetColumns = Object.keys(jsonData[0] || {});
-      const isValidStructure = requiredColumns.every((col) =>
-        sheetColumns.includes(col)
-      );
-
-      if (!isValidStructure) {
-        alert(
-          "Le fichier Excel ne correspond pas à la structure attendue. Il doit contenir toutes les colonnes comme dans le modèle."
-        );
-        return;
-      }
-
-      const formattedData = jsonData
-        .map((row) => {
-          const {
-            Carte: numero_carte,
-            Nom: nom,
-            Prénoms: prenom,
-            Sexe: sexe,
-            "Né le": date_naissance,
-            "À": lieu_naissance,
-            Nationalité: Nationalite,
-            Tél: Tel_1,
-            Ets: etab,
-            Parcours: parcours
-          } = row;
-
-          if (
-            !numero_carte ||
-            !nom ||
-            !prenom ||
-            !date_naissance ||
-            !lieu_naissance ||
-            !sexe
-          ) {
-            alert(
-              `Ligne incomplète détectée : ${JSON.stringify(row)}. Ignorée.`
-            );
-            return null;
-          }
-
-          if (!["M", "F"].includes(sexe.toUpperCase())) {
-            alert(
-              `Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenom}.`
-            );
-            return null;
-          }
-
-          return {
-            carte: numero_carte,
-            nom,
-            prenom,
-            sexe: sexe.toUpperCase(),
-            date_naissance,
-            lieu_naissance,
-            Nationalite,
-            Tel_1,
-            parcours,
-            etab
-          };
-        })
-        .filter((etudiant) => etudiant !== null);
-
-      console.log("etudiants : ", formattedData);
-
-      // const blob = new Blob([JSON.stringify(formattedData, null, 2)], {
-      //   type: "application/json",
-      // });
-      // const url = URL.createObjectURL(blob);
-
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.download = "etudiants_importes.json";
-      // document.body.appendChild(link);
-      // link.click();
-      // document.body.removeChild(link);
-    } catch (error) {
-      alert("Erreur de lecture du fichier Excel.");
+  return new Promise((resolve, reject) => {
+    const file = e.target.files[0];
+    if (!file) {
+      alert("Veuillez sélectionner un fichier Excel.");
+      reject("Aucun fichier sélectionné");
+      return;
     }
-  };
 
-  reader.onerror = () => {
-    alert("Erreur lors de l'ouverture du fichier.");
-  };
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const data = evt.target.result;
+      let formattedData = [];
 
-  reader.readAsBinaryString(file);
+      try {
+        const workbook = XLSX.read(data, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
+
+        const requiredColumns = [
+          "N°", "Ets", "Parcours", "Nb. insc.", "Carte", "Nom", "Prénoms", "Sexe",
+          "Né le", "À", "Nationalité", "Tél"
+        ];
+
+        const sheetColumns = Object.keys(jsonData[0] || {});
+        const isValidStructure = requiredColumns.every((col) =>
+          sheetColumns.includes(col)
+        );
+
+        if (!isValidStructure) {
+          alert("Le fichier Excel ne correspond pas à la structure attendue.");
+          reject("Colonnes invalides");
+          return;
+        }
+
+        formattedData = jsonData
+          .map((row) => {
+            const {
+              Carte: numero_carte,
+              Nom: nom,
+              Prénoms: prenom,
+              Sexe: sexe,
+              "Né le": date_naissance,
+              "À": lieu_naissance,
+              Nationalité: Nationalite,
+              Tél: Tel_1,
+              Ets: etab,
+              Parcours: parcours
+            } = row;
+
+            if (!numero_carte || !nom || !prenom || !date_naissance || !lieu_naissance || !sexe) {
+              alert(`Ligne incomplète détectée : ${JSON.stringify(row)}. Ignorée.`);
+              return null;
+            }
+
+            if (!["M", "F"].includes(sexe.toUpperCase())) {
+              alert(`Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenom}.`);
+              return null;
+            }
+
+            return {
+              numero_carte,
+              nom,
+              prenom,
+              sexe: sexe.toUpperCase(),
+              date_naissance,
+              lieu_naissance,
+              Nationalite,
+              Tel_1,
+              parcours,
+              etab
+            };
+          })
+          .filter((etudiant) => etudiant !== null);
+
+
+        resolve(formattedData);
+        console.log("formattedData: ", formattedData);
+      } catch (error) {
+        alert("Erreur de lecture du fichier Excel.");
+        reject(error);
+      }
+    };
+
+    reader.onerror = () => {
+      alert("Erreur lors de l'ouverture du fichier.");
+      reject("Erreur fichier");
+    };
+
+    reader.readAsBinaryString(file);
+  });
 };
+
 
 // fonction pour exporter les donnees en fichier excel |== ETUDIANTS
 export const exportEtudiantsToExcel = (etudiants) => {

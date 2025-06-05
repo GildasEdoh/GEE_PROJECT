@@ -82,15 +82,39 @@ class EtudiantController extends Controller
     // Ajouter plusieurs etudiants
     public function bulkStore(Request $request)
     {
-        $data = $request->validate([
-            'etudiants' => 'required|array',
-            'etudiants.*.nom' => 'required|string',
-            'etudiants.*.prenom' => 'required|string',
+        // Valider les données
+        $validatedData = $request->validate([
+            'etudiants.*.numero_carte' => 'required|integer',
+            'etudiants.*.nom' => 'required|string|max:100',
+            'etudiants.*.prenom' => 'nullable|string|max:100',
+            'etudiants.*.date_naissance' => 'required|date_format:m/d/Y', // Accepte le format MM/DD/YYYY
+            'etudiants.*.lieu_naissance' => 'nullable|string|max:100',
+            'etudiants.*.sexe' => 'nullable|in:M,F',
+            'etudiants.*.Tel_1' => 'nullable|string|max:20',
+            'etudiants.*.id_etablissement' => 'nullable|integer',
+            'etudiants.*.Nationalite' => 'nullable|string|max:50',
+            'etudiants.*.Tel_2' => 'nullable|string|max:50',
+            'etudiants.*.ville' => 'nullable|string|max:30',
+            'etudiants.*.quartier' => 'nullable|string|max:30',
+            'etudiants.*.rue' => 'nullable|string|max:40',
         ]);
+        $etudiants = [];
 
-        Etudiant::insert($data['etudiants']);
+        foreach ($validatedData as $data) {
+            // Convertir la date au format MySQL
+            $dateNaissance = DateTime::createFromFormat('m/d/Y', $data['date_naissance']);
+            $data['date_naissance'] = $dateNaissance->format('Y-m-d');
 
-        return response()->json(['message' => 'Étudiants ajoutés avec succès.']);
+            // S'assurer que numero_carte est bien un entier
+            $data['numero_carte'] = (int)$data['numero_carte'];
+            $etudiants[] = Etudiant::create($data);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $etudiants,
+            'message' => count($etudiants) . ' étudiant(s) créé(s) avec succès'
+        ], 201);
     }
 
     // Liste des etudiants en fonction du parcours

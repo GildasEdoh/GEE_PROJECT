@@ -45,3 +45,20 @@ interface Matiere {
     optionnelle: String
     coefficient: String
 }
+
+interface etudiant {
+    id: String               
+    numero_carte: String     
+    nom: String              
+    prenom: String           
+    date_naissance: String   
+    lieu_naissance: String   
+    sexe: String             
+    Tel_1: String            
+    id_etablissement: String 
+    Nationalite: String      
+    Tel_2: String            
+    ville: String            
+    quartier: String         
+    rue: String              
+}

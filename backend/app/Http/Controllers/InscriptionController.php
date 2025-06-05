@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InscriptionController extends Controller
 {
@@ -29,18 +30,18 @@ class InscriptionController extends Controller
     // Lire toutes les inscriptions
     public function index()
     {
-        $inscriptions = Inscription::with(['etudiants', 'sessions'])->get();
+        $inscriptions = Inscription::all();
         return response()->json($inscriptions);
     }
 
     // Lire une inscription par ID
     public function show($id)
     {
-        $inscription = Inscription::with(['etudiants', 'sessions'])->find($id);
-        if (!$inscription) {
-            return response()->json(['message' => 'Inscription non trouvée'], 404);
-        }
-        return response()->json($inscription);
+        // $inscription = Inscription::with(['etudiants', 'sessions'])->find($id);
+        // if (!$inscription) {
+        //     return response()->json(['message' => 'Inscription non trouvée'], 404);
+        // }
+        // return response()->json($inscription);
     }
 
     // Mettre à jour une inscription
@@ -77,5 +78,38 @@ class InscriptionController extends Controller
 
         $inscription->delete();
         return response()->json(['message' => 'Inscription supprimée avec succès']);
+    }
+
+        // Lire toutes les inscriptions
+    public function obtainIdParcoursAnneeEtude(Request $request)
+    {
+        $libelle = $request->input('libelle'); 
+
+        $id = DB::table('parcours_annees_etude')
+                ->where('libelle', $libelle)
+                ->value('id');
+
+        if ($id === null) {
+            return response()->json([
+                'message' => "Aucun parcours avec le libellé '$libelle' n'a été trouvé."
+            ], 404);
+        }
+
+        return response()->json(['id' => $id]);
+    }
+
+        // Ajouter plusieurs inscriptions
+    public function bulkStore(Request $request)
+    {
+        $data = $request->validate([
+            'inscriptions' => 'required|array',
+            'inscriptions.*.fk_etudiant' => 'required|integer',
+            'inscriptions.*.fk_parcours_annee_etude' => 'required|integer',
+            'inscriptions.*.fk_annee_univ' => 'required|string',
+        ]);
+
+        Inscription::insert($data['inscriptions']);
+
+        return response()->json(['message' => 'inscriptions ajoutés avec succès.']);
     }
 }

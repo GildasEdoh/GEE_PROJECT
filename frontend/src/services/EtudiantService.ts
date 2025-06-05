@@ -69,6 +69,14 @@ class EtudiantService {
     const response = await api.post(filteredPath, body);
     return response.data;
   }
+
+  public async addAllEtudiant(students: any): Promise<any> {
+    const body = {
+      "etudiants": students
+    }
+    const response = await api.post(path + '/bulk', body);
+    return response.data;
+  }
 }
 
 export default EtudiantService.getInstance();

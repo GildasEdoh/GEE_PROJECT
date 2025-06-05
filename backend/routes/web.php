@@ -70,7 +70,7 @@ Route::prefix('etudiants')->group(function () {
     Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy'); // Supprimer
     Route::post('/filtrage', [EtudiantController::class, 'listeParCriteres']);
 
-    // Route::post('/bulk', [EtudiantController::class, 'bulkStore'])->name('etudiants.bulk'); // Ajouter plusieurs etudiants
+    Route::post('/bulk', [EtudiantController::class, 'bulkStore'])->name('etudiants.bulk'); // Ajouter plusieurs etudiants
     // Route::delete('/', [EtudiantController::class, 'destroyAll'])->name('etudiants.destroyAll'); // Suprimer plusieurs etudiants
     Route::post('/matieres', [EtudiantController::class, 'obtainAllEtudiantsBySubject'])->name('etudiants.obtainAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
 });
@@ -129,6 +129,8 @@ Route::prefix('inscriptions')->group(function () {
     Route::get('/{id}', [InscriptionController::class, 'show'])->name('inscriptions.show');
     Route::put('/{id}', [InscriptionController::class, 'update'])->name('inscriptions.update');
     Route::delete('/{id}', [InscriptionController::class, 'destroy'])->name('inscriptions.destroy');
+    Route::post('/parcoursId', [InscriptionController::class, 'obtainIdParcoursAnneeEtude'])->name('inscriptions.obtainIdParcoursAnneeEtude');
+    Route::post('/bulk', [InscriptionController::class, 'bulkStore'])->name('inscriptions.bulk'); // Ajouter plusieurs etudiants
 });
 
 // ====================================

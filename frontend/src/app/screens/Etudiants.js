@@ -11,6 +11,7 @@ import {
   importEtudiantToExcel,
   exportEtudiantsToExcel,
 } from "../utils/ExcelUtils.js";
+import InscriptionService from "@/services/InscriptionService";
 
 const Etudiants = () => {
   const [editIndex, setEditIndex] = useState(null);
@@ -80,6 +81,87 @@ const Etudiants = () => {
         setMajMessage("Échec de la mise à jour.");
         setMajIsSucces(false);
       });
+  };
+
+
+  const launchImport = async (e) => {
+    setIsLoading(true);
+    console.log("Un fichier a été sélectionné");
+    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
+    try {
+      const etudiantsData = await importEtudiantToExcel(e);
+
+      const etudiantsList = etudiantsData.map((e) => ({
+        numero_carte: parseInt(e.numero_carte.replace(',', '')),
+        nom: e.nom,
+        prenom: e.prenom,
+        date_naissance: e.date_naissance,
+        lieu_naissance: e.lieu_naissance,
+        sexe: e.sexe,
+        Tel_1: e.Tel_1,
+        id_etablissement: 1,
+        Nationalite: e.Nationalite,
+        Tel_2: "",
+        ville: "",
+        quartier: "",
+        rue: ""
+      }));
+      console.log("etudiantsList :", etudiantsList);
+      
+      // // Insertion des etudiants
+      console.log('insertion etudiants: ');
+      try {
+          const res  = await EtudiantService.addAllEtudiant(etudiantsList);
+          rconsole.log("res: ", res); // Exemple : { id: 28 }
+      } catch (err) {
+          console.error("Erreur Insert :");
+      }
+      setEtudiants(etudiantsList);
+      
+      const inscriptionsList = await buildInscriptionsList(etudiantsData, anneeUniv);
+      console.log("inscriptionsList :", inscriptionsList);
+      setIsLoading(false);
+      
+      // console.log('insertion inscriptions: ');
+      // // inscription des etudiants
+      // try {
+      //       const res  = await InscriptionService.insertAll(inscriptionsList);
+      //       rconsole.log("res: ", res); // Exemple : { id: 28 }
+      //   } catch (err) {
+      //       console.error("Erreur Insert :");
+      //   }
+
+      // ici tu peux faire ce que tu veux avec inscriptionsList
+    } catch (error) {
+      console.error("Erreur d'import:", error);
+    }
+  };
+
+  const getParcoursAnneeEtudeId = async (parcours) => {
+    const parcoursLibelle = parcours.replace("SUP - ", "");
+    try {
+      const res = await InscriptionService.getParcoursIdBylibelle(parcoursLibelle);
+      return res; // Exemple : { id: 28 }
+    } catch (err) {
+      console.error("Erreur lors de la récupération du parcours pour :", parcoursLibelle);
+      return { id: 0 };
+    }
+  };
+  const buildInscriptionsList = async (etudiantsData, anneeUniv) => {
+    // On récupère tous les IDs de parcours en parallèle
+    const parcoursIds = await Promise.all(
+      etudiantsData.map((e) => getParcoursAnneeEtudeId(e.parcours))
+    );
+
+    // On construit la liste des inscriptions avec les bons IDs
+    const inscriptionsList = etudiantsData.map((e, index) => ({
+      fk_annee_univ: anneeUniv,
+      fk_etudiant: parseInt(e.numero_carte.replace(',', '')),
+      fk_parcours_annee_etude: parcoursIds[index]?.id ?? 0, // au cas où l’id serait null
+    }));
+
+    console.log("inscriptionsList:", inscriptionsList);
+    return inscriptionsList;
   };
 
   // Get the list of students
@@ -471,7 +553,7 @@ const Etudiants = () => {
               <input
                 type="file"
                 accept=".xlsx, .xls"
-                onChange={importEtudiantToExcel}
+                onChange={launchImport}
                 className="hidden"
               />
             </label>
