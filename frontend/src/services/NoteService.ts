@@ -1,7 +1,7 @@
 import api from "./ApiService";
 
 const path = "/notes";
-
+const frequence_path = path + `/frequence-matiere-globale`;
 class NoteService {
   private static instance: NoteService;
 
@@ -54,6 +54,99 @@ class NoteService {
     const response = await api.get(`${path}/${id}`);
     return response.data;
   }
+
+  public async getRepartitionsNotes(
+  idEtab: string,
+  idFiliere: string,
+  idParcours: string,
+  idAnneeEtu: string,
+  idAnneeUniv: string,
+  idSession: string,
+  idTypeEval: string
+): Promise<Object> {
+  const body = {
+    id_etablissement: idEtab,
+    id_filiere: idFiliere,
+    id_parcours: idParcours,
+    id_annee_etude: idAnneeEtu,
+    id_annee_univ: idAnneeUniv,
+    id_session_annee: idSession,
+    id_type_evaluation: idTypeEval
+  };
+  
+  const response = await api.post(frequence_path, body);
+  return response.data;
+}
+  public async getRecalesMatiere(
+  idEtab: string,
+  idFiliere: string,
+  idParcours: string,
+  idAnneeEtu: string,
+  idAnneeUniv: string,
+  idSession: string,
+  idTypeEval: string
+): Promise<Object> {
+  const body = {
+    id_etablissement: idEtab,
+    id_filiere: idFiliere,
+    id_parcours: idParcours,
+    id_annee_etude: idAnneeEtu,
+    id_annee_univ: idAnneeUniv,
+    id_session_annee: idSession,
+    id_type_evaluation: idTypeEval
+  };
+  
+  const response = await api.post(frequence_path, body);
+  return response.data;
+}
+  public async getEtudiantMention(
+  idEtab: string,
+  idFiliere: string,
+  idParcours: string,
+  idAnneeEtu: string,
+  idAnneeUniv: string,
+  idSession: string,
+  idTypeEval: string
+): Promise<Object> {
+  const body = {
+    id_etablissement: idEtab,
+    id_filiere: idFiliere,
+    id_parcours: idParcours,
+    id_annee_etude: idAnneeEtu,
+    id_annee_univ: idAnneeUniv,
+    id_session_annee: idSession,
+    id_type_evaluation: idTypeEval
+  };
+  
+  const response = await api.post(frequence_path, body);
+  return response.data;
+}
+  public async getFrequenceParMatiere(
+  idEtab: string,
+  idFiliere: string,
+  idParcours: string,
+  idAnneeEtu: string,
+  idAnneeUniv: string,
+  idSession: string,
+  idTypeEval: string
+): Promise<Object> {
+  const body = {
+    id_etablissement: idEtab,
+    id_filiere: idFiliere,
+    id_parcours: idParcours,
+    id_annee_etude: idAnneeEtu,
+    id_annee_univ: idAnneeUniv,
+    id_session_annee: idSession,
+    id_type_evaluation: idTypeEval
+  };
+  
+  const response = await api.post(frequence_path, body);
+  return response.data;
+}
+  
+
+
+
 }
 
 export default NoteService.getInstance();
