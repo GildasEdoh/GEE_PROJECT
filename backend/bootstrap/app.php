@@ -26,10 +26,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'http://localhost:8000/inscriptions',
             'http://localhost:8000/evaluations',
             'http://localhost:8000/notes',
+            'http://localhost:8000/notes/frequence-matiere-globale',
+            'http://localhost:8000/notes/etudiants-mention',
+            'http://localhost:8000/notes/nombre-recales-matieres',
+            'http://localhost:8000/notes/repartition-notes',
             'http://localhost:8000/typedetails',
             'http://localhost:8000/typedetails',
-            // 'http://127.0.0.1:8000/login',
-
+            'http://127.0.0.1:8000/register',
+            'http://127.0.0.1:8000/login',
+            'http://127.0.0.1:8000/etudiants/filtrage',
         ]);
 
         $middleware->web(append: [

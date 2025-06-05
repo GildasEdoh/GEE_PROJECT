@@ -13,7 +13,6 @@ class SessionController extends Controller
         // Validation des données
         $validatedData = $request->validate([
             'libelle' => 'required|string|max:255',
-            'nbcompose' => 'required|integer|min:1',
             'cloture' => 'required|boolean',
         ]);
 

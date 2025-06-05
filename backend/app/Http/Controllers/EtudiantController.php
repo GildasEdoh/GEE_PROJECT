@@ -92,31 +92,56 @@ class EtudiantController extends Controller
 
         return response()->json(['message' => 'Étudiants ajoutés avec succès.']);
     }
-    
-    // Lire les étudiants par matière
-    public function getAllEtudiantsBySubject($idMatiere)
-    {
-        $anneeEnCours = "2024-2025"; 
 
-        $etudiants = DB::table('notes as n')
-        ->distinct()
-        ->join('etudiants as et', 'n.fk_etudiant', '=', 'et.numero_carte')
-        ->join('inscriptions as i', 'i.fk_etudiant', '=', 'et.numero_carte')
-        ->join('evaluations as e', 'n.fk_evaluation', '=', 'e.id')
-        ->join('evaluation_matiere as em', 'e.id', '=', 'em.fk_evaluation')
-        ->join('matieres as m', 'em.fk_matiere', '=', 'm.id')
-        ->where('m.id', $idMatiere)
-        ->where('i.annee', $anneeEnCours)
-        ->select(
-            'et.numero_carte',   // ✅ numéro de carte avec son vrai nom
-            'et.nom',
-            'et.prenom',
-            'et.sexe',           // ✅ ajout du champ sexe
-            'm.libelle as matiere',
-            'i.annee'
-        )
-        ->get();
+    // Liste des etudiants en fonction du parcours
+    public function listeParCriteres(Request $request)
+    {
+        // Validation des paramètres
+        $request->validate([
+            'id_etablissement' => 'required|integer',
+            'id_filiere' => 'required|integer',
+            'id_annee_etude' => 'required|integer',
+            'id_annee_univ' => 'required|integer',
+            'id_session' => 'required|integer',
+        ]);
+
+        // Appel de la procédure stockée
+        $etudiants = DB::select('CALL liste_etudiants_par_criteres(?, ?, ?, ?, ?)', [
+            $request->id_etablissement,
+            $request->id_filiere,
+            $request->id_annee_etude,
+            $request->id_annee_univ,
+            $request->id_session
+        ]);
+
         return response()->json($etudiants);
     }
 
+    // Récupérer tous les étudiants par matière
+    public function obtainAllEtudiantsBySubject(Request $request)
+    {
+        $request->validate([
+            'id_etablissement' => 'required|integer',
+            'id_filiere' => 'required|integer',
+            'id_annee_etude' => 'required|integer',
+            'id_annee_univ' => 'required|integer',
+            'id_session' => 'required|integer',
+            'id_evaluation' => 'required|integer',
+            'id_matiere' => 'required|integer',
+        ]);
+
+        $etudiants = DB::select('CALL get_stats_matiere_etudiants(?, ?, ?, ?, ?, ?, ?)', [
+            $request->id_etablissement,
+            $request->id_filiere,
+            $request->id_annee_etude,
+            $request->id_annee_univ,
+            $request->id_session, 
+            $request->id_evaluation, 
+            $request->id_matiere, 
+        ]);
+
+
+        return response()->json($etudiants);
+    }
+    // Liste des etudiants inscrits
 }

@@ -46,6 +46,7 @@ class MatiereController extends Controller
             'libelle' => 'required|string|max:255',
             'abreviation' => 'nullable|string|max:10',
             'optionnelle' => 'boolean',
+            'coefficient' => 'required|integer|min:1|max:10',
         ]);
 
         // Mettre à jour la matière

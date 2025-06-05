@@ -12,17 +12,18 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TypeDetailsController;
+use App\Http\Controllers\AnneesEtudeController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\AnneeUnivController;
+use App\Http\Controllers\TypeEvaluationController;
+use App\Http\Controllers\EtablissementController;
 /*
 |--------------------------------------------------------------------------
 | Routes Web
 |--------------------------------------------------------------------------
 */
-
-// Route principale
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
 
 Route::get('/test-db-connection', function () {
     try {
@@ -33,14 +34,12 @@ Route::get('/test-db-connection', function () {
     }
 });
 
-use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
 | Routes Web
 |--------------------------------------------------------------------------
 */
-
 
 // Route principale
 Route::get('/', function () {
@@ -69,9 +68,11 @@ Route::prefix('etudiants')->group(function () {
     Route::get('/{id}', [EtudiantController::class, 'show'])->name('etudiants.show');       // Afficher un étudiant
     Route::put('/{id}', [EtudiantController::class, 'update'])->name('etudiants.update');   // Mettre à jour
     Route::delete('/{id}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy'); // Supprimer
+    Route::post('/filtrage', [EtudiantController::class, 'listeParCriteres']);
+
     // Route::post('/bulk', [EtudiantController::class, 'bulkStore'])->name('etudiants.bulk'); // Ajouter plusieurs etudiants
     // Route::delete('/', [EtudiantController::class, 'destroyAll'])->name('etudiants.destroyAll'); // Suprimer plusieurs etudiants
-    // Route::get('/matieres/{id_matiere}', [EtudiantController::class, 'getAllEtudiantsBySubject'])->name('etudiants.getAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
+    Route::post('/matieres', [EtudiantController::class, 'obtainAllEtudiantsBySubject'])->name('etudiants.obtainAllEtudiantsBySubject');       // Afficher la liste des étudiants par matière
 });
 
 
@@ -139,6 +140,13 @@ Route::prefix('notes')->group(function () {
     Route::get('/{id}', [NoteController::class, 'show'])->name('notes.show'); // Afficher une note spécifique
     Route::put('/{id}', [NoteController::class, 'update'])->name('notes.update'); // Mettre à jour une note
     Route::delete('/{id}', [NoteController::class, 'destroy'])->name('notes.destroy'); // Supprimer une note
+    Route::post('/repartition-notes', [NoteController::class, 'repartitionNotes']); // afficher la Repartition des notes par matieres
+
+    Route::post('/nombre-recales-matieres', [NoteController::class, 'nombreRecalesToutesMatieres']); //afficher les recalés par matieres
+
+    Route::post('/etudiants-mention', [NoteController::class, 'getStatsMentions']); //Repartition des etudiants par mention
+
+    Route::post('/frequence-matiere-globale', [NoteController::class, 'frequenceResultatsParMatiereGlobale']);  //frequence des  resultats par matiere
 });
 
 // ====================================
@@ -153,6 +161,42 @@ Route::prefix('typedetails')->group(function () {
 });
 
 // ====================================
+// 🏆 Gestion des annees_etudes
+// ====================================
+Route::prefix('anneesEtude')->group(function () {
+    Route::get('/', [AnneesEtudeController::class, 'index'])->name('annees_etude.index'); // Obtenir la liste des annees_etudes
+});
+
+
+// ====================================
+// 🏆 Gestion des annes_universitaires 
+// ====================================
+Route::prefix('anneesUnivs')->group(function () {
+    Route::get('/', [AnneeUnivController::class, 'index'])->name('annees_universitaire.index'); // Obtenir la liste des universitaires
+});
+
+// ====================================
+// 🏆 Gestion des Filieres
+// ====================================
+Route::prefix('filieres')->group(function () {
+    Route::get('/', [FiliereController::class, 'index'])->name('filieres.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
+// 🏆 Gestion des etablissements
+// ====================================
+Route::prefix('etablissements')->group(function () {
+    Route::get('/', [EtablissementController::class, 'index'])->name('etablissements.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
+// 🏆 Gestion des typeEvaluations
+// ====================================
+Route::prefix('typeEvaluation')->group(function () {
+    Route::get('/', [TypeEvaluationController::class, 'index'])->name('types_evaluation.index'); // Obtenir la liste des annees_etudes
+});
+
+// ====================================
 // ⚙️ Routes Authentification (Middleware)
 // ====================================
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -162,7 +206,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/login', [AuthController::class, 'store']);
-
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

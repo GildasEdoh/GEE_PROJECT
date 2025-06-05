@@ -1,42 +1,59 @@
-import api from "./ApiService"
-/**
- * CRUD service for notes
- */
+import api from "./ApiService";
 
-const path = "/notes"
+const path = "/notes";
+
 class NoteService {
-    private static instance: NoteService;
+  private static instance: NoteService;
 
-    // Default constructor
-    private constructor() {}
+  private constructor() {}
 
-    public static getInstance(): NoteService {
-        if (!NoteService.instance) {
-            NoteService.instance = new NoteService();
-        }
-        return NoteService.instance
+  public static getInstance(): NoteService {
+    if (!NoteService.instance) {
+      NoteService.instance = new NoteService();
     }
+    return NoteService.instance;
+  }
 
-    // Return the list of all notes 
-    public async getAllEtudiant(): Promise<any> {
-        const response = await api.get(path);
-        return response.data
+  // Récupérer toutes les notes
+  public async getAllNotes(): Promise<any> {
+    const response = await api.get(path);
+    return response.data;
+  }
+
+  // Ajouter une note
+  public async addNote(note: {
+    fk_etudiant: number;
+    fk_evaluation: number;
+    valeur: number;
+    gele?: boolean;
+  }): Promise<any> {
+    const response = await api.post(path, note);
+    return response.data;
+  }
+
+  // Mettre à jour une note
+  public async updateNote(
+    id: number,
+    updateData: {
+      valeur?: number;
+      gele?: boolean;
     }
+  ): Promise<any> {
+    const response = await api.put(`${path}/${id}`, updateData);
+    return response.data;
+  }
 
-    // Add a new note
-    public async addEtudiant(nom: string): Promise<any> {
-        const response = await api.post(path, {nom})
-    }
+  // Supprimer une note
+  public async deleteNote(id: number): Promise<any> {
+    const response = await api.delete(`${path}/${id}`);
+    return response.data;
+  }
 
-    // Update a note
-    public async updateEtudiant(): Promise<any> {
-
-    }
-
-    // Delete a note
-    public async deleteEtudiant() : Promise<any>{
-
-    }
+  // Récupérer une note spécifique
+  public async getNote(id: number): Promise<any> {
+    const response = await api.get(`${path}/${id}`);
+    return response.data;
+  }
 }
 
 export default NoteService.getInstance();
