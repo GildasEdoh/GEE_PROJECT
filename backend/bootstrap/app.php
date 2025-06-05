@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'http://localhost:8000/coefficient',
             'http://localhost:8000/sessions',
             'http://localhost:8000/inscriptions',
+            'http://localhost:8000/inscriptions/parcoursId',
             'http://localhost:8000/evaluations',
             'http://localhost:8000/notes',
             'http://localhost:8000/typedetails',

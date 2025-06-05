@@ -52,6 +52,7 @@ import Navbar from "./components/NavBar";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
 import { useState } from "react";
+import InscriptionService from "@/services/InscriptionService";
 
 export default function Home() {
   const [selectedMenu, setSelectedMenu] = useState("accueil");

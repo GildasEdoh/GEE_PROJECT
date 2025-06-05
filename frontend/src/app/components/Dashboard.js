@@ -38,6 +38,5 @@ export default function Dashboard({ selectedMenu }) {
         return <Accueil />;
     }
   };
-
   return <div className="p-4">{renderContent()}</div>;
 }

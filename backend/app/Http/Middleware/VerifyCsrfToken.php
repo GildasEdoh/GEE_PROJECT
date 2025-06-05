@@ -13,11 +13,12 @@ class VerifyCsrfToken extends Middleware
      */
 
     protected $except = [
-        '/etudiant/matieres',
-        '/etudiant',
-        '/etudiant/*',
+        'etudiant/matieres',
+        'etudiant',
+        'etudiant/*',
         'http://localhost:3000/*', // Désactive CSRF pour toutes les routes API
-        '/sanctum/csrf-cookie', // Exclure toutes les routes API de la vérification CSRF
-        'login'
+        'sanctum/csrf-cookie', // Exclure toutes les routes API de la vérification CSRF
+        'login',
+        'inscriptions/parcoursId'
     ];
 }
