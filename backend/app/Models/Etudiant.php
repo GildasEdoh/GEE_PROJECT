@@ -20,8 +20,13 @@ class Etudiant extends Model
         'date_naissance',
         'lieu_naissance',
         'sexe',
-        'telephone',
         'id_etablissement',
+        'Nationalite',
+        'Tel_1',
+        'Tel_2',
+        'ville',
+        'quartier',
+        'rue'
     ];
 
     public function inscriptions()

@@ -1,3 +1,6 @@
+
+'use client';
+
 import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
@@ -7,6 +10,8 @@ import FiliereService from "@/services/FiliereService";
 import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 import { generatePDF, importEtudiantToExcel, exportEtudiantsToExcel, getParcoursAnneeEtudeId, buildInscriptionsList} from "../utils/ExcelUtils.js";
 import InscriptionService from "@/services/InscriptionService";
+import showNotification from '../utils/showMessage';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Etudiants = () => {
   const [editIndex, setEditIndex] = useState(null);
@@ -22,13 +27,19 @@ const Etudiants = () => {
   const [anneesEtude, setAnneesEtude] = useState([]);
   const [filiere, setFiliere] = useState([]);
 
+
   // Variables
   var grades = [];
   var anneeUnivCouranteId = 2;
   var filiereCouranteId = 3;
-  var sessionCouranteId = 1
-  var anneeCurId = 6
-  var etabCourantId = 1
+  var sessionCouranteId = 1;
+  var anneeCurId = 6;
+  var etabCourantId = 1;
+  // var localEtab = JSON.parse(localStorage.getItem('etablissementCourantId'));
+  // if (localEtab) {
+  //   console.log("parseur : ", localEtab);
+  //   etabCourantId = parseInt(localEtab);
+  // }
 
   // Submission of the suppression
   const handleDeleteEtudiant = (index) => {
@@ -43,6 +54,7 @@ const Etudiants = () => {
           `Suppression de l'etudiant ${deleteEtudiant.nom} effectuee avec succes !`
         );
         setMajIsSucces(true);
+        showNotification(`Étudiant ${deleteEtudiant.nom} supprimé avec succès`, 'success');
       })
       .catch((err) => {
         console.error("Erreur :", err);
@@ -71,6 +83,7 @@ const Etudiants = () => {
       .then((res) => {
         setMajMessage("Mise à jour réussie !");
         setMajIsSucces(true);
+        showNotification(`Étudiant "${editedData.nom} ${editedData.prenom}" modifié avec succès`, 'success');
       })
       .catch((err) => {
         console.error("Erreur :", err);
@@ -83,10 +96,14 @@ const Etudiants = () => {
   const launchImport = async (e) => {
     setIsLoading(true);
     console.log("Un fichier a été sélectionné");
-    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
+    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"));
+    const anneesUniv = JSON.parse(localStorage.getItem("annees"));
+    if (anneesUniv) {
+      anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
+    }
+    
     try {
       const etudiantsData = await importEtudiantToExcel(e);
-
       const etudiantsList = etudiantsData.map((e) => ({
         numero_carte: parseInt(e.numero_carte.replace(',', '')),
         nom: e.nom,
@@ -95,7 +112,7 @@ const Etudiants = () => {
         lieu_naissance: e.lieu_naissance,
         sexe: e.sexe,
         Tel_1: e.Tel_1,
-        id_etablissement: 1,
+        id_etablissement: etabCourantId,
         Nationalite: e.Nationalite,
         Tel_2: "",
         ville: "",
@@ -104,33 +121,82 @@ const Etudiants = () => {
       }));
       console.log("etudiantsList :", etudiantsList);
       
-      // // Insertion des etudiants
-      console.log('insertion etudiants: ');
-      try {
-          const res  = await EtudiantService.addAllEtudiant(etudiantsList);
-          rconsole.log("res: ", res); // Exemple : { id: 28 }
-      } catch (err) {
-          console.error("Erreur Insert :");
-      }
-      setEtudiants(etudiantsList);
-      
-      const inscriptionsList = await buildInscriptionsList(etudiantsData, anneeUniv);
-      console.log("inscriptionsList :", inscriptionsList);
+      const inscriptionsList = await buildInscriptionsList(etudiantsData, anneeUnivCouranteId);
       setIsLoading(false);
-      
-      // console.log('insertion inscriptions: ');
-      // // inscription des etudiants
-      // try {
-      //       const res  = await InscriptionService.insertAll(inscriptionsList);
-      //       rconsole.log("res: ", res); // Exemple : { id: 28 }
-      //   } catch (err) {
-      //       console.error("Erreur Insert :");
-      //   }
+      const userConfirmed = await toast.promise(
+        new Promise((resolve, reject) => {
+          const toastId = toast.custom((t) => (
+            <div className="bg-white p-6 rounded-lg shadow-xl">
+              <h3 className="font-bold text-lg">Confirmer l'insertion</h3>
+              <p className="my-4">
+                Voulez-vous vraiment inscrire {etudiantsData.length} étudiants pour l'année universitaire: {anneeUniv} ?
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    toast.dismiss(toastId);
+                    reject(new Error('Annulation utilisateur')); // Seulement reject ici
+                  }}
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={() => {
+                    toast.dismiss(toastId);
+                    resolve(true); // Seulement resolve ici
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded"
+                >
+                  Confirmer
+                </button>
+              </div>
+            </div>
+          ), {
+            duration: Infinity
+          });
+        }),
+        {
+          loading: 'Validation en cours...',
+          error: (err) => err.message === 'Annulation utilisateur' 
+            ? 'Inscription annulée' 
+            : 'Erreur lors de la confirmation',
+          success: 'Validation acceptée'
+        }
+      );
 
-      // ici tu peux faire ce que tu veux avec inscriptionsList
+        setIsLoading(true);
+        if (userConfirmed) {
+            // Insertion des etudiants
+            console.log('insertion etudiants: ');
+            showNotification(`Insertion en cours `, 'loading');
+            try {
+                const res  = await EtudiantService.addAllEtudiant(etudiantsList);
+                console.log("res: ", res); // Exemple : { id: 28 }
+                console.log("Etudiant enregestrées avec succes ");
+                showNotification(`Vous avez inséré "${etudiantsList.length}" avec succes `, 'success');
+            } catch (err) {
+                console.error("Erreur Insert :", err);
+                showNotification("Erreur inscription", "error");
+            }
+            setEtudiants(etudiantsList);
+            // Inscription des etudiants
+            console.log('Insertion inscriptions: ');
+            try {
+              const res = await InscriptionService.insertAll(inscriptionsList);
+              showNotification("Etudiants inscrits avec succes", "success");
+              console.log("Résultat:", res);
+            } catch (err) {
+              showNotification("Erreur inscription", "error");
+              console.error("Erreur:", err);
+            }
+
+        }
     } catch (error) {
-      console.error("Erreur d'import:", error);
+      showNotification(error.message, 'error');
+      console.log("Erreur:", error.message);
     }
+    setIsLoading(false);
   };
 
   const getEtudiant = () => {
@@ -205,8 +271,8 @@ const Etudiants = () => {
     const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
     const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"))
 
-    const anneesUniv = JSON.parse(localStorage.getItem("annees"))
-    const sessions = JSON.parse(localStorage.getItem("sessions"))
+    const anneesUniv = JSON.parse(localStorage.getItem("annees"));
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
     const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
 
     const anneeCur = typeParcours + " " + typeAnneEtude;
@@ -256,9 +322,6 @@ const Etudiants = () => {
                   value={typeParcours}
                   onChange={(e) => {
                     setTypeParcours(e.target.value);
-                    // console.log('----- parcours ---  ', e.target.value);
-                    // localStorage.setItem("gradeCourant", JSON.stringify(e.target.value));
-                    // updateEtudiant();
                     }
                   }
                   className="p-2 border-none rounded-md shadow-sm text-sm"
@@ -280,9 +343,6 @@ const Etudiants = () => {
                   value={idtypeFiliere}
                   onChange={(e) => {
                     setIdTypeFiliere(e.target.value);
-                    // console.log('----- filiere---  ', e.target.value);
-                    // localStorage.setItem("filiereCourante", JSON.stringify(e.target.value));
-                    // updateEtudiant();
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -302,9 +362,6 @@ const Etudiants = () => {
                   value={typeAnneEtude}
                   onChange={(e) => {
                     setypeAnneEtude(e.target.value);
-                    // console.log('----- type annee---  ', e.target.value);
-                    // localStorage.setItem("anneeEtudeCourante", JSON.stringify(e.target.value));
-                    // updateEtudiant();
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -419,19 +476,7 @@ const Etudiants = () => {
                             onChange={(e) =>
                               setEditedData({
                                 ...editedData,
-                                telephone: e.target.value,
-                              })
-                            }
-                            className="border p-1 w-full"
-                          />
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <input
-                            value={editedData.moyenne}
-                            onChange={(e) =>
-                              setEditedData({
-                                ...editedData,
-                                moyenne: e.target.value,
+                                Tel_1: e.target.value,
                               })
                             }
                             className="border p-1 w-full"
@@ -545,6 +590,7 @@ const Etudiants = () => {
             </button>
           </div>
         </div>
+        <Toaster />
       </div>
     );
   }

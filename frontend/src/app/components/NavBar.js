@@ -8,25 +8,29 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect } from "react";
 import SessionService from "@/services/SessionService";
 import AnneeUnivService from "@/services/AnneeUnivService";
+import EtablissementService from "@/services/EtablissementService";
 
 const Navbar = ({ toggleSidebar }) => {
   const [year, setYear] = useState("2024-2025");
+  const [etabCourrant, setEtabCourrant] = useState("");
   const [session, setSession] = useState("Session Normale");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [setSelectedMenu] = useState("acceuil");
   const [showSearch, setShowSearch] = useState(true);
   const [sessions, setSessions] = useState([]);
   const [annees, setAnnees] = useState([]);
+  const [etablissements, setEtablissements] = useState([]);
 
   const router = useRouter(); // pour rediriger
 
   useEffect(() => {
     const sessionData = localStorage.getItem("sessions");
     const anneesData = localStorage.getItem("annees");
+    const etabsData = localStorage.getItem("etablissements");
     // Obtention des sessions
     if (sessionData) {
-    setSessions(JSON.parse(sessionData))
-    localStorage.setItem("sessionCourante", JSON.stringify(session));
+      setSessions(JSON.parse(sessionData))
+      localStorage.setItem("sessionCourante", JSON.stringify(session));
     } else {
       SessionService.getAllSession()
         .then((response) => {
@@ -60,12 +64,27 @@ const Navbar = ({ toggleSidebar }) => {
             // setError(true);
           });
       }
+
+    // Obtention des etablissements
+    if (etabsData) {
+      setEtablissements(JSON.parse(etabsData));
+      localStorage.setItem("etablissementCourantId", JSON.parse(etabsData)[0].id);
+      console.log("response etab ", JSON.parse(etabsData)[0].libelle);
+      } else {
+        EtablissementService.getAllEtablissement()
+          .then((response) => {
+            // console.log("🚀 Reponse brute de l'API :", response[0]);
+            console.log(response);
+            setEtablissements(response);
+            localStorage.setItem("etablissements", JSON.stringify(response));
+            localStorage.setItem("etablissementCourantId", JSON.stringify(response)[0].id);
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            setError(true);
+          });
+      }
   }, []);
-
-  const initparams = () => {
-    // const 
-  }
-
 
   const user = {
     avatar: "https://via.placeholder.com/100", // Remplace par l'URL de l'image de profil
@@ -104,17 +123,30 @@ const Navbar = ({ toggleSidebar }) => {
             </span>
           </div>
         )}
-        <div className="flex items-center justify-evenly gap-4">
-          {/* Icone de messagerie */}
-          <div>
-            <button
-              className="w-full hidden md:block  flex items-center space-x-3 p-2 rounded-lg cursor-pointer"
-              onClick={() => setSelectedMenu("acceuil")}
-            >
-              <FaSms />
-            </button>
-          </div>
 
+        {/* Sélecteur d'etablissements */}
+        <div className="flex items-center space-x-2">
+          <span className="text-white text-sm">Etablissements: </span>
+          <select
+            value={etabCourrant}
+            onChange={(e) => {
+              setEtabCourrant(e.target.value);
+              localStorage.setItem("etablissementCourantId", JSON.stringify(e.target.value));
+              // console.log('etablissementCourantId ', e.target.value);
+            }} className="px-2 py-1/2 rounded border-none bg-white focus:outline-none text-sm">
+            {etablissements.length == 0 ? (
+              <option value="">---------</option>
+            ) : (
+              etablissements.map((etab) => (
+                <option key={etab.id} value={etab.id}>
+                  {etab.libelle}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
+
+        <div className="flex items-center justify-evenly gap-4">
           {/* Sélecteur de session */}
           <div className="flex items-center space-x-2">
             <span className="text-white text-sm">Session</span>
@@ -164,6 +196,7 @@ const Navbar = ({ toggleSidebar }) => {
               )}
             </select>
           </div>
+
           {/* Icone de Notification */}
           <div>
             <button
@@ -173,6 +206,7 @@ const Navbar = ({ toggleSidebar }) => {
               <FaBell />
             </button>
           </div>
+
           {/* Icone de theme */}
           <div>
             <button
@@ -181,6 +215,7 @@ const Navbar = ({ toggleSidebar }) => {
               <FaSun  className="text-yellow-400 text-2xl"/>
             </button>
           </div>
+
           {/* Icône Profil */}
           <div
             className="text-white cursor-pointer hover:text-blue-200 bg-blue-600 p-3 rounded-full"
@@ -190,6 +225,7 @@ const Navbar = ({ toggleSidebar }) => {
               <FaUser />
             </span>
           </div>
+
         </div>
       </div>
     </nav>
