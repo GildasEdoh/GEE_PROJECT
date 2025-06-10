@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Matiere;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MatiereController extends Controller
 {
@@ -71,5 +72,29 @@ class MatiereController extends Controller
         $matiere->delete();
 
         return response()->json(['message' => 'Matière supprimée avec succès']);
+    }
+
+    // Liste des matieres en fonction du parcours
+    public function listeParCriteres(Request $request)
+    {
+        // Validation des paramètres
+        $request->validate([
+            'id_etablissement' => 'required|integer',
+            'id_filiere' => 'required|integer',
+            'id_annee_etude' => 'required|integer',
+            'id_annee_univ' => 'required|integer',
+            'id_session' => 'required|integer',
+        ]);
+
+        // Appel de la procédure stockée
+        $matieres = DB::select('CALL liste_matieres_par_criteres(?, ?, ?, ?, ?)', [
+            $request->id_etablissement,
+            $request->id_filiere,
+            $request->id_annee_etude,
+            $request->id_annee_univ,
+            $request->id_session
+        ]);
+
+        return response()->json($matieres);
     }
 }

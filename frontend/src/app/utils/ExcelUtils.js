@@ -1,12 +1,13 @@
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import InscriptionService from "@/services/InscriptionService";
 
 // --------------------------------- ETUDIANTS --------------------------------
 // fonction pour imprimer un fichier pdf |== ETUDIANTS
 export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
   if (!etudiants?.length) {
-    alert("Aucun étudiant à imprimer !");
+    console.log("Aucun étudiant à imprimer !", "warning");
     return;
   }
 
@@ -80,7 +81,7 @@ export const importEtudiantToExcel = (e) => {
   return new Promise((resolve, reject) => {
     const file = e.target.files[0];
     if (!file) {
-      alert("Veuillez sélectionner un fichier Excel.");
+      console.log("Veuillez sélectionner un fichier Excel.", "error");
       reject("Aucun fichier sélectionné");
       return;
     }
@@ -107,7 +108,7 @@ export const importEtudiantToExcel = (e) => {
         );
 
         if (!isValidStructure) {
-          alert("Le fichier Excel ne correspond pas à la structure attendue.");
+          console.log("Le fichier Excel ne correspond pas à la structure attendue.", "error");
           reject("Colonnes invalides");
           return;
         }
@@ -128,12 +129,12 @@ export const importEtudiantToExcel = (e) => {
             } = row;
 
             if (!numero_carte || !nom || !prenom || !date_naissance || !lieu_naissance || !sexe) {
-              alert(`Ligne incomplète détectée : ${JSON.stringify(row)}. Ignorée.`);
+              console.log(`Ligne incomplète détectée : ${JSON.stringify(row)}. Ignorée.`, 'error');
               return null;
             }
 
             if (!["M", "F"].includes(sexe.toUpperCase())) {
-              alert(`Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenom}.`);
+              console.log(`Sexe invalide (${sexe}) pour l'étudiant : ${nom} ${prenom}.`, 'error');
               return null;
             }
 
@@ -156,13 +157,13 @@ export const importEtudiantToExcel = (e) => {
         resolve(formattedData);
         console.log("formattedData: ", formattedData);
       } catch (error) {
-        alert("Erreur de lecture du fichier Excel.");
+        console.log("Erreur de lecture du fichier Excel.", "error");
         reject(error);
       }
     };
 
     reader.onerror = () => {
-      alert("Erreur lors de l'ouverture du fichier.");
+      console.log("Erreur lors de l'ouverture du fichier.", "error");
       reject("Erreur fichier");
     };
 
@@ -174,7 +175,7 @@ export const importEtudiantToExcel = (e) => {
 // fonction pour exporter les donnees en fichier excel |== ETUDIANTS
 export const exportEtudiantsToExcel = (etudiants) => {
   if (!Array.isArray(etudiants) || etudiants.length === 0) {
-    alert("Aucune donnée à exporter.");
+    console.log("Aucune donnée à exporter.", "error");
     return;
   }
 
@@ -257,7 +258,7 @@ export const exportEtudiantsToExcel = (etudiants) => {
 // fonction pour exporter les donnees en fichier excel |== MATIERES
 export const exportMatieresToExcel = (matieres) => {
   if (!Array.isArray(matieres) || matieres.length === 0) {
-    alert("Aucune matière à exporter.");
+    console.log("Aucune matière à exporter.", "error");
     return;
   }
 
@@ -316,7 +317,7 @@ export const exportMatieresToExcel = (matieres) => {
 export const importMatiereToExcel = (e) => {
   const file = e.target.files[0];
   if (!file) {
-    alert("Veuillez sélectionner un fichier Excel.");
+    console.log("Veuillez sélectionner un fichier Excel.", "error");
     return;
   }
 
@@ -338,8 +339,8 @@ export const importMatiereToExcel = (e) => {
         sheetColumns.includes(col)
       );
       if (!isValidStructure) {
-        alert(
-          "Le fichier Excel ne correspond pas à la structure attendue. Assurez-vous qu'il contient les colonnes 'libelle', 'abreviation' et 'optionnelle'."
+        console.log(
+          "Le fichier Excel ne correspond pas à la structure attendue. Assurez-vous qu'il contient les colonnes 'libelle', 'abreviation' et 'optionnelle'.", "error"
         );
         return;
       }
@@ -348,7 +349,7 @@ export const importMatiereToExcel = (e) => {
       const formattedData = jsonData
         .map((row) => {
           if (!row.libelle || !row.abreviation || !row.optionnelle) {
-            alert("Certaines données sont manquantes dans le fichier Excel.");
+            console.log("Certaines données sont manquantes dans le fichier Excel.", "error");
             return null;
           }
           const optionnelleValue = row.optionnelle === "Oui" ? "Oui" : "Non";
@@ -363,13 +364,13 @@ export const importMatiereToExcel = (e) => {
       // Mettre à jour l'état avec les données importées
       setMatieres((prevMatieres) => [...prevMatieres, ...formattedData]);
     } catch (error) {
-      alert(
-        "Erreur de lecture du fichier Excel. Assurez-vous qu'il soit valide."
+      console.log(
+        "Erreur de lecture du fichier Excel. Assurez-vous qu'il soit valide.", "error"
       );
     }
   };
   reader.onerror = () => {
-    alert("Erreur lors de l'ouverture du fichier.");
+    console.log("Erreur lors de l'ouverture du fichier.", "error");
   };
   reader.readAsBinaryString(file);
 };
@@ -377,7 +378,7 @@ export const importMatiereToExcel = (e) => {
 //fonction pour imprimer un fichier pdf |== MATIERES
 export const exportMatieresToPDF = (matieres, titre = "Liste des Matières") => {
   if (!Array.isArray(matieres) || matieres.length === 0) {
-    alert("Aucune matière à imprimer !");
+    console.log("Aucune matière à imprimer !", "error");
     return;
   }
 
@@ -438,15 +439,15 @@ export const getParcoursAnneeEtudeId = async (parcours) => {
     }
   };
   
-  export const buildInscriptionsList = async (etudiantsData, anneeUniv) => {
+  export const buildInscriptionsList = async (etudiantsData, anneeUnivId) => {
     // On récupère tous les IDs de parcours en parallèle
     const parcoursIds = await Promise.all(
       etudiantsData.map((e) => getParcoursAnneeEtudeId(e.parcours))
-    );
+    ); 
 
     // On construit la liste des inscriptions avec les bons IDs
     const inscriptionsList = etudiantsData.map((e, index) => ({
-      fk_annee_univ: anneeUniv,
+      fk_annee_univ: parseInt(anneeUnivId),
       fk_etudiant: parseInt(e.numero_carte.replace(',', '')),
       fk_parcours_annee_etude: parcoursIds[index]?.id ?? 0, // au cas où l’id serait null
     }));
