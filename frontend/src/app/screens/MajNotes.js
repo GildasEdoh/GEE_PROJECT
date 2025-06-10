@@ -4,7 +4,7 @@ import MatiereService from "@/services/MatiereService";
 import NoteService from "@/services/NoteService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
-import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex, getFiliereLibelle } from "../utils/parseAnnee";
 
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 
@@ -20,10 +20,13 @@ const MajNotes = () => {
   const [showEtudiants, setShowEtudiants] = useState(false);
   const [evaluation, setEvaluation] = useState("Devoir");
   const [typeFiliere, setTypeFiliere] = useState("3");
-  const [typeParcours, setTypeParcours] = useState("Licence");
+  const [typeParcours, setTypeParcours] = useState("CAPACITE");
   const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filiere, setFiliere] = useState([]);
+  const [filieres, setFilieres] = useState([]);
+  const [defaultEtudiant, setDefaultEtudiants] = useState([]);
+  var parcoursLibelle = "";
+
   var grades = [];
   var anneeUnivCouranteId = 1;
   var filiereCouranteId = 3;
@@ -34,7 +37,7 @@ const MajNotes = () => {
   // Recuperation des matières
   useEffect(() => {
     updateEtudiant();
-    MatiereService.getAllMatiere()
+    MatiereService.getMatiereByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
       .then((response) => {
         setMatieres(response);
         setIsLoading(false);
@@ -72,13 +75,13 @@ const MajNotes = () => {
     // Filiere data
     if (filiereData) {
       // console.log("🚀 ---- filiereData local --- :");
-      setFiliere(JSON.parse(filiereData));
+      setFilieres(JSON.parse(filiereData));
     } else {
       FiliereService.getAllFiliere()
         .then((response) => {
           setIsLoading(false);
           localStorage.setItem("filieres", JSON.stringify(response));
-          setFiliere(response);
+          setFilieres(response);
         })
         .catch((error) => {
           console.error("Erreur :", error);
@@ -103,18 +106,51 @@ const MajNotes = () => {
   };
 
   const fetchEtudiantsForMatiere = (idMatiere) => {
-    setIsLoading(true);
+    // setIsLoading(true);
+    let isEmpty = false;
     EtudiantService.getAllEtudiantsBySubject(idMatiere)
       .then((response) => {
-        setEtudiants(response);
-        setIsLoading(false);
+        if (response.length == 0) {
+          console.log("response.length == 0")
+          isEmpty = true;
+        } else {
+          setIsLoading(false);
+          setEtudiants(response);
+        }
       })
       .catch((error) => {
         console.error("Erreur :", error);
         setIsLoading(false);
         setError(true);
       });
+      if (isEmpty) {
+        console.log("emptyyyyyyy");
+        getDefaultEtudiant();
+      }
   };
+    const getDefaultEtudiant = () => {
+    // Get the list of students
+      console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
+        ", sessionCouranteId = " + sessionCouranteId +
+        ", anneeEtudeCourante = " + typeAnneEtude +
+        ", filireCouranteId = " + filiereCouranteId +
+        ", anneeCurId = " + anneeCurId);
+  
+      EtudiantService.getEtudiantByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
+        .then((response) => {
+          // console.log("🚀 Reponse brute de l'API :", response[0]);
+          if (response.length == 0) {
+            console.log("liste vide");
+          }
+          setEtudiants(response);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          setIsLoading(false);
+          setError(true);
+        });
+    }
 
   const handleEdit = (index) => {
     const etudiant = etudiants[index];
@@ -192,8 +228,8 @@ const MajNotes = () => {
 
   const updateEtudiant = () => {
     // Reconstitution du parcours
-    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"));
-    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"));
+    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
+    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"))
 
     const anneesUniv = JSON.parse(localStorage.getItem("annees"));
     const sessions = JSON.parse(localStorage.getItem("sessions"));
@@ -201,17 +237,16 @@ const MajNotes = () => {
 
     const anneeCur = typeParcours + " " + typeAnneEtude;
 
-    anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
-    filiereCouranteId = typeFiliere;
-    sessionCouranteId = getSessionIndex(sessionCourante, sessions);
-    anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
-
-    console.log("anneeUnivCouranteId = " + anneeUnivCouranteId +
-        ", sessionCouranteId = " + sessionCouranteId +
-        ", anneeEtudeCourante = " + typeAnneEtude +
-        ", filireCouranteId = " + filiereCouranteId +
-        ", anneeCurId = " + anneeCurId);
+    if (anneeUniv && sessionCourante && anneesUniv && sessions && anneesEtudes) {
+          anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
+          filiereCouranteId = parseInt(typeFiliere);
+          console.log("error --- fi --", filiereCouranteId);
+          sessionCouranteId = getSessionIndex(sessionCourante, sessions);
+          anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+          parcoursLibelle = getFiliereLibelle(typeFiliere, filieres);
+    }
     setIsLoading(true);
+    getDefaultEtudiant();
   }
 
   const afficheEtudiants = () => {
@@ -229,7 +264,8 @@ const MajNotes = () => {
           </div>
         </div>
       );
-    } else if (etudiants.length === 0) {
+    } 
+    else if (etudiants.length === 0 ) {
       return (
         <div className="ml-60 mt-20 w-2/3 h-2/3">
           <div className="bg-yellow-100 text-yellow-700 h-50 rounded shadow-md text-center text-3xl">
@@ -245,11 +281,11 @@ const MajNotes = () => {
                 Matiere:
             </span>
             <select
-                value={etudiants[0].matiere}
+                value={"etudiants[0].matiere"}
                 onChange={(e) => console.log("hello")}
                 className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
               >
-                <option>{etudiants[0].matiere}</option>
+                <option>{"etudiants[0].matiere"}</option>
               </select>
             
             <span className="text-black font-bold text-sm ml-3">
@@ -260,7 +296,7 @@ const MajNotes = () => {
               onChange={(e) => setTypeParcours(e.target.value)}
               className="p-2 border-none rounded-md shadow-sm text-sm"
             >
-              <option value="admis"> CAPACITE Droit {JSON.parse(typeAnneEtude)}  </option>
+              <option value="admis"> {typeParcours} {parcoursLibelle} {JSON.parse(typeAnneEtude)}  </option>
             </select>
 
               <span className="text-black font-bold text-sm ml-3">
@@ -473,11 +509,11 @@ const MajNotes = () => {
                         }}
                         className="p-2 border-none rounded-md shadow-sm text-sm"
                       >
-                        {filiere.length == 0 ? (
+                        {filieres.length == 0 ? (
                           <option value="--">------------</option>
                         ) : (
-                          filiere.map((f) => (
-                            <option key={f.id} value={f.libelle}>
+                          filieres.map((f) => (
+                            <option key={f.id} value={f.id}>
                               {f.libelle}
                             </option>
                           ))

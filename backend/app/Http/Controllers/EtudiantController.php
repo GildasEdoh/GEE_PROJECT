@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class EtudiantController extends Controller
 {
-
-
     // Créer un étudiant
     public function store(Request $request)
     {
@@ -87,7 +85,7 @@ class EtudiantController extends Controller
             'etudiants.*.numero_carte' => 'required|integer',
             'etudiants.*.nom' => 'required|string|max:100',
             'etudiants.*.prenom' => 'nullable|string|max:100',
-            'etudiants.*.date_naissance' => 'required|date_format:m/d/Y', // Accepte le format MM/DD/YYYY
+            'etudiants.*.date_naissance' => 'nullable|date_format:m/d/Y', // Accepte le format MM/DD/YYYY
             'etudiants.*.lieu_naissance' => 'nullable|string|max:100',
             'etudiants.*.sexe' => 'nullable|in:M,F',
             'etudiants.*.Tel_1' => 'nullable|string|max:20',
@@ -98,15 +96,18 @@ class EtudiantController extends Controller
             'etudiants.*.quartier' => 'nullable|string|max:30',
             'etudiants.*.rue' => 'nullable|string|max:40',
         ]);
+
         $etudiants = [];
 
-        foreach ($validatedData as $data) {
+        foreach ($validatedData['etudiants'] as $data) {
             // Convertir la date au format MySQL
-            $dateNaissance = DateTime::createFromFormat('m/d/Y', $data['date_naissance']);
+            $dateNaissance = \DateTime::createFromFormat('m/d/Y', $data['date_naissance']);
             $data['date_naissance'] = $dateNaissance->format('Y-m-d');
 
             // S'assurer que numero_carte est bien un entier
             $data['numero_carte'] = (int)$data['numero_carte'];
+            // dd($data->all());
+
             $etudiants[] = Etudiant::create($data);
         }
 

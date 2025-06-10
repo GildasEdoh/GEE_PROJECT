@@ -3,7 +3,9 @@ import api from "./ApiService"
  * CRUD service Matieres
  */
 
-const path = "/matieres"
+const path = "/matieres";
+const filteredPath = path + "/filtrage";
+
 class MatiereService {
     private static instance: MatiereService;
 
@@ -39,6 +41,18 @@ class MatiereService {
     public async deleteMatiere(id: String) : Promise<any> {
         const response = await api.delete(path + `/${id}`)
         return response.data
+    }
+
+    public async getMatiereByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Etudiant[]> {
+    const body = {
+        "id_etablissement": idEtab,
+        "id_filiere": idFiliere,
+        "id_annee_etude": idAnneeEtu,
+        "id_annee_univ": idAnneUniv,
+        "id_session": idSession
+    }
+    const response = await api.post(filteredPath, body);
+    return response.data;
     }
 }
 
