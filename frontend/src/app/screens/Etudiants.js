@@ -285,7 +285,6 @@ const Etudiants = () => {
     }
     setIsLoading(true);
     getEtudiant();
-
   }
     useEffect(() => {
       updateEtudiant();
@@ -584,8 +583,7 @@ const Etudiants = () => {
 
             <button
               onClick={() => exportEtudiantsToExcel(etudiants)}
-              className="px-2 py-2 w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer"
-            >
+              className="px-2 py-2 w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer">
               Exporter au format excel
             </button>
           </div>

@@ -4,7 +4,7 @@ import MatiereService from "@/services/MatiereService";
 import NoteService from "@/services/NoteService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
-import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex, getFiliereLibelle } from "../utils/parseAnnee";
 
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 
@@ -23,8 +23,9 @@ const MajNotes = () => {
   const [typeParcours, setTypeParcours] = useState("CAPACITE");
   const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filiere, setFiliere] = useState([]);
+  const [filieres, setFilieres] = useState([]);
   const [defaultEtudiant, setDefaultEtudiants] = useState([]);
+  var parcoursLibelle = "";
 
   var grades = [];
   var anneeUnivCouranteId = 1;
@@ -36,7 +37,7 @@ const MajNotes = () => {
   // Recuperation des matières
   useEffect(() => {
     updateEtudiant();
-    MatiereService.getAllMatiere()
+    MatiereService.getMatiereByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
       .then((response) => {
         setMatieres(response);
         setIsLoading(false);
@@ -74,13 +75,13 @@ const MajNotes = () => {
     // Filiere data
     if (filiereData) {
       // console.log("🚀 ---- filiereData local --- :");
-      setFiliere(JSON.parse(filiereData));
+      setFilieres(JSON.parse(filiereData));
     } else {
       FiliereService.getAllFiliere()
         .then((response) => {
           setIsLoading(false);
           localStorage.setItem("filieres", JSON.stringify(response));
-          setFiliere(response);
+          setFilieres(response);
         })
         .catch((error) => {
           console.error("Erreur :", error);
@@ -122,9 +123,8 @@ const MajNotes = () => {
         setIsLoading(false);
         setError(true);
       });
-
       if (isEmpty) {
-        console.log("emptyyyyyyy")
+        console.log("emptyyyyyyy");
         getDefaultEtudiant();
       }
   };
@@ -243,6 +243,7 @@ const MajNotes = () => {
           console.log("error --- fi --", filiereCouranteId);
           sessionCouranteId = getSessionIndex(sessionCourante, sessions);
           anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+          parcoursLibelle = getFiliereLibelle(typeFiliere, filieres);
     }
     setIsLoading(true);
     getDefaultEtudiant();
@@ -295,7 +296,7 @@ const MajNotes = () => {
               onChange={(e) => setTypeParcours(e.target.value)}
               className="p-2 border-none rounded-md shadow-sm text-sm"
             >
-              <option value="admis"> CAPACITE Droit {JSON.parse(typeAnneEtude)}  </option>
+              <option value="admis"> {typeParcours} {parcoursLibelle} {JSON.parse(typeAnneEtude)}  </option>
             </select>
 
               <span className="text-black font-bold text-sm ml-3">
@@ -508,10 +509,10 @@ const MajNotes = () => {
                         }}
                         className="p-2 border-none rounded-md shadow-sm text-sm"
                       >
-                        {filiere.length == 0 ? (
+                        {filieres.length == 0 ? (
                           <option value="--">------------</option>
                         ) : (
-                          filiere.map((f) => (
+                          filieres.map((f) => (
                             <option key={f.id} value={f.id}>
                               {f.libelle}
                             </option>
