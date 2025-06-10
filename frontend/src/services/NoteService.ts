@@ -1,7 +1,10 @@
 import api from "./ApiService";
 
 const path = "/notes";
-const frequence_path = path + `/frequence-matiere-globale`;
+const repartition_notes_path = path + `/repartition-notes`;
+const recale_matiere_path = path + `/nombre-recales-matieres`;
+const etudiant_mention_path = path + `/etudiants-mention`;
+const frequence_matiere_path = path + `/frequence-matiere-globale`;
 class NoteService {
   private static instance: NoteService;
 
@@ -15,10 +18,16 @@ class NoteService {
   }
 
   // Récupérer toutes les notes
-  public async getAllNotes(): Promise<any> {
+ public async getAllNotes(): Promise<any> {
+  try {
     const response = await api.get(path);
     return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des notes :", error);
+    throw error;
   }
+}
+
 
   // Ajouter une note
   public async addNote(note: {
@@ -74,7 +83,7 @@ class NoteService {
     id_type_evaluation: idTypeEval
   };
   
-  const response = await api.post(frequence_path, body);
+  const response = await api.post(repartition_notes_path, body);
   return response.data;
 }
   public async getRecalesMatiere(
@@ -96,7 +105,7 @@ class NoteService {
     id_type_evaluation: idTypeEval
   };
   
-  const response = await api.post(frequence_path, body);
+  const response = await api.post(recale_matiere_path, body);
   return response.data;
 }
   public async getEtudiantMention(
@@ -118,7 +127,7 @@ class NoteService {
     id_type_evaluation: idTypeEval
   };
   
-  const response = await api.post(frequence_path, body);
+  const response = await api.post( etudiant_mention_path , body);
   return response.data;
 }
   public async getFrequenceParMatiere(
@@ -140,7 +149,7 @@ class NoteService {
     id_type_evaluation: idTypeEval
   };
   
-  const response = await api.post(frequence_path, body);
+  const response = await api.post(frequence_matiere_path, body);
   return response.data;
 }
   
