@@ -101,8 +101,8 @@ class NoteController extends Controller
             'id_filiere' => 'required|integer',
             'id_parcours' => 'required|integer',
             'id_annee_etude' => 'required|integer',
-            'id_annee_universitaire' => 'required|integer',
-            'id_evaluation_annee' => 'required|integer',
+            'id_annee_univ' => 'required|integer',
+            'id_type_evaluation' => 'required|integer',
             'id_session_annee' => 'required|integer',
         ]);
 
@@ -112,8 +112,8 @@ class NoteController extends Controller
             $request->id_filiere,
             $request->id_parcours,
             $request->id_annee_etude,
-            $request->id_annee_universitaire,
-            $request->id_evaluation_annee,
+            $request->id_annee_univ,
+            $request->id_type_evaluation,
             $request->id_session_annee
         ]);
 
@@ -130,9 +130,9 @@ class NoteController extends Controller
             'id_filiere' => 'required|integer',
             'id_parcours' => 'required|integer',
             'id_annee_etude' => 'required|integer',
-            'id_annee_universitaire' => 'required|integer',
+            'id_annee_univ' => 'required|integer',
             'id_session_annee' => 'required|integer',
-            'id_type_evaluation_annee' => 'required|integer',
+            'id_type_evaluation' => 'required|integer',
         ]);
 
         // Appel de la procédure stockée
@@ -141,9 +141,9 @@ class NoteController extends Controller
             $request->id_filiere,
             $request->id_parcours,
             $request->id_annee_etude,
-            $request->id_annee_universitaire,
+            $request->id_annee_univ,
             $request->id_session_annee,
-            $request->id_type_evaluation_annee,
+            $request->id_type_evaluation,
         ]);
 
         return response()->json($resultat);
