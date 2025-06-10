@@ -4,8 +4,6 @@ import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title
 import { Bar } from 'react-chartjs-2';
 import { FiAward, FiBook, FiUsers, FiXCircle, FiChevronLeft } from 'react-icons/fi';
 
-import NoteService from "@/services/NoteService";
-
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
@@ -206,8 +204,6 @@ const Statistique = () => {
                         { label: "Taux d'absence", value: "7.14%" }
                     ]
     }
-
-    
 };
 const handleCardClick = (title) => {
     setActiveTable(tableauxDetails[title]);
