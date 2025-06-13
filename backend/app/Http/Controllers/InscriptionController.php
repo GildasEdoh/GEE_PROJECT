@@ -101,15 +101,27 @@ class InscriptionController extends Controller
         // Ajouter plusieurs inscriptions
     public function bulkStore(Request $request)
     {
-        $data = $request->validate([
+        $validatedData = $request->validate([
             'inscriptions' => 'required|array',
             'inscriptions.*.fk_etudiant' => 'required|integer',
             'inscriptions.*.fk_parcours_annee_etude' => 'required|integer',
-            'inscriptions.*.fk_annee_univ' => 'required|string',
+            'inscriptions.*.fk_annee_univ' => 'required|integer',
         ]);
 
-        Inscription::insert($data['inscriptions']);
+        $inscriptions= [];
+        
+        foreach ($validatedData['inscriptions'] as $data) {
+            // Convertir les champs en entiers pour être certain
+            $data['fk_etudiant'] = (int)$data['fk_etudiant'];
+            $data['fk_parcours_annee_etude'] = (int)$data['fk_parcours_annee_etude'];
+            $data['fk_annee_univ'] = (int)$data['fk_annee_univ'];
+            $inscriptions[] = Inscription::create($data);
+        }
 
-        return response()->json(['message' => 'inscriptions ajoutés avec succès.']);
+        return response()->json([
+            'success' => true,
+            'data' => $inscriptions,
+            'message' => count($inscriptions) . ' inscriptions(s) créé(s) avec succès'
+        ], 201);
     }
 }

@@ -118,6 +118,7 @@ Route::prefix('matieres')->group(function () {
     Route::get('/{id}', [MatiereController::class, 'show'])->name('matieres.show');
     Route::put('/{id}', [MatiereController::class, 'update'])->name('matieres.update');
     Route::delete('/{id}', [MatiereController::class, 'destroy'])->name('matieres.destroy');
+    Route::post('/filtrage', [MatiereController::class, 'listeParCriteres'])->name('matieres.listeParCriteres');
 });
 
 // ====================================
