@@ -152,7 +152,6 @@ class NoteService {
     const response = await api.post(frequence_matiere_path, body);
     return response.data;
   }
-
 }
 
 export default NoteService.getInstance();
