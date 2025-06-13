@@ -58,7 +58,7 @@ class EtudiantService {
     return response.data;
   }
 
-  public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Object> {
+  public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Etudiant[]> {
     const body = {
       "id_etablissement": idEtab,
       "id_filiere": idFiliere,
@@ -70,6 +70,25 @@ class EtudiantService {
     return response.data;
   }
 
+  public async addAllEtudiant(students: any): Promise<any> {
+    const body = {
+      "etudiants": students
+    }
+    const response = await api.post(path + '/bulk', body);
+    return response.data;
+  }
+
+  // public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Object> {
+  //   const body = {
+  //     "id_etablissement": idEtab,
+  //     "id_filiere": idFiliere,
+  //     "id_annee_etude": idAnneeEtu,
+  //     "id_annee_univ": idAnneUniv,
+  //     "id_session": idSession
+  //   }
+  //   const response = await api.post(filteredPath, body);
+  //   return response.data;
+  // }
 }
 
 export default EtudiantService.getInstance();
