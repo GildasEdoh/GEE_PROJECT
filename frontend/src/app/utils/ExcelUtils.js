@@ -2,6 +2,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import InscriptionService from "@/services/InscriptionService";
+import showNotification from "./showMessage";
 
 // --------------------------------- ETUDIANTS --------------------------------
 // fonction pour imprimer un fichier pdf |== ETUDIANTS
@@ -455,3 +456,7 @@ export const getParcoursAnneeEtudeId = async (parcours) => {
     console.log("inscriptionsList:", inscriptionsList);
     return inscriptionsList;
   };
+
+export function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

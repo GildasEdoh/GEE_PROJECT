@@ -7,6 +7,7 @@ import {
   exportMatieresToExcel,
   exportMatieresToPDF,
 } from "../utils/ExcelUtils";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
 
 /**
  * This page provides the list of matieres and allow all crud operations on this list
@@ -23,12 +24,19 @@ const Matieres = () => {
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
-  const [typeParcours, setTypeParcours] = useState("Licence");
-  const [idtypeFiliere, setIdTypeFiliere] = useState("1");
+  const [typeParcours, setTypeParcours] = useState("CAPACITE");
+  const [idtypeFiliere, setIdTypeFiliere] = useState("3");
   const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [filiere, setFiliere] = useState([]);
+  const [anneesEtude, setAnneesEtude] = useState([]);
+  const [coefficient, setCoeficient] = useState("1");
+
   var grades = [];
+  var anneeUnivCouranteId = 2;
+  var filiereCouranteId = 3;
+  var sessionCouranteId = 1;
+  var anneeCurId = 6;
+  var etabCourantId = 1;
 
   const handleEditClick = (index, matiere) => {
     setEditIndex(index);
@@ -98,23 +106,85 @@ const Matieres = () => {
     setLibelle("");
     setAbreviation("");
     setOptionnelle("Non");
-    setCoeficient(1)
+    setCoeficient(1);
 
-    MatiereService.addMatiere(newMatiere)
-      .then((response) => {
-        console.log(" ajout ..");
-        setMajMessage(`Matiere ajoutee effectuee avec succes !`);
-        setMajIsSucces(true);
-      })
-      .catch((error) => {
-        setMajMessage(`Erreur lors de la Creation de la matiere !`);
-        setMajIsSucces(false);
-      });
+    // MatiereService.addMatiere(newMatiere)
+    //   .then((response) => {
+    //     console.log(" ajout ..");
+    //     setMajMessage(`Matiere ajoutee effectuee avec succes !`);
+    //     setMajIsSucces(true);
+    //   })
+    //   .catch((error) => {
+    //     setMajMessage(`Erreur lors de la Creation de la matiere !`);
+    //     setMajIsSucces(false);
+    //   });
   };
+
+  const updateEtudiant = () => {
+    // Reconstitution du parcours
+    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"))
+    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"))
+
+    const anneesUniv = JSON.parse(localStorage.getItem("annees"));
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
+
+    const anneeCur = typeParcours + " " + typeAnneEtude;
+
+    if (anneeUniv && sessionCourante && anneesUniv && sessions && anneesEtudes) {
+          anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
+          filiereCouranteId = idtypeFiliere;
+          sessionCouranteId = getSessionIndex(sessionCourante, sessions);
+          anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+    }
+    setIsLoading(true);
+  }
+
+    useEffect(() => {
+      const anneeData = localStorage.getItem("anneesEtude");
+      const filiereData = localStorage.getItem("filieres");
+      //
+      if (anneeData) {
+        // console.log("🚀 ---- anneeData local --- :");
+        setAnneesEtude(JSON.parse(anneeData));
+      } else {
+        AnneesEtudeService.getAllAnneesEtude()
+          .then((response) => {
+            // console.log("🚀 ---- AnneesEtude --- :", response[0]);
+            // console.log(Array.isArray(response));
+            setIsLoading(false);
+            localStorage.setItem("anneesEtude", JSON.stringify(response));
+            setAnneesEtude(response);
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            setIsLoading(false);
+            setError(true);
+          });
+      }
+      // Filiere data
+      if (filiereData) {
+        // console.log("🚀 ---- filiereData local --- :");
+        setFiliere(JSON.parse(filiereData));
+      } else {
+        FiliereService.getAllFiliere()
+          .then((response) => {
+            setIsLoading(false);
+            localStorage.setItem("filieres", JSON.stringify(response));
+            setFiliere(response);
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            setIsLoading(false);
+            setError(true);
+          });
+      }
+    }, []);
 
   // Get all the matieres from the backend
   useEffect(() => {
-    MatiereService.getAllMatiere()
+    updateEtudiant()
+    MatiereService.getMatiereByFiltre(etabCourantId, filiereCouranteId, anneeCurId, anneeUnivCouranteId, sessionCouranteId)
       .then((response) => {
         console.log("🚀 Reponse brute de l'API :", response[0]);
         console.log(Array.isArray(response));
@@ -126,7 +196,7 @@ const Matieres = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, []);
+  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
 
   if (isLoading) {
     return (
@@ -144,7 +214,9 @@ const Matieres = () => {
     );
   } else {
     // Return the content of the page
+    anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
     return (
+
       <div className="flex-grow">
         <div className="sm:flex sm:flex-col sm:items-center xl:flex">
           <div className="p-6 bg-transparent w-full h-full flex flex-col xl:flex-row gap-6">

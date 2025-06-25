@@ -3,10 +3,10 @@
 import toast, { Toaster } from 'react-hot-toast';
 
 // Fonction exportable pour être utilisée partout
-export default function showNotification (message, type = 'default') {
+export default function showNotification (message, type = 'default', var_duration=4000) {
   const options = {
     position: 'top-center',
-    duration: 4000,
+    duration: var_duration,
   };
 
   switch (type) {

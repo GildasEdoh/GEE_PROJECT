@@ -7,11 +7,12 @@ import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
-import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex } from "../utils/parseAnnee";
-import { generatePDF, importEtudiantToExcel, exportEtudiantsToExcel, getParcoursAnneeEtudeId, buildInscriptionsList} from "../utils/ExcelUtils.js";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex, getFiliereLibelle } from "../utils/parseAnnee";
+import { generatePDF, importEtudiantToExcel, exportEtudiantsToExcel, getParcoursAnneeEtudeId, buildInscriptionsList, sleep} from "../utils/ExcelUtils.js";
 import InscriptionService from "@/services/InscriptionService";
 import showNotification from '../utils/showMessage';
 import toast, { Toaster } from 'react-hot-toast';
+
 
 const Etudiants = () => {
   const [editIndex, setEditIndex] = useState(null);
@@ -25,8 +26,7 @@ const Etudiants = () => {
   const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filiere, setFiliere] = useState([]);
-
+  const [filieres, setFilieres] = useState([]);
 
   // Variables
   var grades = [];
@@ -35,6 +35,8 @@ const Etudiants = () => {
   var sessionCouranteId = 1;
   var anneeCurId = 6;
   var etabCourantId = 1;
+  var parcoursCourant = "";
+
   // var localEtab = JSON.parse(localStorage.getItem('etablissementCourantId'));
   // if (localEtab) {
   //   console.log("parseur : ", localEtab);
@@ -98,6 +100,10 @@ const Etudiants = () => {
     console.log("Un fichier a été sélectionné");
     const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"));
     const anneesUniv = JSON.parse(localStorage.getItem("annees"));
+    const waning_duration = 9000;
+    // showNotification(`Les parcours doivent etre au format: "SUP - Grade Filiere anneeEtude, ex: CAPACITE droit 1 ...." `, 'warning', waning_duration);
+    sleep(waning_duration);
+
     if (anneesUniv) {
       anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
     }
@@ -169,7 +175,7 @@ const Etudiants = () => {
         if (userConfirmed) {
             // Insertion des etudiants
             console.log('insertion etudiants: ');
-            showNotification(`Insertion en cours `, 'loading');
+            
             try {
                 const res  = await EtudiantService.addAllEtudiant(etudiantsList);
                 console.log("res: ", res); // Exemple : { id: 28 }
@@ -198,6 +204,20 @@ const Etudiants = () => {
     }
     setIsLoading(false);
   };
+
+  const launchPrint = () => {
+    if (etudiants.length == 0) {
+      showNotification(`Aucun étudiant à imprimer !`, 'warning');
+    }
+    generatePDF(etudiants, "Liste des Étudiants");
+  }
+
+  const launchExport = () => {
+    if (etudiants.length == 0) {
+      showNotification(`Aucun étudiant à imprimer !`, 'warning');
+    }
+    exportEtudiantsToExcel(etudiants);
+  }
 
   const getEtudiant = () => {
   // Get the list of students
@@ -250,13 +270,13 @@ const Etudiants = () => {
     // Filiere data
     if (filiereData) {
       // console.log("🚀 ---- filiereData local --- :");
-      setFiliere(JSON.parse(filiereData));
+      setFilieres(JSON.parse(filiereData));
     } else {
       FiliereService.getAllFiliere()
         .then((response) => {
           setIsLoading(false);
           localStorage.setItem("filieres", JSON.stringify(response));
-          setFiliere(response);
+          setFilieres(response);
         })
         .catch((error) => {
           console.error("Erreur :", error);
@@ -276,6 +296,11 @@ const Etudiants = () => {
     const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
 
     const anneeCur = typeParcours + " " + typeAnneEtude;
+    if (idtypeFiliere && filieres) {
+      parcoursCourant = getFiliereLibelle(idtypeFiliere, filieres);
+      localStorage.setItem("parcoursCourant", JSON.stringify(parcoursCourant));
+    }
+    // console.log("----- gog --- ", anneeCur);
 
     if (anneeUniv && sessionCourante && anneesUniv && sessions && anneesEtudes) {
           anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
@@ -345,10 +370,10 @@ const Etudiants = () => {
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
-                  {filiere.length == 0 ? (
+                  {filieres.length == 0 ? (
                     <option value="--">------------</option>
                   ) : (
-                    filiere.map((f) => (
+                    filieres.map((f) => (
                       <option key={f.id} value={f.id}>
                         {f.libelle}
                       </option>
@@ -563,7 +588,7 @@ const Etudiants = () => {
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
             <button
               className="px-2 py-2 w-full bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer"
-              onClick={() => generatePDF(etudiants, "Liste des Étudiants")}
+              onClick={launchPrint}
             >
               Imprimer la liste
             </button>
@@ -582,7 +607,7 @@ const Etudiants = () => {
             </label>
 
             <button
-              onClick={() => exportEtudiantsToExcel(etudiants)}
+              onClick={launchExport}
               className="px-2 py-2 w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer">
               Exporter au format excel
             </button>
