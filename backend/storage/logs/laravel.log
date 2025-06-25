@@ -11485,6 +11485,7 @@
 #55 {main}
 >>>>>>> 27495b3a27849857a086ecee53f172e180de4e26
 "} 
+<<<<<<< HEAD
 [2025-06-25 12:25:08] local.ERROR: SQLSTATE[HY000] [1049] Unknown database 'gee_test' (Connection: mysql, SQL: select * from `matieres`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 1049): SQLSTATE[HY000] [1049] Unknown database 'gee_test' (Connection: mysql, SQL: select * from `matieres`) at /Users/v9/Documents/TP/gee/GEE_PROJECT/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:822)
 [stacktrace]
 #0 /Users/v9/Documents/TP/gee/GEE_PROJECT/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(776): Illuminate\\Database\\Connection->runQueryCallback('select * from `...', Array, Object(Closure))
@@ -13752,4 +13753,9 @@
 #68 /Users/v9/Documents/TP/gee/GEE_PROJECT/backend/public/index.php(20): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
 #69 /Users/v9/Documents/TP/gee/GEE_PROJECT/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('/Users/v9/Docum...')
 #70 {main}
+=======
+[2025-06-13 09:08:56] local.ERROR: Maximum execution time of 60 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at D:\\cours_troisieme_annee\\semestre5\\Projet Tuteuré\\GeeFrontend\\GEE_PROJECT\\backend\\vendor\\composer\\ClassLoader.php:429)
+[stacktrace]
+#0 {main}
+>>>>>>> 5219df08df4b7e5b33e20fc48a280a46978a4a5d
 "} 
