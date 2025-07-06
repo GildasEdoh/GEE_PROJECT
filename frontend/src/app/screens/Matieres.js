@@ -216,7 +216,6 @@ const Matieres = () => {
     // Return the content of the page
     anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
     return (
-
       <div className="flex-grow">
         <div className="sm:flex sm:flex-col sm:items-center xl:flex">
           <div className="p-6 bg-transparent w-full h-full flex flex-col xl:flex-row gap-6">
