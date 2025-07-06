@@ -11,7 +11,7 @@ class EtudiantService {
   private static instance: EtudiantService;
 
   // Default constructor
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): EtudiantService {
     if (!EtudiantService.instance) {
@@ -32,7 +32,7 @@ class EtudiantService {
     return response.data;
   }
 
-  // Update a etudiant
+  //  Update a etudiant
   public async updateEtudiant(student: any): Promise<Object> {
     const response = await api.put(path + `/${student.numero_carte}`, student);
     return response.data;
@@ -77,6 +77,18 @@ class EtudiantService {
     const response = await api.post(path + '/bulk', body);
     return response.data;
   }
+
+  // public async getEtudiantByFiltre(idEtab: String, idFiliere: String, idAnneeEtu: String, idAnneUniv: String, idSession: String ): Promise<Object> {
+  //   const body = {
+  //     "id_etablissement": idEtab,
+  //     "id_filiere": idFiliere,
+  //     "id_annee_etude": idAnneeEtu,
+  //     "id_annee_univ": idAnneUniv,
+  //     "id_session": idSession
+  //   }
+  //   const response = await api.post(filteredPath, body);
+  //   return response.data;
+  // }
 }
 
 export default EtudiantService.getInstance();
