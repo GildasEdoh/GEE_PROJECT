@@ -143,6 +143,13 @@ Route::prefix('notes')->group(function () {
     Route::get('/{id}', [NoteController::class, 'show'])->name('notes.show'); // Afficher une note spécifique
     Route::put('/{id}', [NoteController::class, 'update'])->name('notes.update'); // Mettre à jour une note
     Route::delete('/{id}', [NoteController::class, 'destroy'])->name('notes.destroy'); // Supprimer une note
+    Route::post('/repartition-notes', [NoteController::class, 'repartitionNotes']); // afficher la Repartition des notes par matieres
+
+    Route::post('/nombre-recales-matieres', [NoteController::class, 'nombreRecalesToutesMatieres']); //afficher les recalés par matieres
+
+    Route::post('/etudiants-mention', [NoteController::class, 'getStatsMentions']); //Repartition des etudiants par mention
+
+    Route::post('/frequence-matiere-globale', [NoteController::class, 'frequenceResultatsParMatiereGlobale']);  //frequence des  resultats par matiere
 });
 
 // ====================================
