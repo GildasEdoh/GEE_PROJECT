@@ -406,6 +406,7 @@ const MajNotes = () => {
                 value={poidsDevoir * 100}
                 onChange={(e) => {
                   const value = parseInt(e.target.value, 10) / 100;
+                  console.log("Nouvelle valeur devoir sélectionnée :", value);
                   setPoidsDevoir(value);
                 }}
                 className={`w-20 px-2 py-1/2 rounded border-none focus:outline-none text-sm text-white ml-1 text-center ${
@@ -720,7 +721,7 @@ const MajNotes = () => {
                   className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
                     selectedIndex === null
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-green-500 hover:bg-green-700"
+                      : "bg-blue-500 hover:bg-gray-800"
                   }`}
                   onClick={handleValidation}
                   disabled={selectedIndex === null}

@@ -1,20 +1,24 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
 import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
-import * as XLSX from "xlsx";
-import { getGrades } from "../utils/parseAnnee";
-
 import {
+  getGrades,
+  getSessionIndex,
+  getAnneeEtudeIndex,
+  getAnneeUnivIndex,
+} from "../utils/parseAnnee";
+import {
+  generatePDF,
   exportEtudiantsToExcel,
-  handleImportEtudiantsExcel,
-  handleImportExcelToJson,
-} from "../components/BottomButtons";
-/**
- * Return the page which contains the table of students
- */
+  getParcoursAnneeEtudeId,
+} from "../utils/ExcelUtils.js";
+import showNotification from "../utils/showMessage";
+import toast, { Toaster } from "react-hot-toast";
 
 const Echoues = () => {
   const [editIndex, setEditIndex] = useState(null);
@@ -23,69 +27,48 @@ const Echoues = () => {
   const [error, setError] = useState(false);
   const [majMessage, setMajMessage] = useState(null);
   const [majIsSucces, setMajIsSucces] = useState(false);
-  const [typeFiliere, setTypeFiliere] = useState("Genie Logiciel");
-  const [typeParcours, setTypeParcours] = useState("Licence");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1ere annee");
+  const [idtypeFiliere, setIdTypeFiliere] = useState("3");
+  const [typeParcours, setTypeParcours] = useState("CAPACITE");
+  const [typeAnneEtude, setypeAnneEtude] = useState("1");
   const [etudiants, setEtudiants] = useState([]);
   const [anneesEtude, setAnneesEtude] = useState([]);
-  var grades = [];
   const [filiere, setFiliere] = useState([]);
 
-  // Submission of the suppression
-  const handleDeleteEtudiant = (index) => {
-    if (window.confirm("Voulez-vous vraiment supprimer cet étudiant ?")) {
-      setEtudiants(etudiants.filter((_, i) => i !== index));
-    }
-    const deleteEtudiant = etudiants[index];
-    //
-    EtudiantService.deleteEtudiant(deleteEtudiant.numero_carte)
-      .then((res) => {
-        setMajMessage(
-          `Suppression de l'etudiant ${deleteEtudiant.nom} effectuee avec succes !`
-        );
-        setMajIsSucces(true);
-      })
-      .catch((err) => {
-        console.error("Erreur :", err);
-        setMajMessage("Échec de la Suppression.");
-        setMajIsSucces(false);
-      });
-  };
+  // Variables
+  var grades = [];
+  var anneeUnivCouranteId = 2;
+  var filiereCouranteId = 3;
+  var sessionCouranteId = 1;
+  var anneeCurId = 6;
+  var etabCourantId = 1;
 
-  const handleEditEtudiant = (index) => {
-    setEditIndex(index);
-    setEditedData(etudiants[index]);
-    const etudiant = etudiants[index];
-    console.log("etudiant: " + etudiant.numero_carte);
-  };
+  const getEtudiant = () => {
+    // Get the list of students
+    console.log(
+      "anneeUnivCouranteId = " +
+        anneeUnivCouranteId +
+        ", sessionCouranteId = " +
+        sessionCouranteId +
+        ", anneeEtudeCourante = " +
+        typeAnneEtude +
+        ", filireCouranteId = " +
+        filiereCouranteId +
+        ", anneeCurId = " +
+        anneeCurId
+    );
 
-  // Submission of the edition
-  const handleSaveEdit = (index) => {
-    const updatedEtudiants = [...etudiants];
-    updatedEtudiants[index] = editedData;
-    console.log("etudiant updated : " + editedData.numero_carte);
-    setEtudiants(updatedEtudiants);
-    setEditIndex(null);
-
-    // Maj student
-    EtudiantService.updateEtudiant(editedData)
-      .then((res) => {
-        setMajMessage("Mise à jour réussie !");
-        setMajIsSucces(true);
-      })
-      .catch((err) => {
-        console.error("Erreur :", err);
-        setMajMessage("Échec de la mise à jour.");
-        setMajIsSucces(false);
-      });
-  };
-
-  // Get the list of students
-  useEffect(() => {
-    EtudiantService.getAllEtudiant()
+    EtudiantService.getEtudiantByFiltre(
+      etabCourantId,
+      filiereCouranteId,
+      anneeCurId,
+      anneeUnivCouranteId,
+      sessionCouranteId
+    )
       .then((response) => {
-        // console.log("🚀 Reponse brute de l'API :", response[0]);
-        // console.log(Array.isArray(response));
+        console.log("🚀 Reponse brute de l'API :", response[0]);
+        if (response.length == 0) {
+          console.log("liste vide");
+        }
         setEtudiants(response);
         setIsLoading(false);
       })
@@ -94,7 +77,7 @@ const Echoues = () => {
         setIsLoading(false);
         setError(true);
       });
-  }, []);
+  };
 
   // Get the list of students
   useEffect(() => {
@@ -137,15 +120,46 @@ const Echoues = () => {
         });
     }
   }, []);
-  console.log(
-    " etudiant page anneeUnivCourante ----- : ",
-    localStorage.getItem("anneeUnivCourante")
-  );
-  console.log(
-    " etudiant page sessionCourante ------ : ",
-    localStorage.getItem("sessionCourante")
-  );
 
+  const updateEtudiant = () => {
+    // Reconstitution du parcours
+    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"));
+    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"));
+
+    const anneesUniv = JSON.parse(localStorage.getItem("annees"));
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
+
+    const anneeCur = typeParcours + " " + typeAnneEtude;
+
+    if (
+      anneeUniv &&
+      sessionCourante &&
+      anneesUniv &&
+      sessions &&
+      anneesEtudes
+    ) {
+      anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
+      filiereCouranteId = idtypeFiliere;
+      sessionCouranteId = getSessionIndex(sessionCourante, sessions);
+      anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
+    }
+    setIsLoading(true);
+    getEtudiant();
+  };
+  useEffect(() => {
+    updateEtudiant();
+  }, [typeParcours, typeAnneEtude, idtypeFiliere]);
+
+  const etudiantsAvecMoyenne = etudiants.map((etudiant) => ({
+    ...etudiant,
+    moyenneAleatoire: parseFloat((Math.random() * 9).toFixed(2)),
+  }));
+
+  // Trier par moyenne décroissante
+  etudiantsAvecMoyenne.sort((a, b) => b.moyenneAleatoire - a.moyenneAleatoire);
+
+  //
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -164,11 +178,14 @@ const Echoues = () => {
     {
       anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : [];
     }
+
     return (
       <div className="flex-grow">
         <div className="flex flex-col">
           <div className="bg-white flex items-center z-4 pt-3 pb-3  pr-4 justify-between">
-            <h1 className="text-2xl font-bold">Liste des Étudiants Echoués</h1>
+            <h1 className="text-2xl font-bold ml-55">
+              Liste des Étudiants échoués
+            </h1>
 
             <div className="flex items-center gap-4">
               <div>
@@ -176,11 +193,6 @@ const Echoues = () => {
                   value={typeParcours}
                   onChange={(e) => {
                     setTypeParcours(e.target.value);
-                    console.log("----- parcours ---  ", e.target.value);
-                    localStorage.setItem(
-                      "parcoursCourante",
-                      JSON.stringify(e.target.value)
-                    );
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -197,14 +209,9 @@ const Echoues = () => {
               </div>
               <div>
                 <select
-                  value={typeFiliere}
+                  value={idtypeFiliere}
                   onChange={(e) => {
-                    setTypeFiliere(e.target.value);
-                    console.log("----- filiere---  ", e.target.value);
-                    localStorage.setItem(
-                      "filiereCourante",
-                      JSON.stringify(e.target.value)
-                    );
+                    setIdTypeFiliere(e.target.value);
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
@@ -224,23 +231,17 @@ const Echoues = () => {
                   value={typeAnneEtude}
                   onChange={(e) => {
                     setypeAnneEtude(e.target.value);
-                    console.log("----- type annee---  ", e.target.value);
-                    localStorage.setItem(
-                      "anneeEtudeCourante",
-                      JSON.stringify(e.target.value)
-                    );
                   }}
                   className="p-2 border-none rounded-md shadow-sm text-sm"
                 >
                   <option value="1">1ere année</option>
                   <option value="2">2eme année</option>
-                  <option value="3">3eme année</option>
                 </select>
               </div>
             </div>
           </div>
-          <div className="h-[400px] overflow-y-auto mt-8">
-            <table className="w-full border-collapse border rounded-xl shadow-md">
+          <div className="flex justify-center h-[400px] overflow-y-auto mt-8">
+            <table className="w-300 border-collapse border rounded-xl shadow-md">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
@@ -255,22 +256,18 @@ const Echoues = () => {
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
                     Date de Naissance
                   </th>
-                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                    Lieu de Naissance
-                  </th>
+
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
                     Sexe
                   </th>
+
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                    Téléphone
-                  </th>
-                  <th className="px-4 py-2 text-gray-700 text-sm text-center">
-                    Actions
+                    Moyenne
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {etudiants.map((etudiant, index) => (
+                {etudiantsAvecMoyenne.map((etudiant, index) => (
                   <tr
                     key={etudiant.numero_carte}
                     className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
@@ -340,41 +337,15 @@ const Echoues = () => {
                         </td>
                         <td className="px-4 py-2 text-center">
                           <input
-                            value={editedData.telephone}
+                            value={editedData.Tel_1}
                             onChange={(e) =>
                               setEditedData({
                                 ...editedData,
-                                telephone: e.target.value,
+                                Tel_1: e.target.value,
                               })
                             }
                             className="border p-1 w-full"
                           />
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <input
-                            value={editedData.moyenne}
-                            onChange={(e) =>
-                              setEditedData({
-                                ...editedData,
-                                moyenne: e.target.value,
-                              })
-                            }
-                            className="border p-1 w-full"
-                          />
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <button
-                            className="text-green-500 hover:text-green-700"
-                            onClick={() => handleSaveEdit(index)}
-                          >
-                            <MdCheck size={18} />
-                          </button>
-                          <button
-                            className="text-gray-500 hover:text-gray-700"
-                            onClick={() => setEditIndex(null)}
-                          >
-                            <MdClose size={18} />
-                          </button>
                         </td>
                       </>
                     ) : (
@@ -395,32 +366,13 @@ const Echoues = () => {
                           {" "}
                           {etudiant.date_naissance}{" "}
                         </td>
-                        <td className="px-4 py-2 text-center">
-                          {" "}
-                          {etudiant.lieu_naissance}{" "}
-                        </td>
+
                         <td className="px-4 py-2 text-center">
                           {etudiant.sexe}
                         </td>
+
                         <td className="px-4 py-2 text-center">
-                          {" "}
-                          {etudiant.telephone}{" "}
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <div className="flex gap-2 justify-center">
-                            <button
-                              className="text-blue-500 hover:text-blue-700"
-                              onClick={() => handleEditEtudiant(index)}
-                            >
-                              <MdEdit size={18} />
-                            </button>
-                            <button
-                              className="text-red-500 hover:text-red-700"
-                              onClick={() => handleDeleteEtudiant(index)}
-                            >
-                              <MdDelete size={18} />
-                            </button>
-                          </div>
+                          {etudiant.moyenneAleatoire}
                         </td>
                       </>
                     )}
@@ -441,19 +393,23 @@ const Echoues = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
-            <button className="px-2 py-2 w-full bg-green-500 text-white text-sm rounded-lg hover:bg-red-600 cursor-pointer">
+          <div className="  lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2 width:50">
+            <button
+              className="ml-65 px-2 py-2 w-100 bg-blue-500 text-white text-sm rounded-lg hover:bg-gray-600 cursor-pointer"
+              onClick={() => generatePDF(etudiants, "Liste des Étudiants")}
+            >
               Imprimer la liste
             </button>
 
             <button
               onClick={() => exportEtudiantsToExcel(etudiants)}
-              className="px-2 py-2 w-full bg-yellow-500 text-white text-sm rounded-lg hover:bg-yellow-600 cursor-pointer"
+              className="ml-80 px-2 py-2 w-100 bg-blue-500 text-white text-sm rounded-lg hover:bg-gray-600 cursor-pointer"
             >
               Exporter au format excel
             </button>
           </div>
         </div>
+        <Toaster />
       </div>
     );
   }
