@@ -246,7 +246,6 @@ const MajNotes = () => {
       setEditedData({});
     } catch (error) {
       console.error("Erreur lors de l'enregistrement de la note :", error);
-      alert("Une erreur s'est produite.");
     }
   };
 
@@ -314,7 +313,7 @@ const MajNotes = () => {
         "+" +
         nouveauxEtudiants[0].note_examen +
         "*" +
-        poidsExamen
+        poidsExam
     );
 
     setEtudiants(nouveauxEtudiants);
@@ -407,6 +406,7 @@ const MajNotes = () => {
                 value={poidsDevoir * 100}
                 onChange={(e) => {
                   const value = parseInt(e.target.value, 10) / 100;
+                  console.log("Nouvelle valeur devoir sélectionnée :", value);
                   setPoidsDevoir(value);
                 }}
                 className={`w-20 px-2 py-1/2 rounded border-none focus:outline-none text-sm text-white ml-1 text-center ${
@@ -444,16 +444,17 @@ const MajNotes = () => {
                 }} */
                 onChange={(e) => {
                   const nouvelleValeur = parseInt(e.target.value, 10) / 100;
+                  console.log("Nouvelle valeur sélectionnée :", nouvelleValeur);
+
+                  setPoidsExamen(nouvelleValeur); // mettre à jour le champ
+
                   const sommePrevue = poidsDevoir + nouvelleValeur;
 
-                  if (sommePrevue.toFixed(2) == 1.0) {
-                    setPoidsExamen(nouvelleValeur);
+                  if (sommePrevue.toFixed(2) === "1.00") {
                     setPoidsErreur(false);
-                    setTimeout(() => {
-                      console.log("poidsExamen", poidsExamen);
-                      console.log("poidsDevoir", poidsDevoir);
-                      calculerMoyennePourTous(poidsDevoir, nouvelleValeur);
-                    }, 0);
+
+                    // ✅ Utiliser directement la valeur à jour
+                    calculerMoyennePourTous(poidsDevoir, nouvelleValeur);
                   } else {
                     setPoidsErreur(true);
                     alert(
@@ -715,17 +716,19 @@ const MajNotes = () => {
                 </div>
               </div>
 
-              <button
-                className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
-                  selectedIndex === null
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-500 hover:bg-green-700"
-                }`}
-                onClick={handleValidation}
-                disabled={selectedIndex === null}
-              >
-                Valider
-              </button>
+              <div className="mt-5 flex justify-center">
+                <button
+                  className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
+                    selectedIndex === null
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-gray-800"
+                  }`}
+                  onClick={handleValidation}
+                  disabled={selectedIndex === null}
+                >
+                  Valider
+                </button>
+              </div>
             </>
           )}
           {showEtudiants && afficheEtudiants()}
