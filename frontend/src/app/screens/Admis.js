@@ -183,9 +183,7 @@ const Admis = () => {
       <div className="flex-grow">
         <div className="flex flex-col">
           <div className="bg-white flex items-center z-4 pt-3 pb-3  pr-4 justify-between">
-            <h1 className="text-2xl font-bold ml-55">
-              Liste des Étudiants admis
-            </h1>
+            <h1 className="text-2xl font-bold"> Liste des Étudiants admis </h1>
 
             <div className="flex items-center gap-4">
               <div>
@@ -240,8 +238,8 @@ const Admis = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-center h-[400px] overflow-y-auto mt-8">
-            <table className="w-300 border-collapse border rounded-xl shadow-md">
+          <div className="h-[400px] overflow-y-auto mt-8">
+            <table className="w-full border-collapse border rounded-xl shadow-md">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="px-4 py-2 text-gray-700 text-sm text-center">
@@ -393,9 +391,9 @@ const Admis = () => {
             )}
           </div>
 
-          <div className="  lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2 width:50">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4 mt-8 w-full md:flex md:gap-2 gap-2">
             <button
-              className="ml-65 px-2 py-2 w-100 bg-blue-500 text-white text-sm rounded-lg hover:bg-gray-600 cursor-pointer"
+              className="px-2 py-2 w-full bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 cursor-pointer"
               onClick={() => generatePDF(etudiants, "Liste des Étudiants")}
             >
               Imprimer la liste
@@ -403,7 +401,7 @@ const Admis = () => {
 
             <button
               onClick={() => exportEtudiantsToExcel(etudiants)}
-              className="ml-80 px-2 py-2 w-100 bg-blue-500 text-white text-sm rounded-lg hover:bg-gray-600 cursor-pointer"
+              className="px-2 py-2 w-full bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 cursor-pointer"
             >
               Exporter au format excel
             </button>

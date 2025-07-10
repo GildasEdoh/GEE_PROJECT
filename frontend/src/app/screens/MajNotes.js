@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import EtudiantService from "@/services/EtudiantService";
 import MatiereService from "@/services/MatiereService";
 import NoteService from "@/services/NoteService";
@@ -12,730 +12,595 @@ import {
   getFiliereLibelle,
 } from "../utils/parseAnnee";
 
-import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
-
 const MajNotes = () => {
-  const [matieres, setMatieres] = useState([]);
-  const [codeSelected, setCodeSelected] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [etudiants, setEtudiants] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
-  const [editedData, setEditedData] = useState({});
-  const [showEtudiants, setShowEtudiants] = useState(false);
-  const [evaluation, setEvaluation] = useState("Devoir");
-  const [typeFiliere, setTypeFiliere] = useState("3");
-  const [typeParcours, setTypeParcours] = useState("CAPACITE");
-  const [typeAnneEtude, setypeAnneEtude] = useState("1");
-  const [anneesEtude, setAnneesEtude] = useState([]);
-  const [filieres, setFilieres] = useState([]);
-  const [defaultEtudiant, setDefaultEtudiants] = useState([]);
-  const [poidsDevoir, setPoidsDevoir] = useState(1);
-  const [poidsExamen, setPoidsExamen] = useState(0);
-  const [poidsErreur, setPoidsErreur] = useState(false);
+  // States groupés par fonctionnalité
+  const [data, setData] = useState({
+    matieres: [],
+    etudiants: [],
+    anneesEtude: [],
+    filieres: [],
+  });
 
-  var parcoursLibelle = "";
+  const [ui, setUi] = useState({
+    isLoading: true,
+    error: false,
+    showEtudiants: false,
+    selectedIndex: null,
+    editIndex: null,
+    editedData: {},
+  });
 
-  var grades = [];
-  var anneeUnivCouranteId = 1;
-  var filiereCouranteId = 3;
-  var sessionCouranteId = 1;
-  var anneeCurId = 6;
-  var etabCourantId = 1;
+  const [filters, setFilters] = useState({
+    codeSelected: "",
+    evaluation: "Devoir",
+    typeFiliere: "3",
+    typeParcours: "CAPACITE",
+    typeAnneEtude: "1",
+    poidsDevoir: 0.5,
+    poidsExamen: 0.5,
+    poidsErreur: false,
+    libelleMatSelected: ""
+  });
 
-  // Recuperation des matières
-  useEffect(() => {
-    updateEtudiant();
-    MatiereService.getMatiereByFiltre(
-      etabCourantId,
-      filiereCouranteId,
-      anneeCurId,
-      anneeUnivCouranteId,
-      sessionCouranteId
-    )
-      .then((response) => {
-        setMatieres(response);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur :", error);
-        setIsLoading(false);
-        setError(true);
-      });
-  }, [typeParcours, typeAnneEtude, typeFiliere]);
+  // Constantes déplacées dans le state ou calculées
+  const constants = {
+    anneeUnivCouranteId: 1,
+    filiereCouranteId: 3,
+    sessionCouranteId: 1,
+    anneeCurId: 6,
+    etabCourantId: 1,
+  };
+  // Utilitaires pour localStorage
+  const getFromStorage = (key) => {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  };
 
-  //Recuperation des années d'étude et des filières
-  useEffect(() => {
-    const anneeData = localStorage.getItem("anneesEtude");
-    const filiereData = localStorage.getItem("filieres");
+  const setToStorage = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
 
-    if (anneeData) {
-      // console.log("🚀 ---- anneeData local --- :");
-      setAnneesEtude(JSON.parse(anneeData));
-    } else {
-      AnneesEtudeService.getAllAnneesEtude()
-        .then((response) => {
-          // console.log("🚀 ---- AnneesEtude --- :", response[0]);
-          console.log(Array.isArray(response));
-          setIsLoading(false);
-          localStorage.setItem("anneesEtude", JSON.stringify(response));
-          setAnneesEtude(response);
-        })
-        .catch((error) => {
-          console.error("Erreur :", error);
-          setIsLoading(false);
-          setError(true);
-        });
+  // Fonction pour mettre à jour les IDs courants
+  const updateCurrentIds = useCallback(() => {
+    const anneeUniv = getFromStorage("anneeUnivCourante");
+    const sessionCourante = getFromStorage("sessionCourante");
+    const anneesUniv = getFromStorage("annees");
+    const sessions = getFromStorage("sessions");
+    const anneesEtudes = getFromStorage("anneesEtude");
+
+    const anneeCur = `${filters.typeParcours} ${filters.typeAnneEtude}`;
+
+    if (anneeUniv && sessionCourante && anneesUniv && sessions && anneesEtudes) {
+      return {
+        etabCourantId : 1,
+        anneeUnivCouranteId: getAnneeUnivIndex(anneeUniv, anneesUniv),
+        filiereCouranteId: parseInt(filters.typeFiliere),
+        sessionCouranteId: getSessionIndex(sessionCourante, sessions),
+        anneeCurId: getAnneeEtudeIndex(anneeCur, anneesEtudes),
+      };
     }
-    // Filiere data
-    if (filiereData) {
-      // console.log("🚀 ---- filiereData local --- :");
-      setFilieres(JSON.parse(filiereData));
-    } else {
-      FiliereService.getAllFiliere()
-        .then((response) => {
-          setIsLoading(false);
-          localStorage.setItem("filieres", JSON.stringify(response));
-          setFilieres(response);
-        })
-        .catch((error) => {
-          console.error("Erreur :", error);
-          setIsLoading(false);
-          setError(true);
-        });
+    return constants;
+  }, [filters.typeParcours, filters.typeAnneEtude, filters.typeFiliere]);
+
+  // Chargement des données de référence
+  const loadReferenceData = useCallback(async () => {
+    try {
+      const [anneesEtudeData, filieresData] = await Promise.all([
+        getFromStorage("anneesEtude") || AnneesEtudeService.getAllAnneesEtude(),
+        getFromStorage("filieres") || FiliereService.getAllFiliere(),
+      ]);
+
+      if (!getFromStorage("anneesEtude")) setToStorage("anneesEtude", anneesEtudeData);
+      if (!getFromStorage("filieres")) setToStorage("filieres", filieresData);
+
+      setData(prev => ({
+        ...prev,
+        anneesEtude: anneesEtudeData,
+        filieres: filieresData,
+      }));
+    } catch (error) {
+      console.error("Erreur lors du chargement des données de référence:", error);
+      setUi(prev => ({ ...prev, error: true }));
     }
   }, []);
 
+  // Chargement des matières
+  const loadMatieres = useCallback(async () => {
+    try {
+      setUi(prev => ({ ...prev, isLoading: true }));
+      const currentIds = updateCurrentIds();
+      console.log(" ---- currentIds ---- ", currentIds)
+      
+      const response = await MatiereService.getMatiereByFiltre(
+        currentIds.etabCourantId,
+        currentIds.filiereCouranteId,
+        currentIds.anneeCurId,
+        currentIds.anneeUnivCouranteId,
+        currentIds.sessionCouranteId
+      );
+
+      setData(prev => ({ ...prev, matieres: response }));
+      setUi(prev => ({ ...prev, isLoading: false, error: false }));
+    } catch (error) {
+      console.error("Erreur lors du chargement des matières:", error);
+      setUi(prev => ({ ...prev, isLoading: false, error: true }));
+    }
+  }, [filters.typeParcours, filters.typeAnneEtude, filters.typeFiliere, updateCurrentIds]);
+
+  // Chargement des étudiants
+  const loadEtudiants = useCallback(async (idMatiere = null) => {
+    try {
+      const currentIds = updateCurrentIds();
+      let response;
+
+      if (idMatiere) {
+        response = await EtudiantService.getAllEtudiantsBySubject(idMatiere);
+      }
+
+      // Si pas d'étudiants ou pas d'ID matière, charger tous les étudiants
+      if (!response || response.length === 0) {
+        response = await EtudiantService.getEtudiantByFiltre(
+          currentIds.etabCourantId,
+          currentIds.filiereCouranteId,
+          currentIds.anneeCurId,
+          currentIds.anneeUnivCouranteId,
+          currentIds.sessionCouranteId
+        );
+      }
+
+      setData(prev => ({ ...prev, etudiants: response }));
+      setUi(prev => ({ ...prev, isLoading: false }));
+    } catch (error) {
+      console.error("Erreur lors du chargement des étudiants:", error);
+      setUi(prev => ({ ...prev, isLoading: false, error: true }));
+    }
+  }, [updateCurrentIds]);
+
+  // Calcul de la moyenne pour tous les étudiants
+  const calculerMoyennePourTous = useCallback((poidsDev, poidsExam) => {
+    const nouveauxEtudiants = data.etudiants.map(etudiant => ({
+      ...etudiant,
+      total_pondere: (
+        parseFloat(etudiant.note_devoir || 0) * poidsDev +
+        parseFloat(etudiant.note_examen || 0) * poidsExam
+      ).toFixed(2),
+    }));
+
+    setData(prev => ({ ...prev, etudiants: nouveauxEtudiants }));
+  }, [data.etudiants]);
+
+  // Validation des notes
+  const validateNote = (value, fieldName) => {
+    const note = parseFloat(value);
+    if (isNaN(note) || note < 0 || note > 20) {
+      alert(`Veuillez entrer une note ${fieldName} valide entre 0 et 20.`);
+      return false;
+    }
+    return true;
+  };
+
+  // Handlers
   const handleRowClick = (index, codeMat) => {
-    setSelectedIndex(index);
-    setCodeSelected(codeMat);
+    setUi(prev => ({ ...prev, selectedIndex: index }));
+    setFilters(prev => ({ ...prev, codeSelected: codeMat }));
   };
 
   const handleValidation = () => {
-    const selectedMatiere = matieres[selectedIndex];
-    const id = selectedMatiere ? selectedMatiere.id : null;
-    if (id) {
-      setShowEtudiants(true);
-      fetchEtudiantsForMatiere(id);
+    const selectedMatiere = data.matieres[ui.selectedIndex];
+    // filters.libelleMatSelected.setFilters(selectedMatiere?.libelle)
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      libelleMatSelected: selectedMatiere.libelle
+    }));
+    if (selectedMatiere?.id) {
+      setUi(prev => ({ ...prev, showEtudiants: true }));
+      loadEtudiants(selectedMatiere.id);
     }
-  };
-
-  const fetchEtudiantsForMatiere = (idMatiere) => {
-    // setIsLoading(true);
-    let isEmpty = false;
-    EtudiantService.getAllEtudiantsBySubject(idMatiere)
-      .then((response) => {
-        if (response.length == 0) {
-          console.log("response.length == 0");
-          isEmpty = true;
-        } else {
-          setIsLoading(false);
-          setEtudiants(response);
-        }
-      })
-      .catch((error) => {
-        console.error("Erreur :", error);
-        setIsLoading(false);
-        setError(true);
-      });
-    if (isEmpty) {
-      console.log("emptyyyyyyy");
-      getDefaultEtudiant();
-    }
-  };
-  const getDefaultEtudiant = () => {
-    // Get the list of students
-    console.log(
-      "anneeUnivCouranteId = " +
-        anneeUnivCouranteId +
-        ", sessionCouranteId = " +
-        sessionCouranteId +
-        ", anneeEtudeCourante = " +
-        typeAnneEtude +
-        ", filireCouranteId = " +
-        filiereCouranteId +
-        ", anneeCurId = " +
-        anneeCurId
-    );
-
-    EtudiantService.getEtudiantByFiltre(
-      etabCourantId,
-      filiereCouranteId,
-      anneeCurId,
-      anneeUnivCouranteId,
-      sessionCouranteId
-    )
-      .then((response) => {
-        // console.log("🚀 Reponse brute de l'API :", response[0]);
-        if (response.length == 0) {
-          console.log("liste vide");
-        }
-        setEtudiants(response);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur :", error);
-        setIsLoading(false);
-        setError(true);
-      });
   };
 
   const handleEdit = (index) => {
-    const etudiant = etudiants[index];
-    const id = etudiant.numero_carte;
-
-    // Tu as maintenant l'ID de l'étudiant !
-    console.log("ID de l'étudiant :", id);
-
-    setEditIndex(index);
-    setEditedData({
-      note_devoir: etudiant.note_devoir ?? "",
-      note_examen: etudiant.note_examen ?? "",
-      total_pondere: etudiant.total_pondere ?? "",
-    });
+    const etudiant = data.etudiants[index];
+    setUi(prev => ({
+      ...prev,
+      editIndex: index,
+      editedData: {
+        note_devoir: etudiant.note_devoir ?? "",
+        note_examen: etudiant.note_examen ?? "",
+        total_pondere: etudiant.total_pondere ?? "",
+      },
+    }));
   };
 
   const handleSave = async (index) => {
     try {
-      const updatedEtudiants = [...etudiants];
-      const etudiant = etudiants[index]; // donc ici encore tu as l'ID
-      const id = etudiant.numero_carte;
+      const etudiant = data.etudiants[index];
+      const { note_devoir, note_examen, total_pondere } = ui.editedData;
 
-      const devoir = parseFloat(editedData.note_devoir);
-      const examen = parseFloat(editedData.note_examen);
-      const moyenne = parseFloat(editedData.total_pondere);
-
-      // Validation des champs requis
-      if (evaluation === "Devoir") {
-        if (isNaN(devoir) || devoir < 0 || devoir > 20) {
-          alert("Veuillez entrer une note de devoir valide entre 0 et 20.");
-          setdevoir("");
-          return;
-        }
-
-        updatedEtudiants[index] = { ...etudiant, note_devoir: devoir };
-      } else if (evaluation === "Examen") {
-        if (
-          isNaN(devoir) ||
-          devoir < 0 ||
-          devoir > 20 ||
-          isNaN(examen) ||
-          examen < 0 ||
-          examen > 20 ||
-          isNaN(moyenne) ||
-          moyenne < 0 ||
-          moyenne > 20
-        ) {
-          alert(
-            "Toutes les notes doivent être des nombres valides entre 0 et 20."
-          );
-          return;
-        }
-
-        updatedEtudiants[index] = {
-          ...etudiant,
-          note_devoir: devoir,
-          note_examen: examen,
-          total_pondere: moyenne,
-        };
+      // Validation selon le type d'évaluation
+      if (filters.evaluation === "Devoir") {
+        if (!validateNote(note_devoir, "de devoir")) return;
+      } else if (filters.evaluation === "Examen") {
+        if (!validateNote(note_devoir, "de devoir") || 
+            !validateNote(note_examen, "d'examen") || 
+            !validateNote(total_pondere, "moyenne")) return;
       }
 
-      setEtudiants(updatedEtudiants);
-      setEditIndex(null);
-      setEditedData({});
+      const updatedEtudiants = [...data.etudiants];
+      updatedEtudiants[index] = {
+        ...etudiant,
+        ...(filters.evaluation === "Devoir" && { note_devoir: parseFloat(note_devoir) }),
+        ...(filters.evaluation === "Examen" && {
+          note_devoir: parseFloat(note_devoir),
+          note_examen: parseFloat(note_examen),
+          total_pondere: parseFloat(total_pondere),
+        }),
+      };
+
+      setData(prev => ({ ...prev, etudiants: updatedEtudiants }));
+      setUi(prev => ({ ...prev, editIndex: null, editedData: {} }));
     } catch (error) {
-      console.error("Erreur lors de l'enregistrement de la note :", error);
+      console.error("Erreur lors de l'enregistrement:", error);
     }
   };
 
   const handleKeyDown = async (e, currentIndex) => {
     if (e.key === "Enter") {
       await handleSave(currentIndex);
-
-      // Passer à la ligne suivante
       const nextIndex = currentIndex + 1;
-      if (nextIndex < etudiants.length) {
-        handleEdit(nextIndex, etudiants[nextIndex]);
+      if (nextIndex < data.etudiants.length) {
+        handleEdit(nextIndex);
       }
     }
   };
 
-  const updateEtudiant = () => {
-    // Reconstitution du parcours
-    const anneeUniv = JSON.parse(localStorage.getItem("anneeUnivCourante"));
-    const sessionCourante = JSON.parse(localStorage.getItem("sessionCourante"));
+  const handlePoidsChange = (type, value) => {
+    const newValue = parseInt(value, 10) / 100;
+    const otherValue = type === "devoir" ? filters.poidsExamen : filters.poidsDevoir;
+    const sum = (type === "devoir" ? newValue + otherValue : filters.poidsDevoir + newValue).toFixed(2);
 
-    const anneesUniv = JSON.parse(localStorage.getItem("annees"));
-    const sessions = JSON.parse(localStorage.getItem("sessions"));
-    const anneesEtudes = JSON.parse(localStorage.getItem("anneesEtude"));
+    setFilters(prev => ({
+      ...prev,
+      [type === "devoir" ? "poidsDevoir" : "poidsExamen"]: newValue,
+      poidsErreur: sum !== "1.00",
+    }));
 
-    const anneeCur = typeParcours + " " + typeAnneEtude;
-
-    if (
-      anneeUniv &&
-      sessionCourante &&
-      anneesUniv &&
-      sessions &&
-      anneesEtudes
-    ) {
-      anneeUnivCouranteId = getAnneeUnivIndex(anneeUniv, anneesUniv);
-      filiereCouranteId = parseInt(typeFiliere);
-      console.log("error --- fi --", filiereCouranteId);
-      sessionCouranteId = getSessionIndex(sessionCourante, sessions);
-      anneeCurId = getAnneeEtudeIndex(anneeCur, anneesEtudes);
-      parcoursLibelle = getFiliereLibelle(typeFiliere, filieres);
-    }
-    setIsLoading(true);
-    getDefaultEtudiant();
-  };
-  // calculer la moyenne pour tous les étudiants
-  const calculerMoyennePourTous = (poidsDev, poidsExam) => {
-    const nouveauxEtudiants = etudiants.map((etudiant) => {
-      const devoir = parseFloat(etudiant.note_devoir || 0);
-      const examen = parseFloat(etudiant.note_examen || 0);
-      const moyenne = devoir * poidsDev + examen * poidsExam;
-
-      return {
-        ...etudiant,
-        total_pondere: moyenne.toFixed(2), // arrondi à 2 décimales
-      };
-    });
-    console.log(
-      "Moyenne pour l'étudiant",
-      nouveauxEtudiants[0].id,
-      ": moyenne",
-      nouveauxEtudiants[0].total_pondere +
-        "=" +
-        nouveauxEtudiants[0].note_devoir +
-        "*" +
-        poidsDevoir +
-        "+" +
-        nouveauxEtudiants[0].note_examen +
-        "*" +
-        poidsExam
-    );
-
-    setEtudiants(nouveauxEtudiants);
-  };
-
-  const afficheEtudiants = () => {
-    if (isLoading) {
-      return (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
-        </div>
-      );
-    } else if (error) {
-      return (
-        <div className="ml-64 mt-20 w-2/3">
-          <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
-            ⚠️ Impossible de récupérer la liste. Erreur serveur
-          </div>
-        </div>
-      );
-    } else if (etudiants.length === 0) {
-      return (
-        <div className="ml-60 mt-20 w-2/3 h-2/3">
-          <div className="bg-yellow-100 text-yellow-700 h-50 rounded shadow-md text-center text-3xl">
-            Aucune donnée disponible pour cette matière.
-          </div>
-        </div>
-      );
+    if (sum === "1.00") {
+      const poidsDev = type === "devoir" ? newValue : filters.poidsDevoir;
+      const poidsExam = type === "examen" ? newValue : filters.poidsExamen;
+      calculerMoyennePourTous(poidsDev, poidsExam);
     } else {
-      return (
-        <div className="ml-0 mt-0 w-full">
-          <div className="flex items-center gap-4 ml-5 flex-wrap ">
-            <span className="text-black font-bold text-sm">Matiere</span>
+      // alert("La somme des poids doit être égale à 100%. Veuillez ajuster les poids.");
+    }
+  };
+
+  // Effects
+  useEffect(() => {
+    loadReferenceData();
+  }, [loadReferenceData]);
+
+  useEffect(() => {
+    loadEtudiants();
+    loadMatieres();
+  }, [filters.typeParcours, filters.typeAnneEtude, filters.typeFiliere, loadMatieres, loadEtudiants]);
+
+  // Render helpers
+  const renderLoading = () => (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
+    </div>
+  );
+
+  const renderError = (message) => (
+    <div className="ml-64 mt-20 w-2/3">
+      <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
+        ⚠️ {message}
+      </div>
+    </div>
+  );
+
+  const renderEmptyState = () => (
+    <div className="ml-60 mt-20 w-2/3 h-2/3">
+      <div className="bg-yellow-100 text-yellow-700 h-50 rounded shadow-md text-center text-3xl">
+        Aucune donnée disponible pour cette matière.
+      </div>
+    </div>
+  );
+
+  const renderEtudiants = () => {
+    if (ui.isLoading) return renderLoading();
+    if (ui.error) return renderError("Impossible de récupérer la liste. Erreur serveur");
+    if (data.etudiants.length === 0) return renderEmptyState();
+
+    const parcoursLibelle = getFiliereLibelle(filters.typeFiliere, data.filieres);
+    const grades = data.anneesEtude.length > 0 ? getGrades(data.anneesEtude) : [];
+
+    return (
+      <div className="ml-0 mt-0 w-full">
+        <div className="flex items-center gap-4 ml-5 flex-wrap">
+          <span className="text-black font-bold text-sm">Matiere</span>
+          <select
+            value={filters.libelleMatSelected}
+            onChange={() => {}}
+            className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
+          >
+            <option>{filters.libelleMatSelected}</option>
+          </select>
+
+          <span className="text-black font-bold text-sm ml-2">Parcours</span>
+          <select
+            value={filters.typeParcours}
+            onChange={(e) => setFilters(prev => ({ ...prev, typeParcours: e.target.value }))}
+            className="p-2 border-none rounded-md shadow-sm text-sm"
+          >
+            <option value="admis">
+              {filters.typeParcours} {parcoursLibelle} {filters.typeAnneEtude}
+            </option>
+          </select>
+
+          <span className="text-black font-bold text-sm ml-2">Evaluation</span>
+          <select
+            value={filters.evaluation}
+            onChange={(e) => setFilters(prev => ({ ...prev, evaluation: e.target.value }))}
+            className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white"
+          >
+            <option>Exam Harmattan</option>
+            <option>Exam Mousson</option>
+          </select>
+
+          <div>
+            <span className="text-black font-bold text-sm ml-0">Type d'evaluation</span>
             <select
-              value={"etudiants[0].matiere"}
-              onChange={(e) => console.log("hello")}
+              value={filters.evaluation}
+              onChange={(e) => setFilters(prev => ({ ...prev, evaluation: e.target.value }))}
               className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
             >
-              <option>{"Droit civil"}</option>
+              <option>Devoir</option>
+              <option>Examen</option>
+              <option>Moyenne</option>
             </select>
-
-            <span className="text-black font-bold text-sm ml-2">Parcours</span>
-            <select
-              value={typeParcours}
-              onChange={(e) => setTypeParcours(e.target.value)}
-              className="p-2 border-none rounded-md shadow-sm text-sm"
-            >
-              <option value="admis">
-                {" "}
-                {typeParcours} {parcoursLibelle} {JSON.parse(typeAnneEtude)}{" "}
-              </option>
-            </select>
-
-            <span className="text-black font-bold text-sm ml-2">
-              Evaluation
-            </span>
-            <select
-              value={evaluation}
-              onChange={(e) => setEvaluation(e.target.value)}
-              className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white "
-            >
-              <option>Exam Harmattan </option>
-              <option>Exam Mousson </option>
-            </select>
-
-            <div>
-              <span className="text-black font-bold text-sm ml-0">
-                Type d'evaluation
-              </span>
-              <select
-                value={evaluation}
-                onChange={(e) => setEvaluation(e.target.value)}
-                className="px-2 py-1/2 rounded border-none bg-blue-500 focus:outline-none text-sm text-white ml-1"
-              >
-                <option>Devoir</option>
-                <option>Examen</option>
-                <option>Moyenne</option>
-              </select>
-            </div>
-            <div className="flex items-center gap-4 ">
-              <span className="text-black font-bold text-sm ml-0">
-                Poids devoir
-              </span>
-
-              <input
-                type="number"
-                min="0"
-                max="100"
-                step="10"
-                value={poidsDevoir * 100}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value, 10) / 100;
-                  console.log("Nouvelle valeur devoir sélectionnée :", value);
-                  setPoidsDevoir(value);
-                }}
-                className={`w-20 px-2 py-1/2 rounded border-none focus:outline-none text-sm text-white ml-1 text-center ${
-                  poidsErreur ? "bg-red-500" : "bg-blue-500"
-                }`}
-                disabled={evaluation !== "Moyenne"}
-              />
-            </div>
-            <div className="flex items-center gap-4 ">
-              <span className="text-black font-bold text-sm ml-0">
-                Poids examen
-              </span>
-              {/* <input type="number" min="0" max="100" step="10" /> */}
-              <input
-                type="number"
-                min="0"
-                max="100"
-                step="10"
-                value={poidsExamen * 100}
-                /*  onChange={(e) => {
-                  const value = parseInt(e.target.value, 10) / 100;
-                  setPoidsExamen(value);
-                  if (value + poidsDevoir == 1) {
-                    setPoidsErreur(false);
-
-                    console.log("poidsExamen", poidsExamen);
-                    console.log("poidsDevoir", poidsDevoir);
-                    calculerMoyennePourTous();
-                  } else {
-                    setPoidsErreur(true);
-                    alert(
-                      "La somme des poids doit être égale à 100%. Veuillez ajuster les poids."
-                    );
-                  }
-                }} */
-                onChange={(e) => {
-                  const nouvelleValeur = parseInt(e.target.value, 10) / 100;
-                  console.log("Nouvelle valeur sélectionnée :", nouvelleValeur);
-
-                  setPoidsExamen(nouvelleValeur); // mettre à jour le champ
-
-                  const sommePrevue = poidsDevoir + nouvelleValeur;
-
-                  if (sommePrevue.toFixed(2) === "1.00") {
-                    setPoidsErreur(false);
-
-                    // ✅ Utiliser directement la valeur à jour
-                    calculerMoyennePourTous(poidsDevoir, nouvelleValeur);
-                  } else {
-                    setPoidsErreur(true);
-                    alert(
-                      "La somme des poids doit être égale à 100%. Veuillez ajuster les poids."
-                    );
-                  }
-                }}
-                className={`w-20 px-2 py-1/2 rounded border-none focus:outline-none text-sm text-white ml-1 text-center ${
-                  poidsErreur ? "bg-red-500" : "bg-blue-500"
-                }`}
-                disabled={evaluation !== "Moyenne" || poidsDevoir === 1}
-              />
-            </div>
           </div>
 
-          {/* <div className="flex items-center space-x-10 ml-60 mt-7"></div> */}
+          <div className="flex items-center gap-4">
+            <span className="text-black font-bold text-sm ml-0">Poids devoir</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="10"
+              value={filters.poidsDevoir * 100}
+              onChange={(e) => handlePoidsChange("devoir", e.target.value)}
+              className={`w-20 px-2 py-1/2 rounded border-none focus:outline-none text-sm text-white ml-1 text-center ${
+                filters.poidsErreur ? "bg-red-500" : "bg-blue-500"
+              }`}
+              disabled={filters.evaluation !== "Moyenne"}
+            />
+          </div>
 
-          <div className="border p-4 mt-10">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-4 py-2 text-sm text-center">N° CARTE</th>
-                  <th className="px-4 py-2 text-sm text-center">NOM</th>
-                  <th className="px-4 py-2 text-sm text-center">PRÉNOMS</th>
-                  <th className="px-4 py-2 text-sm text-center">SEXE</th>
-                  {evaluation === "Devoir" && (
-                    <th className="px-4 py-2 text-sm text-center">Devoir</th>
+          <div className="flex items-center gap-4">
+            <span className="text-black font-bold text-sm ml-0">Poids examen</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="10"
+              value={filters.poidsExamen * 100}
+              onChange={(e) => handlePoidsChange("examen", e.target.value)}
+              className={`w-20 px-2 py-1/2 rounded border-none focus:outline-none text-sm text-white ml-1 text-center ${
+                filters.poidsErreur ? "bg-red-500" : "bg-blue-500"
+              }`}
+              disabled={filters.evaluation !== "Moyenne" || filters.poidsDevoir === 1}
+            />
+          </div>
+        </div>
+
+        <div className="border p-4 mt-10">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 text-sm text-center">N° CARTE</th>
+                <th className="px-4 py-2 text-sm text-center">NOM</th>
+                <th className="px-4 py-2 text-sm text-center">PRÉNOMS</th>
+                <th className="px-4 py-2 text-sm text-center">SEXE</th>
+                {filters.evaluation === "Devoir" && (
+                  <th className="px-4 py-2 text-sm text-center">Devoir</th>
+                )}
+                {filters.evaluation === "Examen" && (
+                  <th className="px-4 py-2 text-sm text-center">Examen</th>
+                )}
+                {filters.evaluation === "Moyenne" && (
+                  <th className="px-4 py-2 text-sm text-center">Moyenne</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {data.etudiants.map((etudiant, index) => (
+                <tr
+                  key={`${etudiant.numero_carte}-${index}`}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                >
+                  <td className="px-4 py-2 text-center">{etudiant.numero_carte}</td>
+                  <td className="px-4 py-2 text-center">{etudiant.nom}</td>
+                  <td className="px-4 py-2 text-center">{etudiant.prenom}</td>
+                  <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
+                  {filters.evaluation === "Devoir" && (
+                    <td
+                      className="px-4 py-2 text-center cursor-pointer"
+                      onClick={() => handleEdit(index)}
+                    >
+                      {ui.editIndex === index ? (
+                        <input
+                          type="number"
+                          value={ui.editedData.note_devoir}
+                          onChange={(e) =>
+                            setUi(prev => ({
+                              ...prev,
+                              editedData: { ...prev.editedData, note_devoir: e.target.value },
+                            }))
+                          }
+                          onKeyDown={(e) => handleKeyDown(e, index)}
+                          autoFocus
+                          className="w-16 text-center border rounded bg-gray-100"
+                        />
+                      ) : (
+                        etudiant.note_devoir
+                      )}
+                    </td>
                   )}
-                  {evaluation === "Examen" && (
-                    <th className="px-4 py-2 text-sm text-center">Examen</th>
+                  {filters.evaluation === "Examen" && (
+                    <td
+                      className="px-4 py-2 text-center cursor-pointer"
+                      onClick={() => handleEdit(index)}
+                    >
+                      {ui.editIndex === index ? (
+                        <input
+                          type="number"
+                          value={ui.editedData.note_examen}
+                          onChange={(e) =>
+                            setUi(prev => ({
+                              ...prev,
+                              editedData: { ...prev.editedData, note_examen: e.target.value },
+                            }))
+                          }
+                          onKeyDown={(e) => handleKeyDown(e, index)}
+                          autoFocus
+                          className="w-16 text-center border rounded bg-gray-100"
+                        />
+                      ) : (
+                        etudiant.note_examen
+                      )}
+                    </td>
                   )}
-                  {evaluation === "Moyenne" && (
-                    <th className="px-4 py-2 text-sm text-center">Moyenne</th>
+                  {filters.evaluation === "Moyenne" && (
+                    <td className="px-4 py-2 text-center">{etudiant.total_pondere}</td>
                   )}
                 </tr>
-              </thead>
-              <tbody>
-                {etudiants.map((etudiant, index) => (
-                  <tr
-                    key={`${etudiant.numero_carte}-${index}`}
-                    className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
-                  >
-                    <td className="px-4 py-2 text-center">
-                      {etudiant.numero_carte}
-                    </td>
-                    <td className="px-4 py-2 text-center">{etudiant.nom}</td>
-                    <td className="px-4 py-2 text-center">{etudiant.prenom}</td>
-                    <td className="px-4 py-2 text-center">{etudiant.sexe}</td>
-                    {evaluation === "Devoir" && (
-                      <td
-                        className="px-4 py-2 text-center cursor-pointer"
-                        onClick={() => handleEdit(index, etudiant)}
-                      >
-                        {editIndex === index ? (
-                          <input
-                            id="devoir-input"
-                            type="number"
-                            value={editedData.note_devoir}
-                            onChange={(e) => {
-                              console.log("Valeur saisie :", e.target.value);
-                              setEditedData({
-                                ...editedData,
-                                note_devoir: e.target.value,
-                              });
-                            }}
-                            disabled={evaluation !== "Devoir"}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            autoFocus
-                            className="w-16 text-center border rounded bg-gray-100 disabled:opacity-50"
-                          />
-                        ) : (
-                          etudiant.note_devoir
-                        )}
-                      </td>
-                    )}
-                    {evaluation === "Examen" && (
-                      <td
-                        className="px-4 py-2 text-center cursor"
-                        onClick={() => handleEdit(index, etudiant)}
-                      >
-                        {editIndex === index ? (
-                          <input
-                            id="examen-input"
-                            type="number"
-                            value={editedData.note_examen}
-                            onChange={(e) =>
-                              setEditedData({
-                                ...editedData,
-                                note_examen: e.target.value,
-                              })
-                            }
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            autoFocus
-                            className="w-16 text-center border rounded bg-gray-100"
-                          />
-                        ) : (
-                          etudiant.note_examen
-                        )}
-                      </td>
-                    )}
-                    {evaluation === "Moyenne" && (
-                      <td className="px-4 py-2 text-center">
-                        {etudiant.total_pondere}
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
-      );
-    }
+      </div>
+    );
   };
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-500 border-solid"></div>
-      </div>
-    );
-  } else if (!isLoading && error) {
-    return (
-      <div className="ml-64 mt-20 w-2/3">
-        <div className="bg-red-100 text-red-700 h-50 rounded shadow-md text-center text-3xl">
-          ⚠️Impossible de récupérer la liste. erreur serveur
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex-grow">
-        <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
-          {!showEtudiants && (
-            <>
-              {anneesEtude.length != 0 ? (grades = getGrades(anneesEtude)) : []}
-              <div className="w-full">
-                <div className=" bg-white sticky top-0 z-2 flex items-center justify-between  mb-5 p-3">
-                  <h2 className="md:text-lg lg:text-xl text-md font-bold text-center">
-                    Liste des matières
-                  </h2>
 
-                  <div className="flex items-center gap-4">
-                    <div>
-                      <select
-                        value={typeParcours}
-                        onChange={(e) => {
-                          setTypeParcours(e.target.value);
-                        }}
-                        className="p-2 border-none rounded-md shadow-sm text-sm"
-                      >
-                        {grades.length == 0 ? (
-                          <option value="--">-----------</option>
-                        ) : (
-                          grades.map((g, index) => (
-                            <option key={index} value={g}>
-                              {g}
-                            </option>
-                          ))
-                        )}
-                      </select>
-                    </div>
-                    <div>
-                      <select
-                        value={typeFiliere}
-                        onChange={(e) => {
-                          setTypeFiliere(e.target.value);
-                          // console.log('----- filiere---  ', e.target.value);
-                          localStorage.setItem(
-                            "filiereCourante",
-                            JSON.stringify(e.target.value)
-                          );
-                        }}
-                        className="p-2 border-none rounded-md shadow-sm text-sm"
-                      >
-                        {filieres.length == 0 ? (
-                          <option value="--">------------</option>
-                        ) : (
-                          filieres.map((f) => (
-                            <option key={f.id} value={f.id}>
-                              {f.libelle}
-                            </option>
-                          ))
-                        )}
-                      </select>
-                    </div>
-                    <div>
-                      <select
-                        value={typeAnneEtude}
-                        onChange={(e) => {
-                          setypeAnneEtude(e.target.value);
-                          // console.log('----- type annee---  ', e.target.value);
-                          localStorage.setItem(
-                            "anneeEtudeCourante",
-                            JSON.stringify(e.target.value)
-                          );
-                        }}
-                        className="p-2 border-none rounded-md shadow-sm text-sm"
-                      >
-                        <option value="1">1ere année</option>
-                        <option value="2">2eme année</option>
-                      </select>
-                    </div>
-                  </div>
+  if (ui.isLoading && !ui.showEtudiants) return renderLoading();
+  if (ui.error && !ui.showEtudiants) return renderError("Impossible de récupérer la liste. Erreur serveur");
+
+  const grades = data.anneesEtude.length > 0 ? getGrades(data.anneesEtude) : [];
+
+  return (
+    <div className="flex-grow">
+      <div className="flex flex-col rounded-sm w-full h-full shadow-sm">
+        {!ui.showEtudiants && (
+          <>
+            <div className="w-full">
+              <div className="bg-white sticky top-0 z-2 flex items-center justify-between mb-5 p-3">
+                <h2 className="md:text-lg lg:text-xl text-md font-bold text-center">
+                  Liste des matières
+                </h2>
+
+                <div className="flex items-center gap-4">
+                  <select
+                    value={filters.typeParcours}
+                    onChange={(e) => setFilters(prev => ({ ...prev, typeParcours: e.target.value }))}
+                    className="p-2 border-none rounded-md shadow-sm text-sm"
+                  >
+                    {grades.length === 0 ? (
+                      <option value="--">-----------</option>
+                    ) : (
+                      grades.map((g, index) => (
+                        <option key={index} value={g}>{g}</option>
+                      ))
+                    )}
+                  </select>
+
+                  <select
+                    value={filters.typeFiliere}
+                    onChange={(e) => {
+                      setFilters(prev => ({ ...prev, typeFiliere: e.target.value }));
+                      setToStorage("filiereCourante", e.target.value);
+                    }}
+                    className="p-2 border-none rounded-md shadow-sm text-sm"
+                  >
+                    {data.filieres.length === 0 ? (
+                      <option value="--">------------</option>
+                    ) : (
+                      data.filieres.map((f) => (
+                        <option key={f.id} value={f.id}>{f.libelle}</option>
+                      ))
+                    )}
+                  </select>
+
+                  <select
+                    value={filters.typeAnneEtude}
+                    onChange={(e) => {
+                      setFilters(prev => ({ ...prev, typeAnneEtude: e.target.value }));
+                      setToStorage("anneeEtudeCourante", e.target.value);
+                    }}
+                    className="p-2 border-none rounded-md shadow-sm text-sm"
+                  >
+                    <option value="1">1ere année</option>
+                    <option value="2">2eme année</option>
+                  </select>
                 </div>
+              </div>
 
-                <div className="overflow-auto rounded-lg shadow-md mt-4">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="px-4 py-2 text-sm text-center">
-                          NUMERO
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          LIBELLE
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          ABRÉVIATION
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          OPTIONNELLE
-                        </th>
-                        <th className="px-4 py-2 text-sm text-center">
-                          COEFFICIENT
-                        </th>
+              <div className="overflow-auto rounded-lg shadow-md mt-4">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2 text-sm text-center">NUMERO</th>
+                      <th className="px-4 py-2 text-sm text-center">LIBELLE</th>
+                      <th className="px-4 py-2 text-sm text-center">ABRÉVIATION</th>
+                      <th className="px-4 py-2 text-sm text-center">OPTIONNELLE</th>
+                      <th className="px-4 py-2 text-sm text-center">COEFFICIENT</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.matieres.map((matiere, index) => (
+                      <tr
+                        key={matiere.id}
+                        className={`cursor-pointer ${
+                          ui.selectedIndex === index
+                            ? "bg-blue-300"
+                            : index % 2 === 0
+                            ? "bg-white"
+                            : "bg-gray-100"
+                        }`}
+                        onClick={() => handleRowClick(index, matiere.id)}
+                      >
+                        <td className="px-4 py-2 text-center">MAT{matiere.id}</td>
+                        <td className="px-4 py-2 text-center">{matiere.libelle}</td>
+                        <td className="px-4 py-2 text-center">{matiere.abreviation}</td>
+                        <td className="px-4 py-2 text-center">
+                          {matiere.optionnelle === 1 ? "Oui" : "Non"}
+                        </td>
+                        <td className="px-4 py-2 text-center">{matiere.coefficient}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {matieres.map((matiere, index) => (
-                        <tr
-                          key={matiere.id}
-                          className={`cursor-pointer ${
-                            selectedIndex === index
-                              ? "bg-blue-300"
-                              : index % 2 === 0
-                              ? "bg-white"
-                              : "bg-gray-100"
-                          }`}
-                          onClick={() => handleRowClick(index, matiere.id)}
-                        >
-                          <td className="px-4 py-2 text-center">
-                            MAT{matiere.id}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.libelle}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.abreviation}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.optionnelle === 1 ? "Oui" : "Non"}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {matiere.coefficient}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+            </div>
 
-              <div className="mt-5 flex justify-center">
-                <button
-                  className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
-                    selectedIndex === null
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 hover:bg-gray-800"
-                  }`}
-                  onClick={handleValidation}
-                  disabled={selectedIndex === null}
-                >
-                  Valider
-                </button>
-              </div>
-            </>
-          )}
-          {showEtudiants && afficheEtudiants()}
-        </div>
+            <div className="mt-5 flex justify-center">
+              <button
+                className={`px-4 py-2 w-70 h-15 text-white font-bold rounded self-center ${
+                  ui.selectedIndex === null
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-gray-800"
+                }`}
+                onClick={handleValidation}
+                disabled={ui.selectedIndex === null}
+              >
+                Valider
+              </button>
+            </div>
+          </>
+        )}
+        {ui.showEtudiants && renderEtudiants()}
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default MajNotes;

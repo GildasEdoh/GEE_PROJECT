@@ -172,7 +172,7 @@ const SideBar = ({ isSidebarOpen, setSelectedMenu }) => {
         <li className="mb-23">
           <button
             className="w-full flex items-center space-x-3 p-3 text-sm rounded-lg hover:bg-blue-600 transition-all duration-300 ease-out cursor-pointer"
-            onClick={() => setSelectedMenu("Paramètres")}
+            onClick={() => setSelectedMenu("Parametres")}
           >
             <FaTools />
             {isSidebarOpen && <span>Paramètres</span>}

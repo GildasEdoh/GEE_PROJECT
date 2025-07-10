@@ -8,6 +8,7 @@ import ListeInscrits from "../screens/edition/ListeInscrits";
 import NotesMatieres from "../screens/edition/NotesMatieres";
 import PVIndividuels from "../screens/edition/PVIndividuels";
 import Releves from "../screens/edition/Releves";
+import Settings from "../screens/Parametres"
 import Admis from "../screens/Admis";
 import Echoues from "../screens/Echoues";
 
@@ -34,6 +35,8 @@ export default function Dashboard({ selectedMenu }) {
         return <PVIndividuels />;
       case "Releves":
         return <Releves />;
+      case "Parametres":
+        return <Settings />;
       default:
         return <Accueil />;
     }
