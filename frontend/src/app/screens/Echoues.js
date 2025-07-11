@@ -17,7 +17,7 @@ import {
   exportEtudiantsToExcel,
   getParcoursAnneeEtudeId,
 } from "../utils/ExcelUtils.js";
-import showNotification from "../utils/showMessage";
+import showNotification from "../utils/showMessage.js";
 import toast, { Toaster } from "react-hot-toast";
 
 const Echoues = () => {

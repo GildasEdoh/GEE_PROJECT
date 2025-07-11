@@ -7,10 +7,10 @@ import { FiUpload } from "react-icons/fi";
 import EtudiantService from "@/services/EtudiantService";
 import AnneesEtudeService from "@/services/AnneesEtudeService";
 import FiliereService from "@/services/FiliereService";
-import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex, getFiliereLibelle } from "../utils/parseAnnee";
+import { getGrades, getSessionIndex, getAnneeEtudeIndex, getAnneeUnivIndex, getFiliereLibelle } from "../utils/parseAnnee"
 import { generatePDF, importEtudiantToExcel, exportEtudiantsToExcel, getParcoursAnneeEtudeId, buildInscriptionsList, sleep} from "../utils/ExcelUtils.js";
 import InscriptionService from "@/services/InscriptionService";
-import showNotification from '../utils/showMessage';
+import showNotification from '../utils/showMessage.js';
 import toast, { Toaster } from 'react-hot-toast';
 
 

@@ -36,10 +36,10 @@ export const generatePDF = (etudiants, titre = "Liste des Étudiants") => {
 
   // Données formatées
   const data = etudiants.map((etudiant) => [
-    etudiant["N°"] || "",
-    etudiant["Ets"] || "",
-    etudiant["Parcours"] || "",
-    etudiant["Nb. insc."] || "",
+    etudiant["N°"] || "1",
+    etudiant["Ets"] || "FDD",
+    etudiant["Parcours"] || "Capacité Droit 1",
+    etudiant["Nb. insc."] || "1",
     etudiant["numero_carte"] || "",
     etudiant["nom"] || "",
     etudiant["prenom"] || "",

@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser, getUser } from "../../services/auth";
 import AuthService from "../../services/AuthService"
+import toast, { Toaster } from 'react-hot-toast';
+import showNotification from '../utils/showMessage';
 /**
  * 
  */
@@ -62,14 +64,12 @@ const Login = () => {
         if (data) {
             console.log("Connexion réussie !");
             console.log("Utilisateur connecté :", data);
-            alert("connexion" + data)
-            alert("Connexion reussie ")
-            router.replace("/"); // Rediriger après connexion
+            showNotification("Connexion reussie ", "success")
+            router.replace("/Acceuil"); // Rediriger après connexion
         } else {
             setErrorMessage("Email ou mot de passe incorrect.");
         }
         
-        // setShowSessionPopup(true); // Afficher la popup immédiatement
     };
 
     const handleSessionSelect = (sessionId) => {
@@ -218,6 +218,7 @@ const Login = () => {
                     </div>
                 </div>
             )}
+            <Toaster />
         </div>
     );
 };
